@@ -1,5 +1,6 @@
 package org.trishanku.oa.admin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class CustomerDTO {
-
+    @JsonIgnore
     private UUID uuid;
     private String customerId;
     private String name;
