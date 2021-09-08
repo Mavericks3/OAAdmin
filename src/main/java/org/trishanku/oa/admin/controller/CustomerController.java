@@ -62,7 +62,7 @@ public class CustomerController {
     {
         log.debug("in update customer method " + customerId);
         // to check if a customer with the given does not exist
-        if(customerRepository.findByCustomerId(customerId).isEmpty()) throw new RuntimeException("customer with id " + customerDTO.getCustomerId() + " does not exist");
+        if(customerRepository.findByCustomerId(customerId).isEmpty()) throw new RuntimeException("customer with id " + customerId + " does not exist");
         Customer customer = customerMapper.CustomerDTOToCustomer(customerDTO);
         customer.setUuid(customerRepository.findByCustomerId(customerId).get().getUuid());
         customer.setCustomerId(customerId);
@@ -72,6 +72,15 @@ public class CustomerController {
         return new ResponseEntity<>(savedCustomerDTO,HttpStatus.ACCEPTED);
     }
 
+    @DeleteMapping(path="/{customerId}")
+    public ResponseEntity deleteCustomer(@PathVariable(name="customerId") String customerId)
+    {
+        log.debug("in delete customer method " + customerId);
+        // to check if a customer with the given does not exist
+        if(customerRepository.findByCustomerId(customerId).isEmpty()) throw new RuntimeException("customer with id " + customerId + " does not exist");
+        customerRepository.deleteById(customerRepository.findByCustomerId(customerId).get().getUuid());
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
 
 
