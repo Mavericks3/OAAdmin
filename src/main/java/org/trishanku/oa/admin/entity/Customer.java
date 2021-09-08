@@ -13,6 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@Data
 public class Customer {
     @Id
     @Column(name = "SYSTEM_ID")

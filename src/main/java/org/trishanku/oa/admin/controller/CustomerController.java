@@ -1,5 +1,6 @@
 package org.trishanku.oa.admin.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
@@ -54,6 +56,23 @@ public class CustomerController {
         CustomerDTO savedCustomerDTO = customerMapper.CustomerToCustomerDTO(savedCustomer);
         return new ResponseEntity<>(savedCustomerDTO,HttpStatus.CREATED);
     }
+
+    @PutMapping(path="/{customerId}")
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable(name="customerId") String customerId, @RequestBody CustomerDTO customerDTO)
+    {
+        log.debug("in update customer method " + customerId);
+        // to check if a customer with the given does not exist
+        if(customerRepository.findByCustomerId(customerId).isEmpty()) throw new RuntimeException("customer with id " + customerDTO.getCustomerId() + " does not exist");
+        Customer customer = customerMapper.CustomerDTOToCustomer(customerDTO);
+        customer.setUuid(customerRepository.findByCustomerId(customerId).get().getUuid());
+        customer.setCustomerId(customerId);
+        log.debug("customer to be saved is " + customer);
+        Customer savedCustomer = customerRepository.save(customer);
+        CustomerDTO savedCustomerDTO = customerMapper.CustomerToCustomerDTO(savedCustomer);
+        return new ResponseEntity<>(savedCustomerDTO,HttpStatus.ACCEPTED);
+    }
+
+
 
 
 
