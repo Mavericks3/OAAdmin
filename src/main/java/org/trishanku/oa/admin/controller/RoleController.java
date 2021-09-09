@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.trishanku.oa.admin.entity.Role;
+import org.trishanku.oa.admin.mapper.RoleMapper;
+import org.trishanku.oa.admin.model.RoleDTO;
 import org.trishanku.oa.admin.repository.RoleRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,9 +21,15 @@ public class RoleController {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    RoleMapper roleMapper;
+
     @GetMapping
-    public ResponseEntity<List<Role>> getRoles()
+    public ResponseEntity<List<RoleDTO>> getRoles()
     {
-       return new ResponseEntity<>(roleRepository.findAll(), HttpStatus.OK);
+        List<Role> roleList = roleRepository.findAll();
+        List<RoleDTO> roleDTOS = new ArrayList<>();
+        roleList.forEach((role)-> roleDTOS.add(roleMapper.roleToRoleDTO(role)));
+       return new ResponseEntity<>(roleDTOS, HttpStatus.OK);
     }
 }
