@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.trishanku</groupId>
-    <artifactId>OAAdmin</artifactId>
+    <artifactId>oaadmin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>OAAdmin</name>
     <description>OAAdmin</description>
@@ -127,7 +127,14 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <image>
+                        <name>ravikanthm/${project.artifactId}:${project.version}</name>
+                    </image>
+                    <pullPolicy>IF_NOT_PRESENT</pullPolicy>
+
                 </configuration>
+
+
             </plugin>
 
             <plugin>

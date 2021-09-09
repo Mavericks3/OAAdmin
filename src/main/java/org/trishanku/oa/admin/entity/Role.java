@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -19,7 +20,9 @@ import java.util.UUID;
 public class Role extends Base{
 
     @Id
+    @Column(name = "ROLE_ID")
     private UUID uuid;
+    @Column(name="ROLE_NAME")
     private String name;
 
 }
