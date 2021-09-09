@@ -1,6 +1,6 @@
 package org.trishanku.oa.admin.entity;
 
-public enum transactionStatusEnum {
+public enum TransactionStatusEnum {
 
     PENDING,MASTER
 }
