@@ -9,7 +9,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class Base {
 
     private String createdUser;
