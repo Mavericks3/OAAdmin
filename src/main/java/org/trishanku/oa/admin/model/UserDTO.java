@@ -22,7 +22,7 @@ public class UserDTO {
     private String lastName;
     private Date effectiveDate;
     private boolean status;
-    private List<Role> roles;
-    private List<Customer> customers;
+    private List<RoleDTO> roles;
+    private List<CustomerDTO> customers;
     private String emailAddress;
 }
