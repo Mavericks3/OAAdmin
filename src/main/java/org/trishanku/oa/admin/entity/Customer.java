@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @Builder
 @Data
-public class Customer {
+public class Customer extends Base{
     @Id
     @Column(name = "SYSTEM_ID")
     private UUID uuid;
