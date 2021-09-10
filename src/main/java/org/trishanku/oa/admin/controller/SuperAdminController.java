@@ -58,6 +58,13 @@ public class SuperAdminController {
     }
 
     //Mapping to delete a super admin
+    @PutMapping(path = "/delete/{userId}")
+    public ResponseEntity<UserDTO> deleteSuperAdmin(@PathVariable(name="userId") String userId)
+    {
+        UserDTO superAdminDTO = superAdminService.deleteSuperAdmin(userId);
+        return new ResponseEntity<>(superAdminDTO, HttpStatus.OK);
+    }
+
 
     //Mapping to authorize a super admin
 

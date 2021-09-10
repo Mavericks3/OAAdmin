@@ -96,4 +96,15 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         if(users.size()==0) throw new RuntimeException("There are no pending super admin's currently in the system");
         return userMapper.userListToUserDTOList(users);
     }
+
+    @Override
+    public UserDTO deleteSuperAdmin(String userId) {
+        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Super admin with id " + userId + " does not exist");
+        User existingUserDetails = userRepository.findByUserId(userId).get();
+        existingUserDetails.setStatus(false);
+        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
+        existingUserDetails.setModificationDetails("RAVIKANTH");
+        User savedUser = userRepository.save(existingUserDetails);
+        return userMapper.userToUserDTO(savedUser);
+    }
 }
