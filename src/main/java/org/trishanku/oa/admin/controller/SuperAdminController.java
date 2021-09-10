@@ -24,6 +24,7 @@ public class SuperAdminController {
         return new ResponseEntity<>(superAdminDTOS, HttpStatus.OK);
     }
 
+    //Mapping to get all pending super admins
     @GetMapping(path = "/pending")
     public ResponseEntity<List<UserDTO>> getPendingSuperAdmins()
     {
@@ -66,7 +67,7 @@ public class SuperAdminController {
     }
 
 
-    //Mapping to authorize a super admin
+    //Mapping to authorise a super admin
 
     @PutMapping(path = "/authorise/{userId}")
     public ResponseEntity<UserDTO> authorizeSuperAdmin(@PathVariable(name="userId") String userId)
