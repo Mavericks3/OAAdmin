@@ -10,4 +10,6 @@ public interface SuperAdminService {
     List<UserDTO> getAllSuperAdmins();
 
     UserDTO getSuperAdminById(String userId);
+
+    UserDTO addSuperAdmin(UserDTO userDTO);
 }

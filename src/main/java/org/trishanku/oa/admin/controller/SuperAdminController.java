@@ -3,10 +3,7 @@ package org.trishanku.oa.admin.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.trishanku.oa.admin.model.UserDTO;
 import org.trishanku.oa.admin.service.SuperAdminService;
 
@@ -30,13 +27,20 @@ public class SuperAdminController {
 
     //Mapping to get a specific super admin
     @GetMapping(path = "/{userId}")
-    public ResponseEntity<UserDTO> getAllSuperAdmins(@PathVariable(name="userId") String userId)
+    public ResponseEntity<UserDTO> getSuperAdminById(@PathVariable(name="userId") String userId)
     {
         UserDTO superAdminDTO = superAdminService.getSuperAdminById(userId);
         return new ResponseEntity<>(superAdminDTO, HttpStatus.OK);
     }
 
     //Mapping to add a super admin
+
+    @PostMapping()
+    public ResponseEntity<UserDTO> addSuperAdmin(@RequestBody UserDTO userDTO)
+    {
+        UserDTO superAdminDTO = superAdminService.addSuperAdmin(userDTO);
+        return new ResponseEntity<>(superAdminDTO, HttpStatus.OK);
+    }
 
     //Mapping to modify a super admin
 
