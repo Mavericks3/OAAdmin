@@ -28,13 +28,14 @@ public class SuperAdminServiceImpl implements SuperAdminService{
     @Override
     public List<UserDTO> getAllSuperAdmins() {
         List<User> users = userRepository.findByRoles(roleRepository.findByName("SUPER_ADMIN"));
+        if(users.stream().count()==0) throw new RuntimeException("There are no super admin's currently in the system");
         return userMapper.userListToUserDTOList(users);
     }
 
     @Override
     public UserDTO getSuperAdminById(String userId) {
         User user = userRepository.findByRolesAndUserId(roleRepository.findByName("SUPER_ADMIN"),userId);
-        if(user==null) throw new RuntimeException("user with id -> " + userId + " does not exist");
+        if(user==null) throw new RuntimeException("Super admin with id " + userId + " does not exist");
         return userMapper.userToUserDTO(user);
     }
 
@@ -46,6 +47,8 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         List<Role> superAdminRoles = new ArrayList<>();
         superAdminRoles.add(roleRepository.findByName("SUPER_ADMIN"));
         user.setRoles(superAdminRoles);
+        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
+        user.setCreationDetails("RAVIKANTH");
         return userMapper.userToUserDTO(userRepository.save(user));
     }
 
@@ -57,6 +60,8 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         existingUserDetails.setLastName(userDTO.getLastName());
         existingUserDetails.setEffectiveDate(userDTO.getEffectiveDate());
         existingUserDetails.setEmailAddress(userDTO.getEmailAddress());
+        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
+        existingUserDetails.setModificationDetails("RAVIKANTH");
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }

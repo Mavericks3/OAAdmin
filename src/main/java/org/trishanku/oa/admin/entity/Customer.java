@@ -48,5 +48,7 @@ public class Customer extends Base{
     private String sponsorDetails;
     @Column(name = "STATUS")
     private String status;
+    @Column(name = "IS_BANK")
+    private boolean bank;
 
 }

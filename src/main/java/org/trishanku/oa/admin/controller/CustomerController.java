@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.trishanku.oa.admin.entity.Customer;
-import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.mapper.CustomerMapper;
 import org.trishanku.oa.admin.model.CustomerDTO;
 import org.trishanku.oa.admin.repository.CustomerRepository;
@@ -32,7 +31,7 @@ public class CustomerController {
     {
         List<Customer> customers = customerRepository.findAll();
         List<CustomerDTO> customerDTOS = new ArrayList<>();
-        customers.forEach((customer) -> customerDTOS.add(customerMapper.CustomerToCustomerDTO(customer)));
+        customers.forEach((customer) -> customerDTOS.add(customerMapper.customerToCustomerDTO(customer)));
         return new ResponseEntity<>(customerDTOS,HttpStatus.OK);
     }
 
@@ -41,7 +40,9 @@ public class CustomerController {
     {
         Optional<Customer> customer = customerRepository.findByCustomerId(customerId);
         if(customer.isEmpty()) throw new RuntimeException("customer with id " + customerId + " not found");
-        CustomerDTO customerDTO = customerMapper.CustomerToCustomerDTO(customer.get());
+        log.info("customer retrieved from the database is " + customer.get());
+        CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer.get());
+        log.info("customerDTO transmitted to the user is " + customerDTO);
         return new ResponseEntity<>(customerDTO,HttpStatus.OK);
     }
 
@@ -51,13 +52,13 @@ public class CustomerController {
         // to check if a customer with the given id already exists
          if(customerRepository.findByCustomerId(customerDTO.getCustomerId()).isPresent()) throw new RuntimeException("customer with id " + customerDTO.getCustomerId() + " already exists");
 
-        Customer customer = customerMapper.CustomerDTOToCustomer(customerDTO);
+        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
         customer.setUuid(UUID.randomUUID());
         //below line to be changed to retrieve the user name from request
         customer.setCreationDetails("ToBeChanged");
 
         Customer savedCustomer = customerRepository.save(customer);
-        CustomerDTO savedCustomerDTO = customerMapper.CustomerToCustomerDTO(savedCustomer);
+        CustomerDTO savedCustomerDTO = customerMapper.customerToCustomerDTO(savedCustomer);
         return new ResponseEntity<>(savedCustomerDTO,HttpStatus.CREATED);
     }
 
@@ -67,7 +68,7 @@ public class CustomerController {
         log.debug("in update customer method " + customerId);
         // to check if a customer with the given does not exist
         if(customerRepository.findByCustomerId(customerId).isEmpty()) throw new RuntimeException("customer with id " + customerId + " does not exist");
-        Customer customer = customerMapper.CustomerDTOToCustomer(customerDTO);
+        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
         Customer currentCustomerDetails = customerRepository.findByCustomerId(customerId).get();
 
         //below code to be refactored
@@ -79,7 +80,7 @@ public class CustomerController {
         customer.setModificationDetails("ToBeChanged");
         log.debug("customer to be saved is " + customer);
         Customer savedCustomer = customerRepository.save(customer);
-        CustomerDTO savedCustomerDTO = customerMapper.CustomerToCustomerDTO(savedCustomer);
+        CustomerDTO savedCustomerDTO = customerMapper.customerToCustomerDTO(savedCustomer);
         return new ResponseEntity<>(savedCustomerDTO,HttpStatus.ACCEPTED);
     }
 
@@ -103,7 +104,7 @@ public class CustomerController {
         //below line to be changed to retrieve the user name from request
         customer.setAuthorizationDetails("ToBeChanged");
         Customer savedCustomer = customerRepository.save(customer);
-        CustomerDTO savedCustomerDTO = customerMapper.CustomerToCustomerDTO(savedCustomer);
+        CustomerDTO savedCustomerDTO = customerMapper.customerToCustomerDTO(savedCustomer);
         return new ResponseEntity<>(savedCustomerDTO,HttpStatus.ACCEPTED);
     }
 

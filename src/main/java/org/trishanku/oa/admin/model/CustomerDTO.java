@@ -30,5 +30,6 @@ public class CustomerDTO {
     private String sponsorName;
     private String sponsorDetails;
     private String status;
+    private boolean bank;
 
 }
