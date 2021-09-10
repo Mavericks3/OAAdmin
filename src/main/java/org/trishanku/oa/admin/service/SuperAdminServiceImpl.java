@@ -30,4 +30,11 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         List<User> users = userRepository.findByRoles(roleRepository.findByName("SUPER_ADMIN"));
         return userMapper.UserListToUserDTOList(users);
     }
+
+    @Override
+    public UserDTO getSuperAdminById(String userId) {
+        User user = userRepository.findByRolesAndUserId(roleRepository.findByName("SUPER_ADMIN"),userId);
+        if(user==null) throw new RuntimeException("user with id -> " + userId + " does not exist");
+        return userMapper.UserToUserDTO(user);
+    }
 }
