@@ -3,6 +3,7 @@ package org.trishanku.oa.admin.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.trishanku.oa.admin.entity.Role;
+import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.entity.User;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     List<User> findByRoles(Role role);
     User findByRolesAndUserId(Role role,String userId);
     Optional<User> findByUserId(String userId);
+    List<User> findByRolesAndTransactionStatus(Role role, TransactionStatusEnum transactionStatus);
 }

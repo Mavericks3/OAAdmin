@@ -24,6 +24,12 @@ public class SuperAdminController {
         return new ResponseEntity<>(superAdminDTOS, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/pending")
+    public ResponseEntity<List<UserDTO>> getPendingSuperAdmins()
+    {
+        List<UserDTO> superAdminDTOS = superAdminService.getPendingSuperAdmins();
+        return new ResponseEntity<>(superAdminDTOS, HttpStatus.OK);
+    }
 
     //Mapping to get a specific super admin
     @GetMapping(path = "/{userId}")

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.Role;
+import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.entity.User;
 import org.trishanku.oa.admin.mapper.UserMapper;
 import org.trishanku.oa.admin.model.UserDTO;
@@ -87,5 +88,12 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         existingUserDetails.setAuthorizationDetails("RAVIKANTH");
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
+    }
+
+    @Override
+    public List<UserDTO> getPendingSuperAdmins() {
+        List<User> users = userRepository.findByRolesAndTransactionStatus(roleRepository.findByName("SUPER_ADMIN"), TransactionStatusEnum.PENDING);
+        if(users.size()==0) throw new RuntimeException("There are no pending super admin's currently in the system");
+        return userMapper.userListToUserDTOList(users);
     }
 }

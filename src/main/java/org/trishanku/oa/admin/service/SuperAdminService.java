@@ -16,4 +16,6 @@ public interface SuperAdminService {
     UserDTO modifySuperAdmin(String userId, UserDTO userDTO);
 
     UserDTO authoriseSuperAdmin(String userId);
+
+    List<UserDTO> getPendingSuperAdmins();
 }
