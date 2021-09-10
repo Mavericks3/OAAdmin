@@ -3,10 +3,12 @@ package org.trishanku.oa.admin.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.Role;
 import org.trishanku.oa.admin.entity.User;
 import org.trishanku.oa.admin.mapper.UserMapper;
 import org.trishanku.oa.admin.model.UserDTO;
+import org.trishanku.oa.admin.repository.CustomerRepository;
 import org.trishanku.oa.admin.repository.RoleRepository;
 import org.trishanku.oa.admin.repository.UserRepository;
 
@@ -25,10 +27,13 @@ public class SuperAdminServiceImpl implements SuperAdminService{
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    CustomerRepository customerRepository;
+
     @Override
     public List<UserDTO> getAllSuperAdmins() {
         List<User> users = userRepository.findByRoles(roleRepository.findByName("SUPER_ADMIN"));
-        if(users.stream().count()==0) throw new RuntimeException("There are no super admin's currently in the system");
+        if(users.size()==0) throw new RuntimeException("There are no super admin's currently in the system");
         return userMapper.userListToUserDTOList(users);
     }
 
@@ -44,9 +49,17 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         if(userRepository.findByUserId(userDTO.getUserId()).isPresent()) throw new RuntimeException("Super admin with id " + userDTO.getUserId() + " already exists");
         User user = userMapper.userDTOToUser(userDTO);
         user.setUuid(UUID.randomUUID());
+
+        // to set super admin role
         List<Role> superAdminRoles = new ArrayList<>();
         superAdminRoles.add(roleRepository.findByName("SUPER_ADMIN"));
         user.setRoles(superAdminRoles);
+
+        // to link super admin to bank unit
+        List<Customer> bank = new ArrayList<>();
+        if(customerRepository.findByBank(true).isEmpty()) throw new RuntimeException("Bank business unit does not exist");
+        bank.add(customerRepository.findByBank(true).get());
+        user.setCustomers(bank);
         //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
         user.setCreationDetails("RAVIKANTH");
         return userMapper.userToUserDTO(userRepository.save(user));
