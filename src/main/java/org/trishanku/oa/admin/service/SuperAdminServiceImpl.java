@@ -67,7 +67,7 @@ public class SuperAdminServiceImpl implements SuperAdminService{
 
     @Override
     public UserDTO modifySuperAdmin(String userId, UserDTO userDTO) {
-        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Super admin with id " + userDTO.getUserId() + " does not exist");
+        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Super admin with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
         existingUserDetails.setFirstName(userDTO.getFirstName());
         existingUserDetails.setLastName(userDTO.getLastName());
@@ -79,6 +79,13 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         return userMapper.userToUserDTO(savedUser);
     }
 
-
-
+    @Override
+    public UserDTO authoriseSuperAdmin(String userId) {
+        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Super admin with id " + userId + " does not exist");
+        User existingUserDetails = userRepository.findByUserId(userId).get();
+        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
+        existingUserDetails.setAuthorizationDetails("RAVIKANTH");
+        User savedUser = userRepository.save(existingUserDetails);
+        return userMapper.userToUserDTO(savedUser);
+    }
 }

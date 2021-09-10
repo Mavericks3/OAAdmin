@@ -53,7 +53,15 @@ public class SuperAdminController {
 
     //Mapping to delete a super admin
 
-    //Mapping to suspend a super admin
+    //Mapping to authorize a super admin
+
+    @PutMapping(path = "/authorise/{userId}")
+    public ResponseEntity<UserDTO> authorizeSuperAdmin(@PathVariable(name="userId") String userId)
+    {
+        UserDTO superAdminDTO = superAdminService.authoriseSuperAdmin(userId);
+        return new ResponseEntity<>(superAdminDTO, HttpStatus.OK);
+    }
+
 
 
 }

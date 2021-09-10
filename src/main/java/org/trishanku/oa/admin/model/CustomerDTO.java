@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 
 import java.util.UUID;
 
@@ -31,5 +32,6 @@ public class CustomerDTO {
     private String sponsorDetails;
     private String status;
     private boolean bank;
+
 
 }

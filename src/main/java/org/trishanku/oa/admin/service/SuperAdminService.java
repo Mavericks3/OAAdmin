@@ -14,4 +14,6 @@ public interface SuperAdminService {
     UserDTO addSuperAdmin(UserDTO userDTO);
 
     UserDTO modifySuperAdmin(String userId, UserDTO userDTO);
+
+    UserDTO authoriseSuperAdmin(String userId);
 }
