@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.trishanku.oa.admin.entity.Customer;
+import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.mapper.CustomerMapper;
 import org.trishanku.oa.admin.model.CustomerDTO;
 import org.trishanku.oa.admin.repository.CustomerRepository;
@@ -30,6 +31,17 @@ public class CustomerController {
     public ResponseEntity<List<CustomerDTO>> getCustomersList()
     {
         List<Customer> customers = customerRepository.findAll();
+        if(customers.size()==0) throw new RuntimeException("No customers exists in the system");
+        List<CustomerDTO> customerDTOS = new ArrayList<>();
+        customers.forEach((customer) -> customerDTOS.add(customerMapper.customerToCustomerDTO(customer)));
+        return new ResponseEntity<>(customerDTOS,HttpStatus.OK);
+    }
+
+    @GetMapping("/pending")
+    public ResponseEntity<List<CustomerDTO>> getPendingCustomersList()
+    {
+        List<Customer> customers = customerRepository.findByTransactionStatus(TransactionStatusEnum.PENDING);
+        if(customers.size()==0) throw new RuntimeException("No pending customers exists in the system");
         List<CustomerDTO> customerDTOS = new ArrayList<>();
         customers.forEach((customer) -> customerDTOS.add(customerMapper.customerToCustomerDTO(customer)));
         return new ResponseEntity<>(customerDTOS,HttpStatus.OK);
