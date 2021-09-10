@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.Role;
+import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 
 
 import java.util.Date;
@@ -25,4 +26,5 @@ public class UserDTO {
     private List<RoleDTO> roles;
     private List<CustomerDTO> customers;
     private String emailAddress;
+    private TransactionStatusEnum transactionStatus;
 }
