@@ -40,6 +40,7 @@ public class SuperAdminServiceImpl implements SuperAdminService{
 
     @Override
     public UserDTO addSuperAdmin(UserDTO userDTO) {
+        if(userRepository.findByUserId(userDTO.getUserId()).isPresent()) throw new RuntimeException("Super admin with id " + userDTO.getUserId() + " already exists");
         User user = userMapper.userDTOToUser(userDTO);
         user.setUuid(UUID.randomUUID());
         List<Role> superAdminRoles = new ArrayList<>();
@@ -47,4 +48,19 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         user.setRoles(superAdminRoles);
         return userMapper.userToUserDTO(userRepository.save(user));
     }
+
+    @Override
+    public UserDTO modifySuperAdmin(String userId, UserDTO userDTO) {
+        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Super admin with id " + userDTO.getUserId() + " does not exist");
+        User existingUserDetails = userRepository.findByUserId(userId).get();
+        existingUserDetails.setFirstName(userDTO.getFirstName());
+        existingUserDetails.setLastName(userDTO.getLastName());
+        existingUserDetails.setEffectiveDate(userDTO.getEffectiveDate());
+        existingUserDetails.setEmailAddress(userDTO.getEmailAddress());
+        User savedUser = userRepository.save(existingUserDetails);
+        return userMapper.userToUserDTO(savedUser);
+    }
+
+
+
 }

@@ -44,6 +44,13 @@ public class SuperAdminController {
 
     //Mapping to modify a super admin
 
+    @PutMapping(path = "/{userId}")
+    public ResponseEntity<UserDTO> modifySuperAdmin(@PathVariable(name="userId") String userId, @RequestBody UserDTO userDTO)
+    {
+        UserDTO superAdminDTO = superAdminService.modifySuperAdmin(userId, userDTO);
+        return new ResponseEntity<>(superAdminDTO, HttpStatus.OK);
+    }
+
     //Mapping to delete a super admin
 
     //Mapping to suspend a super admin

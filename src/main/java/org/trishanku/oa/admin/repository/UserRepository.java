@@ -6,6 +6,7 @@ import org.trishanku.oa.admin.entity.Role;
 import org.trishanku.oa.admin.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -13,4 +14,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     List<User> findByRoles(Role role);
     User findByRolesAndUserId(Role role,String userId);
+    Optional<User> findByUserId(String userId);
 }

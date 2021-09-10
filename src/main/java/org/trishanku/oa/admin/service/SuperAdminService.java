@@ -12,4 +12,6 @@ public interface SuperAdminService {
     UserDTO getSuperAdminById(String userId);
 
     UserDTO addSuperAdmin(UserDTO userDTO);
+
+    UserDTO modifySuperAdmin(String userId, UserDTO userDTO);
 }
