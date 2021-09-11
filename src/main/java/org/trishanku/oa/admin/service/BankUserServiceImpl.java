@@ -1,5 +1,6 @@
 package org.trishanku.oa.admin.service;
 
+import com.netflix.discovery.converters.Auto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.Role;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.entity.User;
+import org.trishanku.oa.admin.mapper.RoleMapper;
 import org.trishanku.oa.admin.mapper.UserMapper;
 import org.trishanku.oa.admin.model.RoleDTO;
 import org.trishanku.oa.admin.model.UserDTO;
@@ -14,10 +16,10 @@ import org.trishanku.oa.admin.repository.CustomerRepository;
 import org.trishanku.oa.admin.repository.RoleRepository;
 import org.trishanku.oa.admin.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 @Service
 @Slf4j
@@ -31,6 +33,9 @@ public class BankUserServiceImpl implements BankUserService{
     UserMapper userMapper;
 
     @Autowired
+    RoleMapper roleMapper;
+
+    @Autowired
     CustomerRepository customerRepository;
 
     @Override
@@ -42,13 +47,20 @@ public class BankUserServiceImpl implements BankUserService{
         }
         List<User> users = userRepository.findByRolesIn(rolesList);
         if(users.size()==0) throw new RuntimeException("There are no bank user's currently in the system");
-        return userMapper.userListToUserDTOList(users);
+
+        //remove duplicates
+
+        List<User> unique = users.stream()
+                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(User::getUserId))),
+                        ArrayList::new));
+
+        return userMapper.userListToUserDTOList(unique);
     }
 
     @Override
     public UserDTO getBankUserById(String userId) {
-        User user = userRepository.findByRolesAndUserId(roleRepository.findByName("BANK_ADMIN"),userId);
-        if(user==null) throw new RuntimeException("Bank admin with id " + userId + " does not exist");
+        User user = userRepository.findByRolesInAndUserId(roleRepository.findByNameIn(List.of(new String[]{"BANK_USER_MAKER", "BANK_USER_CHECKER", "BANK_USER_VIEWER"})),userId);
+        if(user==null) throw new RuntimeException("Bank user with id " + userId + " does not exist");
         return userMapper.userToUserDTO(user);
     }
 
@@ -78,12 +90,23 @@ public class BankUserServiceImpl implements BankUserService{
 
     @Override
     public UserDTO modifyBankUser(String userId, UserDTO userDTO) {
-        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Bank admin with id " + userId + " does not exist");
+        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Bank user with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
         existingUserDetails.setFirstName(userDTO.getFirstName());
         existingUserDetails.setLastName(userDTO.getLastName());
         existingUserDetails.setEffectiveDate(userDTO.getEffectiveDate());
         existingUserDetails.setEmailAddress(userDTO.getEmailAddress());
+
+        //to get role ids
+        List<Role> newRoles = new ArrayList<>();
+        for(RoleDTO roleDTO:userDTO.getRoles())
+        {
+            Role roleDetails = roleRepository.findByName(roleDTO.getName());
+            if(roleDetails == null) throw new RuntimeException("Role " + roleDTO.getName() + " does not exist");
+            newRoles.add(roleDetails);
+        }
+
+        existingUserDetails.setRoles(newRoles);
         //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
         existingUserDetails.setModificationDetails("RAVIKANTH");
         User savedUser = userRepository.save(existingUserDetails);
@@ -102,9 +125,25 @@ public class BankUserServiceImpl implements BankUserService{
 
     @Override
     public List<UserDTO> getPendingBankUsers() {
-        List<User> users = userRepository.findByRolesAndTransactionStatus(roleRepository.findByName("BANK_ADMIN"), TransactionStatusEnum.PENDING);
+
+        List<Role> rolesList = roleRepository.findByNameIn(Arrays.asList("BANK_USER_MAKER","BANK_USER_CHECKER","BANK_USER_VIEWER"));
+        for(Role role: rolesList)
+        {
+            log.debug("Role is " + role);
+        }
+        List<User> users = userRepository.findByRolesInAndTransactionStatus(rolesList,TransactionStatusEnum.PENDING);
+        if(users.size()==0) throw new RuntimeException("There are no bank user's currently in the system");
+
+        //remove duplicates
+
+        List<User> unique = users.stream()
+                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(User::getUserId))),
+                        ArrayList::new));
+
+/*        List<User> users = userRepository.findByRolesAndTransactionStatus(roleRepository.findByName("BANK_ADMIN"), TransactionStatusEnum.PENDING);
         if(users.size()==0) throw new RuntimeException("There are no pending bank admin's currently in the system");
-        return userMapper.userListToUserDTOList(users);
+        return userMapper.userListToUserDTOList(users);*/
+        return userMapper.userListToUserDTOList(unique);
     }
 
     @Override
