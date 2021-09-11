@@ -38,9 +38,11 @@ public class BankUserServiceImpl implements BankUserService{
     @Autowired
     CustomerRepository customerRepository;
 
+    private static final List<String> bankUsersRoles =  Arrays.asList("CORPORATE_USER_MAKER","CORPORATE_USER_CHECKER","CORPORATE_USER_VIEWER");
+
     @Override
     public List<UserDTO> getAllBankUsers() {
-        List<Role> rolesList = roleRepository.findByNameIn(Arrays.asList("BANK_USER_MAKER","BANK_USER_CHECKER","BANK_USER_VIEWER"));
+        List<Role> rolesList = roleRepository.findByNameIn(bankUsersRoles);
         for(Role role: rolesList)
         {
             log.debug("Role is " + role);
@@ -59,7 +61,7 @@ public class BankUserServiceImpl implements BankUserService{
 
     @Override
     public UserDTO getBankUserById(String userId) {
-        User user = userRepository.findByRolesInAndUserId(roleRepository.findByNameIn(List.of(new String[]{"BANK_USER_MAKER", "BANK_USER_CHECKER", "BANK_USER_VIEWER"})),userId);
+        User user = userRepository.findByRolesInAndUserId(roleRepository.findByNameIn(bankUsersRoles),userId);
         if(user==null) throw new RuntimeException("Bank user with id " + userId + " does not exist");
         return userMapper.userToUserDTO(user);
     }
@@ -126,7 +128,7 @@ public class BankUserServiceImpl implements BankUserService{
     @Override
     public List<UserDTO> getPendingBankUsers() {
 
-        List<Role> rolesList = roleRepository.findByNameIn(Arrays.asList("BANK_USER_MAKER","BANK_USER_CHECKER","BANK_USER_VIEWER"));
+        List<Role> rolesList = roleRepository.findByNameIn(bankUsersRoles);
         for(Role role: rolesList)
         {
             log.debug("Role is " + role);
@@ -140,9 +142,7 @@ public class BankUserServiceImpl implements BankUserService{
                 .collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(User::getUserId))),
                         ArrayList::new));
 
-/*        List<User> users = userRepository.findByRolesAndTransactionStatus(roleRepository.findByName("BANK_ADMIN"), TransactionStatusEnum.PENDING);
-        if(users.size()==0) throw new RuntimeException("There are no pending bank admin's currently in the system");
-        return userMapper.userListToUserDTOList(users);*/
+
         return userMapper.userListToUserDTOList(unique);
     }
 
