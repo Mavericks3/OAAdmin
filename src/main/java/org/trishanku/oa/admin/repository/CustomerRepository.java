@@ -15,5 +15,6 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     Optional<Customer> findByCustomerId(String customerId);
     Optional<Customer> findByBank(boolean isBank);
     List<Customer> findByTransactionStatus(TransactionStatusEnum transactionStatus);
+    Optional<Customer> findByCustomerIdAndBank(String customerId, boolean isBank);
 
 }
