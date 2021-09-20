@@ -59,6 +59,7 @@ public class AgreementServiceImpl implements AgreementService {
         Agreement agreement = agreementMapper.AgreementDTOToAgreement(agreementDTO);
         agreement.setUuid(UUID.randomUUID());
         agreement.setBusinessType(productRepository.findByName(agreement.getBusinessType().getName()));
+        agreement.setStatus(true);
         agreement.setAnchorCustomer(customerRepository.findByCustomerId(agreement.getAnchorCustomer().getCustomerId()).get());
         agreement.setRm(rmRepository.findByRmId(agreement.getRm().getRmId()));
         List<Customer> counterParties = new ArrayList<>();
@@ -94,6 +95,16 @@ public class AgreementServiceImpl implements AgreementService {
         if(agreement== null) throw new RuntimeException("Agreement with contract reference number " + contractReferenceNumber + " not found");
         // TO BE CHANGED AFTER RETRIEVING THE DETAILS FROM JWT
         agreement.setAuthorizationDetails("RAVIKANTH");
+        return agreementMapper.AgreementToAgreementDTO(agreement);
+    }
+
+    @Override
+    public AgreementDTO deleteAgreement(String contractReferenceNumber, AgreementDTO agreementDTO) {
+        Agreement agreement = agreementRepository.findByContractReferenceNumber(contractReferenceNumber);
+        if(agreement== null) throw new RuntimeException("Agreement with contract reference number " + contractReferenceNumber + " not found");
+        agreement.setStatus(false);
+        // TO BE CHANGED AFTER RETRIEVING THE DETAILS FROM JWT
+        agreement.setModificationDetails("RAVIKANTH");
         return agreementMapper.AgreementToAgreementDTO(agreement);
     }
 }

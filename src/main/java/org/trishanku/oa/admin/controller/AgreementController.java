@@ -74,4 +74,10 @@ public class AgreementController {
     }
 
     //Delete Agreement
+    @PutMapping(path= "/delete")
+    public ResponseEntity<AgreementDTO> deleteAgreement( @RequestBody AgreementDTO agreementDTO)
+    {
+
+        return new ResponseEntity<>(agreementService.deleteAgreement(agreementDTO.getContractReferenceNumber(), agreementDTO), HttpStatus.OK);
+    }
 }

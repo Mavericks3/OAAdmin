@@ -34,4 +34,5 @@ public class AgreementDTO {
     private Date expiryDate;
     private int numberOfCounterParties;
     private List<Customer> counterParties;
+    private boolean status;
 }
