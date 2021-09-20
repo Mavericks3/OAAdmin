@@ -1,5 +1,6 @@
 package org.trishanku.oa.admin.service;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.Role;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.entity.User;
+import org.trishanku.oa.admin.exception.ResourceAlreadyExistsException;
 import org.trishanku.oa.admin.mapper.UserMapper;
 import org.trishanku.oa.admin.model.UserDTO;
 import org.trishanku.oa.admin.repository.CustomerRepository;
@@ -45,9 +47,10 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         return userMapper.userToUserDTO(user);
     }
 
+
     @Override
-    public UserDTO addSuperAdmin(UserDTO userDTO) {
-        if(userRepository.findByUserId(userDTO.getUserId()).isPresent()) throw new RuntimeException("Super admin with id " + userDTO.getUserId() + " already exists");
+    public UserDTO addSuperAdmin(UserDTO userDTO) throws ResourceAlreadyExistsException {
+        if(userRepository.findByUserId(userDTO.getUserId()).isPresent()) throw new ResourceAlreadyExistsException("Super admin with id " + userDTO.getUserId() + " already exists");
         User user = userMapper.userDTOToUser(userDTO);
         user.setUuid(UUID.randomUUID());
 

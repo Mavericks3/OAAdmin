@@ -8,6 +8,7 @@ import org.trishanku.oa.admin.model.UserDTO;
 import org.trishanku.oa.admin.service.BankUserService;
 import org.trishanku.oa.admin.service.CustomerUserService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -44,7 +45,7 @@ public class CustomerUserController {
     //Mapping to add a customer user
 
     @PostMapping()
-    public ResponseEntity<UserDTO> addCustomerUser(@RequestBody UserDTO userDTO)
+    public ResponseEntity<UserDTO> addCustomerUser(@Valid @RequestBody UserDTO userDTO)
     {
         UserDTO customerUserDTO = customerUserService.addCustomerUser(userDTO);
         return new ResponseEntity<>(customerUserDTO, HttpStatus.OK);

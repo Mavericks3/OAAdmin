@@ -1,5 +1,9 @@
 package org.trishanku.oa.admin.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
 
 import org.trishanku.oa.admin.entity.Customer;
@@ -11,7 +15,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
 public class AgreementDTO {
 
     @JsonIgnore
