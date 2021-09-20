@@ -30,7 +30,12 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public AgreementDTO getAgreementByContractReferenceNumber(String contactReferenceNumber) {
-        return agreementMapper.AgreementToAgreementDTO(agreementRepository.findByContractReferenceNumber(contactReferenceNumber));
+    public AgreementDTO getAgreementByContractReferenceNumber(String contractReferenceNumber) {
+        return agreementMapper.AgreementToAgreementDTO(agreementRepository.findByContractReferenceNumber(contractReferenceNumber));
+    }
+
+    @Override
+    public AgreementDTO getAgreementByContractDocumentNumber(String contractDocumentNumber) {
+        return agreementMapper.AgreementToAgreementDTO(agreementRepository.findByContractDocumentNumber(contractDocumentNumber));
     }
 }

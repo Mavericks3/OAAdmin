@@ -13,5 +13,7 @@ public interface AgreementService {
 
     List<AgreementDTO> getPendingAgrements();
 
-    AgreementDTO getAgreementByContractReferenceNumber(String contactReferenceNumber);
+    AgreementDTO getAgreementByContractReferenceNumber(String contractReferenceNumber);
+
+    AgreementDTO getAgreementByContractDocumentNumber(String contractDocumentNumber);
 }

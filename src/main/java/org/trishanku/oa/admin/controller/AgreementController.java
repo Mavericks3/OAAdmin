@@ -29,7 +29,7 @@ public class AgreementController {
     }
 
     //Get Agreement by Contact reference Number
-    @GetMapping(path = "/{contractReferenceNumber}")
+    @GetMapping(path = "/byreferencenumber/{contractReferenceNumber}")
     public ResponseEntity<AgreementDTO> getAgreementByContractReferenceNumber(@PathVariable(name="contractReferenceNumber") String contractReferenceNumber)
     {
         return new ResponseEntity(agreementService.getAgreementByContractReferenceNumber(contractReferenceNumber),HttpStatus.OK);
@@ -37,6 +37,11 @@ public class AgreementController {
 
 
     //Get Agreement by Contract Document Number
+    @GetMapping(path = "/bydocumentnumber/{contractDocumentNumber}")
+    public ResponseEntity<AgreementDTO> getAgreementByContractDocumentNumber(@PathVariable(name="contractDocumentNumber") String contractDocumentNumber)
+    {
+        return new ResponseEntity(agreementService.getAgreementByContractDocumentNumber(contractDocumentNumber),HttpStatus.OK);
+    }
 
     //Get Pending Agreements
     @GetMapping(path = "/pending")
