@@ -67,4 +67,20 @@ public class AgreementServiceImpl implements AgreementService {
         agreement.setNumberOfCounterParties(counterParties.size());
         return agreementMapper.AgreementToAgreementDTO(agreementRepository.save(agreement));
     }
+
+    @Override
+    public AgreementDTO modifyAgreement(String contractReferenceNumber, AgreementDTO agreementDTO) {
+        Agreement agreement = agreementRepository.findByContractReferenceNumber(contractReferenceNumber);
+        if(agreement== null) throw new RuntimeException("Agreement with contract reference number " + contractReferenceNumber + " not found");
+        Agreement newAgreementDetails = agreementMapper.AgreementDTOToAgreement(agreementDTO);
+        newAgreementDetails.setUuid(agreement.getUuid());
+        newAgreementDetails.setBusinessType(productRepository.findByName(newAgreementDetails.getBusinessType().getName()));
+        newAgreementDetails.setAnchorCustomer(customerRepository.findByCustomerId(newAgreementDetails.getAnchorCustomer().getCustomerId()).get());
+        newAgreementDetails.setRm(rmRepository.findByRmId(newAgreementDetails.getRm().getRmId()));
+        List<Customer> counterParties = new ArrayList<>();
+        newAgreementDetails.getCounterParties().forEach(customer -> counterParties.add(customerRepository.findByCustomerId(customer.getCustomerId()).get()));
+        newAgreementDetails.setCounterParties(counterParties);
+        newAgreementDetails.setNumberOfCounterParties(counterParties.size());
+        return agreementMapper.AgreementToAgreementDTO(agreementRepository.save(newAgreementDetails));
+    }
 }

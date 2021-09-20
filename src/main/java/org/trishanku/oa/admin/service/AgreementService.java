@@ -18,4 +18,6 @@ public interface AgreementService {
     AgreementDTO getAgreementByContractDocumentNumber(String contractDocumentNumber);
 
     AgreementDTO addAgreement(AgreementDTO agreementDTO);
+
+    AgreementDTO modifyAgreement(String contractReferenceNumber, AgreementDTO agreementDTO);
 }

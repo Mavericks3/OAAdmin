@@ -58,6 +58,12 @@ public class AgreementController {
 
 
     //Modify Agreement
+    @PutMapping()
+    public ResponseEntity<AgreementDTO> modifyAgreement( @RequestBody AgreementDTO agreementDTO)
+    {
+
+        return new ResponseEntity<>(agreementService.modifyAgreement(agreementDTO.getContractReferenceNumber(), agreementDTO), HttpStatus.OK);
+    }
 
     //Authorise Agreement
 
