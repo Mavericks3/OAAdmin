@@ -2,6 +2,8 @@ package org.trishanku.oa.admin.entity;
 
 import lombok.*;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import java.util.Date;
 @MappedSuperclass
@@ -17,6 +19,7 @@ public class Base {
     private Date modifiedDate;
     private String authorisedUser;
     private Date authorisationDate;
+    @Enumerated(EnumType.STRING)
     private TransactionStatusEnum transactionStatus;
 
     public void setModificationDetails(String username)
