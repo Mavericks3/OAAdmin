@@ -51,4 +51,6 @@ public class Agreement extends Base{
             inverseJoinColumns = { @JoinColumn(name = "COUNTER_PARTY_ID") }
     )
     private List<Customer> counterParties;
+    @Column(name = "STATUS")
+    private boolean status;
 }

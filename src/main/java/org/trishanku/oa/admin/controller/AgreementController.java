@@ -66,6 +66,12 @@ public class AgreementController {
     }
 
     //Authorise Agreement
+    @PutMapping(path= "/authorise")
+    public ResponseEntity<AgreementDTO> authoriseAgreement( @RequestBody AgreementDTO agreementDTO)
+    {
+
+        return new ResponseEntity<>(agreementService.authoriseAgreement(agreementDTO.getContractReferenceNumber(), agreementDTO), HttpStatus.OK);
+    }
 
     //Delete Agreement
 }

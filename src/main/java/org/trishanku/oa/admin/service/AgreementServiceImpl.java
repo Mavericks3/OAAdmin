@@ -65,6 +65,8 @@ public class AgreementServiceImpl implements AgreementService {
         agreement.getCounterParties().forEach(customer -> counterParties.add(customerRepository.findByCustomerId(customer.getCustomerId()).get()));
         agreement.setCounterParties(counterParties);
         agreement.setNumberOfCounterParties(counterParties.size());
+        // TO BE CHANGED AFTER RETRIEVING THE DETAILS FROM JWT
+        agreement.setCreationDetails("RAVIKANTH");
         return agreementMapper.AgreementToAgreementDTO(agreementRepository.save(agreement));
     }
 
@@ -81,6 +83,17 @@ public class AgreementServiceImpl implements AgreementService {
         newAgreementDetails.getCounterParties().forEach(customer -> counterParties.add(customerRepository.findByCustomerId(customer.getCustomerId()).get()));
         newAgreementDetails.setCounterParties(counterParties);
         newAgreementDetails.setNumberOfCounterParties(counterParties.size());
+        // TO BE CHANGED AFTER RETRIEVING THE DETAILS FROM JWT
+        agreement.setModificationDetails("RAVIKANTH");
         return agreementMapper.AgreementToAgreementDTO(agreementRepository.save(newAgreementDetails));
+    }
+
+    @Override
+    public AgreementDTO authoriseAgreement(String contractReferenceNumber, AgreementDTO agreementDTO) {
+        Agreement agreement = agreementRepository.findByContractReferenceNumber(contractReferenceNumber);
+        if(agreement== null) throw new RuntimeException("Agreement with contract reference number " + contractReferenceNumber + " not found");
+        // TO BE CHANGED AFTER RETRIEVING THE DETAILS FROM JWT
+        agreement.setAuthorizationDetails("RAVIKANTH");
+        return agreementMapper.AgreementToAgreementDTO(agreement);
     }
 }

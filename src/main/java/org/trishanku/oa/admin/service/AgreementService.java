@@ -20,4 +20,6 @@ public interface AgreementService {
     AgreementDTO addAgreement(AgreementDTO agreementDTO);
 
     AgreementDTO modifyAgreement(String contractReferenceNumber, AgreementDTO agreementDTO);
+
+    AgreementDTO authoriseAgreement(String contractReferenceNumber, AgreementDTO agreementDTO);
 }
