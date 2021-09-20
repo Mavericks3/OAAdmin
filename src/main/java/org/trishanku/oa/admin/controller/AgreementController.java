@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.trishanku.oa.admin.model.AgreementDTO;
+import org.trishanku.oa.admin.model.UserDTO;
 import org.trishanku.oa.admin.service.AgreementService;
 
 
@@ -27,10 +29,22 @@ public class AgreementController {
     }
 
     //Get Agreement by Contact reference Number
+    @GetMapping(path = "/{contractReferenceNumber}")
+    public ResponseEntity<AgreementDTO> getAgreementByContractReferenceNumber(@PathVariable(name="contractReferenceNumber") String contractReferenceNumber)
+    {
+        return new ResponseEntity(agreementService.getAgreementByContractReferenceNumber(contractReferenceNumber),HttpStatus.OK);
+    }
+
 
     //Get Agreement by Contract Document Number
 
     //Get Pending Agreements
+    @GetMapping(path = "/pending")
+    public ResponseEntity<List<AgreementDTO>> getPendingAgreements()
+    {
+        List<AgreementDTO> agreementDTOS = agreementService.getPendingAgrements();
+        return new ResponseEntity<>(agreementDTOS, HttpStatus.OK);
+    }
 
     //Add Agreement
 
