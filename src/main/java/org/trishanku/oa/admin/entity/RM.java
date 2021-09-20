@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,12 +19,21 @@ import java.util.UUID;
 public class RM extends Base {
 
     @Id
+    @Column(name = "SYSTEM_ID")
     private UUID uuid;
-    @UniqueElements
+
+    @Column(name="RM_ID", unique = true)
     private String rmId;
+    @Column(name="RM_NAME")
     private String name;
+    @Column(name = "EMAIL_ADDRESS")
     private String emailAddress;
+    @Column(name = "JOINING_DATE")
     private Date joiningDate;
+    @Column(name = "VALID_DATE")
     private Date validDate;
+    @Column(name = "EXPIRY_DATE")
     private Date expiryDate;
+    @Column(name = "ACTIVE_STATUS")
+    private boolean status;
 }

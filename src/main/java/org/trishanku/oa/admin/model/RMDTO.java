@@ -20,4 +20,6 @@ public class RMDTO {
     private Date joiningDate;
     private Date validDate;
     private Date expiryDate;
+    private boolean status;
+
 }
