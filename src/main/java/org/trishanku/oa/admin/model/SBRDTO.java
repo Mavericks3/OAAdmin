@@ -1,6 +1,7 @@
 package org.trishanku.oa.admin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.trishanku.oa.admin.entity.*;
 
 
@@ -8,6 +9,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 public class SBRDTO {
 
     @JsonIgnore
