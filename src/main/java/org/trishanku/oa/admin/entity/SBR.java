@@ -83,21 +83,21 @@ public class SBR extends Base{
     @Column(name= "ANCHOR_CUSTOMER_TELEPHONE")
     private String anchorCustomerTelephone;
     @Column(name= "COUNTER_PARTY_CONTACT_NAME")
-    private String counteryPartyContactName;
+    private String counterPartyContactName;
     @Column(name= "COUNTER_PARTY_ADDRESS_LINE1")
-    private String counteryPartyAddressLine1;
+    private String counterPartyAddressLine1;
     @Column(name= "COUNTER_PARTY_ADDRESS_LINE2")
-    private String counteryPartyAddressLine2;
+    private String counterPartyAddressLine2;
     @Column(name= "COUNTER_PARTY_ADDRESS_LINE3")
-    private String counteryPartyAddressLine3;
+    private String counterPartyAddressLine3;
     @Column(name= "COUNTER_PARTY_PO_BOX")
-    private String counteryPartyPOBox;
+    private String counterPartyPOBox;
     @Column(name= "COUNTER_PARTY_EMAIL")
-    private String counteryPartyEmail;
+    private String counterPartyEmail;
     @Column(name= "COUNTER_PARTY_FAX")
-    private String counteryPartyFax;
+    private String counterPartyFax;
     @Column(name= "COUNTER_PARTY_TELEPHONE")
-    private String counteryPartyTelephone;
+    private String counterPartyTelephone;
     @Enumerated(EnumType.STRING)
     @Column(name= "MANAGEMENT_FEE_CURRENCY")
     private CurrencyEnum managementFeeCurrency;
