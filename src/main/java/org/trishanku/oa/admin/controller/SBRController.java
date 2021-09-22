@@ -63,10 +63,14 @@ public class SBRController {
 
     //modify an SBR
 
-    //add and SBR
+    //add an SBR
+    @PostMapping()
+    public ResponseEntity<SBRDTO> getSBRsByCounterPartyId(@RequestBody SBRDTO sbrdto)
+    {
+        return  new ResponseEntity<>(sbrService.save(sbrdto), HttpStatus.OK);
+    }
 
     //authorise an SBR
-    //to get a list of all master SBR's
     @PutMapping(path = "/authorise")
     public ResponseEntity<SBRDTO> authoriseSBR(@RequestBody SBRDTO sbrdto)
     {

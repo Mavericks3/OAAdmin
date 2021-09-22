@@ -19,9 +19,9 @@ public class SBRDTO {
     @JsonIgnore
     private UUID uuid;
     private String sbrId;
-    private Agreement agreementId;
-    private Customer anchorCustomerId;
-    private Customer counterPartyId;
+    private Agreement agreement;
+    private Customer anchorCustomer;
+    private Customer counterParty;
     private DirectContactEnum directContactFlag;
     private RecourseEnum recourseFlag;
     private LimitTypeEnum limitTypeFlag;

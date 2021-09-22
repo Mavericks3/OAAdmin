@@ -24,13 +24,13 @@ public class SBR extends Base{
     private String sbrId;
     @ManyToOne
     @JoinColumn(name = "AGREEMENT_ID")
-    private Agreement agreementId;
+    private Agreement agreement;
     @ManyToOne
     @JoinColumn(name = "ANCHOR_CUSTOMER_ID")
-    private Customer anchorCustomerId;
+    private Customer anchorCustomer;
     @ManyToOne
     @JoinColumn(name = "COUNTER_PARTY_ID")
-    private Customer counterPartyId;
+    private Customer counterParty;
     @Enumerated(EnumType.STRING)
     @Column(name= "DIRECT_CONTACT_FLAG")
     private DirectContactEnum directContactFlag;

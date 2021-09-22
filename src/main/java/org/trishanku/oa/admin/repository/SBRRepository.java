@@ -16,7 +16,7 @@ public interface SBRRepository extends JpaRepository<SBR, UUID> {
 
     SBR findBySbrId(String sbrId);
 
-    List<SBR> findByAnchorCustomerId(Customer anchorCustomer);
+    List<SBR> findByAnchorCustomer(Customer anchorCustomer);
 
-    List<SBR> findByCounterPartyId(Customer counterParty);
+    List<SBR> findByCounterParty(Customer counterParty);
 }
