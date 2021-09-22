@@ -55,6 +55,11 @@ public class SBRController {
     }
 
     //to get list of SBR's for a given counter party
+    @GetMapping(path = "/counterparty/{counterPartyId}")
+    public ResponseEntity<List<SBRDTO>> getSBRsByCounterPartyId(@PathVariable(name="counterPartyId") String counterPartyId)
+    {
+        return  new ResponseEntity<>(sbrService.getSBRsByCounterParty(counterPartyId), HttpStatus.OK);
+    }
 
     //modify an SBR
 

@@ -21,4 +21,6 @@ public interface SBRService {
     SBRDTO delete(SBRDTO sbrdto);
 
     List<SBRDTO> getSBRsByAnchorCustomer(String anchorCustomerId);
+
+    List<SBRDTO> getSBRsByCounterParty(String counterPartyId);
 }

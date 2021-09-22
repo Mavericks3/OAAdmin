@@ -78,4 +78,11 @@ public class SBRServiceImpl implements SBRService {
         List<SBR> sbrList = sbrRepository.findByAnchorCustomerId(anchorCustomer);
         return sbrMapper.SBRsToSBRDTOs(sbrList);
     }
+
+    @Override
+    public List<SBRDTO> getSBRsByCounterParty(String counterPartyId) {
+        Customer counterParty = customerRepository.findByCustomerId(counterPartyId).orElseThrow(() -> new RuntimeException("customer with id " + counterPartyId + " does not exist"));
+        List<SBR> sbrList = sbrRepository.findByCounterPartyId(counterParty);
+        return sbrMapper.SBRsToSBRDTOs(sbrList);
+    }
 }
