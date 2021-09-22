@@ -39,6 +39,11 @@ public class SBRController {
     }
 
     //to get a specific SBR
+    @GetMapping(path = "/{sbrId}")
+    public ResponseEntity<SBRDTO> getSBRById(@PathVariable(name="sbrId") String sbrId)
+    {
+        return  new ResponseEntity<>(sbrService.getSBRById(sbrId), HttpStatus.OK);
+    }
 
     //to get list of SBR's for a given anchor customer
 

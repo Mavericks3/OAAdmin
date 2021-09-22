@@ -51,4 +51,9 @@ public class SBRServiceImpl implements SBRService {
         sbr.setAuthorizationDetails("RAVIKANTH");
         return  sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
     }
+
+    @Override
+    public SBRDTO getSBRById(String sbrId) {
+        return sbrMapper.SBRToSBRDTO(sbrRepository.findBySbrId(sbrId));
+    }
 }

@@ -15,4 +15,6 @@ public interface SBRService {
     SBRDTO save(SBRDTO sbrdto);
 
     SBRDTO authorise(SBRDTO sbrdto);
+
+    SBRDTO getSBRById(String sbrId);
 }
