@@ -17,4 +17,6 @@ public interface SBRService {
     SBRDTO authorise(SBRDTO sbrdto);
 
     SBRDTO getSBRById(String sbrId);
+
+    SBRDTO delete(SBRDTO sbrdto);
 }

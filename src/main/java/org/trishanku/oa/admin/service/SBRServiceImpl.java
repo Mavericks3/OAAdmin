@@ -56,4 +56,12 @@ public class SBRServiceImpl implements SBRService {
     public SBRDTO getSBRById(String sbrId) {
         return sbrMapper.SBRToSBRDTO(sbrRepository.findBySbrId(sbrId));
     }
+
+    @Override
+    public SBRDTO delete(SBRDTO sbrdto) {
+        SBR sbr = sbrRepository.findBySbrId(sbrdto.getSbrId());
+        if(sbr == null) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
+        sbr.setStatus(false);
+        return  sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
+    }
 }

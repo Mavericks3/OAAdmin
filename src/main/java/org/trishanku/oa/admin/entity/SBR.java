@@ -148,4 +148,6 @@ public class SBR extends Base{
     private BigDecimal limitAmount;
     @Column(name= "CASH_MARGIN")
     private float cashMargin;
+    @Column(name= "STATUS")
+    private boolean status;
 }

@@ -75,4 +75,5 @@ public class SBRDTO {
     private CurrencyEnum limitCurrency;
     private BigDecimal limitAmount;
     private float cashMargin;
+    private boolean status;
 }

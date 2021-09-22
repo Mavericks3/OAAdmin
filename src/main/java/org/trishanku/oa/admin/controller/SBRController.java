@@ -62,6 +62,11 @@ public class SBRController {
     }
 
     //delete an SBR
+    @PutMapping(path = "/delete")
+    public ResponseEntity<SBRDTO> deleteSBR(@RequestBody SBRDTO sbrdto)
+    {
+        return  new ResponseEntity<>(sbrService.delete(sbrdto), HttpStatus.OK);
+    }
 
 
 }
