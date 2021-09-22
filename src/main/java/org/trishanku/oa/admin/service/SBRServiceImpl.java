@@ -63,6 +63,18 @@ public class SBRServiceImpl implements SBRService {
     }
 
     @Override
+    public SBRDTO edit(SBRDTO sbrdto) {
+        SBR sbr = sbrMapper.SBRDTOToSBR(sbrdto);
+        sbr.setUuid(sbrRepository.findBySbrId(sbr.getSbrId()).getUuid());
+        sbr.setAgreement(agreementRepository.findByContractReferenceNumber(sbr.getAgreement().getContractReferenceNumber()));
+        sbr.setAnchorCustomer(customerRepository.findByCustomerId(sbr.getAnchorCustomer().getCustomerId()).get());
+        sbr.setCounterParty(customerRepository.findByCustomerId(sbr.getCounterParty().getCustomerId()).get());
+        //to be changed once the user details are retrieved from JWT
+        sbr.setModificationDetails("RAVIKANTH");
+        return  sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
+    }
+
+    @Override
     public SBRDTO authorise(SBRDTO sbrdto) {
         SBR sbr = sbrRepository.findBySbrId(sbrdto.getSbrId());
         if(sbr == null) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");

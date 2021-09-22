@@ -62,10 +62,15 @@ public class SBRController {
     }
 
     //modify an SBR
+    @PutMapping()
+    public ResponseEntity<SBRDTO> editSBR(@RequestBody SBRDTO sbrdto)
+    {
+        return  new ResponseEntity<>(sbrService.edit(sbrdto), HttpStatus.OK);
+    }
 
     //add an SBR
     @PostMapping()
-    public ResponseEntity<SBRDTO> getSBRsByCounterPartyId(@RequestBody SBRDTO sbrdto)
+    public ResponseEntity<SBRDTO> addSBR(@RequestBody SBRDTO sbrdto)
     {
         return  new ResponseEntity<>(sbrService.save(sbrdto), HttpStatus.OK);
     }
