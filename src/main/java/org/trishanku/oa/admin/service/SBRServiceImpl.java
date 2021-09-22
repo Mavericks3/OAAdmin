@@ -2,6 +2,7 @@ package org.trishanku.oa.admin.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.trishanku.oa.admin.entity.SBR;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.mapper.SBRMapper;
 import org.trishanku.oa.admin.model.SBRDTO;
@@ -33,5 +34,21 @@ public class SBRServiceImpl implements SBRService {
     public List<SBRDTO> getAllMasterSBRs() {
 
         return sbrMapper.SBRsToSBRDTOs(sbrRepository.findByTransactionStatus(TransactionStatusEnum.MASTER));
+    }
+
+    @Override
+    public SBRDTO save(SBRDTO sbrdto) {
+        SBR sbr = sbrRepository.findBySbrId(sbrdto.getSbrId());
+        if(sbr == null) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
+        return  sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
+    }
+
+    @Override
+    public SBRDTO authorise(SBRDTO sbrdto) {
+        SBR sbr = sbrRepository.findBySbrId(sbrdto.getSbrId());
+        if(sbr == null) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
+        //TO BE MODIFIED ONCE USER DETAILS ARE RETRIEVED FROM JWT
+        sbr.setAuthorizationDetails("RAVIKANTH");
+        return  sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
     }
 }

@@ -3,9 +3,8 @@ package org.trishanku.oa.admin.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.trishanku.oa.admin.entity.SBR;
 import org.trishanku.oa.admin.model.SBRDTO;
 import org.trishanku.oa.admin.service.SBRService;
 
@@ -50,6 +49,12 @@ public class SBRController {
     //add and SBR
 
     //authorise an SBR
+    //to get a list of all master SBR's
+    @PutMapping(path = "/authorise")
+    public ResponseEntity<SBRDTO> authoriseSBR(@RequestBody SBRDTO sbrdto)
+    {
+        return  new ResponseEntity<>(sbrService.authorise(sbrdto), HttpStatus.OK);
+    }
 
     //delete an SBR
 

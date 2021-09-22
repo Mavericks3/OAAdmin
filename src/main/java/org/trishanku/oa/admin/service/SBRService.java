@@ -11,4 +11,8 @@ public interface SBRService {
     List<SBRDTO> getAllPendingSBRs();
 
     List<SBRDTO> getAllMasterSBRs();
+
+    SBRDTO save(SBRDTO sbrdto);
+
+    SBRDTO authorise(SBRDTO sbrdto);
 }
