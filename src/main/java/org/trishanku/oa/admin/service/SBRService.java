@@ -19,4 +19,6 @@ public interface SBRService {
     SBRDTO getSBRById(String sbrId);
 
     SBRDTO delete(SBRDTO sbrdto);
+
+    List<SBRDTO> getSBRsByAnchorCustomer(String anchorCustomerId);
 }

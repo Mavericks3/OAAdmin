@@ -2,12 +2,15 @@ package org.trishanku.oa.admin.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.SBR;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.mapper.SBRMapper;
 import org.trishanku.oa.admin.model.SBRDTO;
+import org.trishanku.oa.admin.repository.CustomerRepository;
 import org.trishanku.oa.admin.repository.SBRRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -15,6 +18,10 @@ public class SBRServiceImpl implements SBRService {
 
     @Autowired
     SBRRepository sbrRepository;
+
+    @Autowired
+    CustomerRepository customerRepository;
+
     @Autowired
     SBRMapper sbrMapper;
 
@@ -63,5 +70,12 @@ public class SBRServiceImpl implements SBRService {
         if(sbr == null) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
         sbr.setStatus(false);
         return  sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
+    }
+
+    @Override
+    public List<SBRDTO> getSBRsByAnchorCustomer(String anchorCustomerId) {
+        Customer anchorCustomer = customerRepository.findByCustomerId(anchorCustomerId).orElseThrow(() -> new RuntimeException("customer with id " + anchorCustomerId + " does not exist"));
+        List<SBR> sbrList = sbrRepository.findByAnchorCustomerId(anchorCustomer);
+        return sbrMapper.SBRsToSBRDTOs(sbrList);
     }
 }

@@ -45,7 +45,14 @@ public class SBRController {
         return  new ResponseEntity<>(sbrService.getSBRById(sbrId), HttpStatus.OK);
     }
 
+
+
     //to get list of SBR's for a given anchor customer
+    @GetMapping(path = "/anchorcustomer/{anchorCustomerId}")
+    public ResponseEntity<List<SBRDTO>> getSBRsByAnchorCustomerId(@PathVariable(name="anchorCustomerId") String anchorCustomerId)
+    {
+        return  new ResponseEntity<>(sbrService.getSBRsByAnchorCustomer(anchorCustomerId), HttpStatus.OK);
+    }
 
     //to get list of SBR's for a given counter party
 

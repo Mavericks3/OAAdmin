@@ -2,6 +2,7 @@ package org.trishanku.oa.admin.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.SBR;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 
@@ -14,4 +15,6 @@ public interface SBRRepository extends JpaRepository<SBR, UUID> {
     List<SBR> findByTransactionStatus(TransactionStatusEnum transactionStatus);
 
     SBR findBySbrId(String sbrId);
+
+    List<SBR> findByAnchorCustomerId(Customer anchorCustomer);
 }
