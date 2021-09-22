@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface SBRService {
     List<SBRDTO> getAllSBRs();
+
+    List<SBRDTO> getAllPendingSBRs();
+
+    List<SBRDTO> getAllMasterSBRs();
 }
