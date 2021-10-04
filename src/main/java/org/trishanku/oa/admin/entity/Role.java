@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ROLE_TABLE")
+@Table(name = "ROLE_TABLE", schema = "ADMIN")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

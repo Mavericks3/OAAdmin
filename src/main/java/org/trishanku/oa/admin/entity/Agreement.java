@@ -4,14 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Entity(name = "AGREEMENT_TABLE")
+@Entity
+@Table(name = "AGREEMENT_TABLE",  schema = "ADMIN")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -46,7 +46,7 @@ public class Agreement extends Base{
     private int numberOfCounterParties;
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     @JoinTable(
-            name = "AGREEMENT_COUNTER_PARTIES_TABLE",
+            name = "AGREEMENT_COUNTER_PARTIES_TABLE", schema = "ADMIN",
             joinColumns = { @JoinColumn(name = "AGREEMENT_ID") },
             inverseJoinColumns = { @JoinColumn(name = "COUNTER_PARTY_ID") }
     )

@@ -3,15 +3,12 @@ package org.trishanku.oa.admin.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "USER_TABLE")
+@Table(name = "USER_TABLE", schema = "ADMIN")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -34,7 +31,7 @@ public class User extends Base{
     private boolean status;
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinTable(
-            name = "USER_ROLES",
+            name = "USER_ROLES", schema = "ADMIN",
             joinColumns = { @JoinColumn(name = "USER_ID") },
             inverseJoinColumns = { @JoinColumn(name = "ROLE_ID") }
     )
@@ -42,7 +39,7 @@ public class User extends Base{
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     @JoinTable(
-            name = "USER_CUSTOMER_MAPPING",
+            name = "USER_CUSTOMER_MAPPING", schema = "ADMIN",
             joinColumns = { @JoinColumn(name = "USER_ID") },
             inverseJoinColumns = { @JoinColumn(name = "CUSTOMER_ID") }
     )

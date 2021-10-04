@@ -8,11 +8,12 @@ import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import java.util.UUID;
 
-@Entity(name="PRODUCT_TABLE")
+@Entity
+@Table(name="PRODUCT_TABLE", schema = "ADMIN")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

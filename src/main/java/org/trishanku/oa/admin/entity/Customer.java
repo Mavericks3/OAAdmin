@@ -5,9 +5,11 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.UUID;
 
-@Entity(name="CUSTOMER_TABLE")
+@Entity
+@Table(name="CUSTOMER_TABLE",  schema = "ADMIN")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

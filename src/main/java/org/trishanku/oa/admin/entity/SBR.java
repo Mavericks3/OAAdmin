@@ -10,7 +10,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
-@Entity (name = "SBR_TABLE")
+@Entity
+@Table(name = "SBR_TABLE", schema = "ADMIN")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
