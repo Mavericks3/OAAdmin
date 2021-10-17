@@ -1,6 +1,6 @@
 package org.trishanku.oa.admin.service;
 
-import lombok.SneakyThrows;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +11,8 @@ import org.trishanku.oa.admin.entity.User;
 import org.trishanku.oa.admin.exception.ResourceAlreadyExistsException;
 import org.trishanku.oa.admin.mapper.UserMapper;
 import org.trishanku.oa.admin.model.UserDTO;
+import org.trishanku.oa.admin.notification.entity.NotificationEvent;
+import org.trishanku.oa.admin.notification.service.NotificationService;
 import org.trishanku.oa.admin.repository.CustomerRepository;
 import org.trishanku.oa.admin.repository.RoleRepository;
 import org.trishanku.oa.admin.repository.UserRepository;
@@ -29,6 +31,9 @@ public class SuperAdminServiceImpl implements SuperAdminService{
     RoleRepository roleRepository;
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    NotificationService notificationService;
 
     @Autowired
     CustomerRepository customerRepository;
@@ -66,6 +71,11 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         user.setCustomers(bank);
         //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
         user.setCreationDetails("RAVIKANTH");
+        try {
+            notificationService.addMakerEvent(user, NotificationEvent.SUPER_ADMIN_CREATION);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         return userMapper.userToUserDTO(userRepository.save(user));
     }
 

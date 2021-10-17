@@ -279,3 +279,31 @@ create table if not exists admin.user_roles
 alter table admin.user_roles
     owner to postgres;
 
+create table if not exists admin.notification_table
+(
+    message_id uuid not null
+        constraint notification_table_pkey
+            primary key,
+    authorisation_date timestamp,
+    authorised_user varchar(255),
+    created_date timestamp,
+    created_user varchar(255),
+    modified_date timestamp,
+    modified_user varchar(255),
+    transaction_status varchar(255),
+    attachments bytea,
+    bcc_list varchar(255),
+    cc_list varchar(255),
+    content varchar(255),
+    from_list varchar(255),
+    status integer,
+    subject varchar(255),
+    to_list varchar(255),
+    transaction_information varchar(255),
+    type varchar(255)
+);
+
+alter table admin.notification_table owner to postgres;
+
+
+

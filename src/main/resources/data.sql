@@ -2,9 +2,11 @@ DELETE FROM ADMIN.SBR_TABLE;
 DELETE FROM ADMIN.AGREEMENT_TABLE;
 DELETE FROM ADMIN.PRODUCT_TABLE;
 DELETE FROM ADMIN.user_roles;
+DELETE FROM admin.user_customer_mapping;
 
 INSERT INTO admin.product_table (uuid, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, code, name) VALUES ('cd320922-df66-497a-841e-798c6fc1b0c3', null, null, null, null, null, null, null, null, 'Supplier Finance');
 INSERT INTO admin.product_table (uuid, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, code, name) VALUES ('55442dfa-9e08-49ef-bead-8615714c2ad1', null, null, null, null, null, null, null, null, 'Receivable Finance');
+
 
 
 DELETE FROM ADMIN.CUSTOMER_TABLE;
@@ -46,6 +48,8 @@ INSERT INTO admin.user_table (system_id, authorisation_date, authorised_user, cr
 INSERT INTO admin.user_table (system_id, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, effective_date, email_address, first_name, last_name, active_status, user_id) VALUES ('18355e5f-9396-4cc8-b391-11c6ea79189b', '2021-09-11 12:35:44.786000', 'RAVIKANTH', '2021-09-10 18:37:44.070000', 'RAVIKANTH', '2021-09-11 12:35:44.766000', 'RAVIKANTH', 'MASTER', '2016-09-09 17:18:52.000000', 'vijayan@chinasystems-me.com', 'vijayan', 'venkatesan s', true, 'vijayan');
 INSERT INTO admin.user_table (system_id, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, effective_date, email_address, first_name, last_name, active_status, user_id) VALUES ('d383c9f3-4a60-4a47-a451-287564ff5061', null, null, '2021-09-10 18:42:56.878000', 'RAVIKANTH', '2021-09-11 12:35:44.807000', 'RAVIKANTH', 'MASTER', '2021-09-09 17:18:52.000000', 'vijayan@gmail.com', 'vijayan', 'venkatesan', false, 'vijayan2');
 
+
+
 DELETE FROM admin.user_roles;
 INSERT INTO admin.user_roles (user_id, role_id) VALUES ('deb06936-65b9-4007-aadf-78d1b5433a08', 'a5e1526c-c5e0-44ef-8416-74254f32eb8e');
 INSERT INTO admin.user_roles (user_id, role_id) VALUES ('c0b4d893-9f6f-4ec8-844a-3eea75eb4ef8', 'a5e1526c-c5e0-44ef-8416-74254f32eb8e');
@@ -61,3 +65,5 @@ INSERT INTO admin.user_roles (user_id, role_id) VALUES ('91e925e3-0a6b-462a-9175
 INSERT INTO admin.user_roles (user_id, role_id) VALUES ('adbf3f67-a12b-41c3-bfea-81aa777a714b', '0de3a370-40ff-4027-b9f9-cd6f56931d27');
 INSERT INTO admin.user_roles (user_id, role_id) VALUES ('adbf3f67-a12b-41c3-bfea-81aa777a714b', 'd005a107-1b1f-4ebb-8697-d0dbae66e9da');
 INSERT INTO admin.user_roles (user_id, role_id) VALUES ('adbf3f67-a12b-41c3-bfea-81aa777a714b', 'bc1e2893-9541-442c-96e0-dd762378c6a1');
+
+INSERT INTO admin.user_customer_mapping (user_id, customer_id) VALUES ('91e925e3-0a6b-462a-9175-b13449de71bd', '793a2fa1-6a9f-44c2-88bd-dcf90a9089d4');
