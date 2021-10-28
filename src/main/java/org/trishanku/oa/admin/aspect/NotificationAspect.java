@@ -65,7 +65,13 @@ public class NotificationAspect {
             "|| within(org.trishanku.oa.admin.service.CustomerUserService+) && execution(* addCustomerUser(..))" +
             "|| within(org.trishanku.oa.admin.service.CustomerUserService+) && execution(* modifyCustomerUser(..))" +
             "|| within(org.trishanku.oa.admin.service.CustomerUserService+) && execution(* authoriseCustomerUser(..))" +
-            "|| within(org.trishanku.oa.admin.service.CustomerUserService+) && execution(* deleteCustomerUser(..))"
+            "|| within(org.trishanku.oa.admin.service.CustomerUserService+) && execution(* deleteCustomerUser(..))" +
+
+            //Point cut on bank user management
+            "|| within(org.trishanku.oa.admin.service.CustomerService+) && execution(* addCustomer(..))" +
+            "|| within(org.trishanku.oa.admin.service.CustomerService+) && execution(* modifyCustomer(..))" +
+            "|| within(org.trishanku.oa.admin.service.CustomerService+) && execution(* authoriseCustomer(..))" +
+            "|| within(org.trishanku.oa.admin.service.CustomerService+) && execution(* deleteCustomer(..))"
 
     )
 
@@ -144,6 +150,20 @@ public class NotificationAspect {
                         break;
                     case  "deleteCustomerUser":
                         notificationService.addDeleteEvent(result, NotificationEvent.CUSTOMER_USER_DELETION);
+                        break;
+
+
+                    case  "addCustomer":
+                        notificationService.addMakerEvent(result, NotificationEvent.CUSTOMER_CREATION);
+                        break;
+                    case  "modifyCustomer":
+                        notificationService.addModificationEvent(result, NotificationEvent.CUSTOMER_MODIFICATION);
+                        break;
+                    case  "authoriseCustomer":
+                        notificationService.addCheckerEvent(result, NotificationEvent.CUSTOMER_APPROVAL);
+                        break;
+                    case  "deleteCustomer":
+                        notificationService.addDeleteEvent(result, NotificationEvent.CUSTOMER_DELETION);
                         break;
 
                 }
