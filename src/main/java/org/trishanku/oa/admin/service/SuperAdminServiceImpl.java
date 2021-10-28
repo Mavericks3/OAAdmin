@@ -9,6 +9,7 @@ import org.trishanku.oa.admin.entity.Role;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.entity.User;
 import org.trishanku.oa.admin.exception.ResourceAlreadyExistsException;
+import org.trishanku.oa.admin.jwtauthentication.configuration.service.JWTUtil;
 import org.trishanku.oa.admin.mapper.UserMapper;
 import org.trishanku.oa.admin.model.UserDTO;
 import org.trishanku.oa.admin.notification.entity.NotificationEvent;
@@ -33,7 +34,7 @@ public class SuperAdminServiceImpl implements SuperAdminService{
     UserMapper userMapper;
 
     @Autowired
-    NotificationService notificationService;
+    JWTUtil jwtUtil;
 
     @Autowired
     CustomerRepository customerRepository;
@@ -69,13 +70,7 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         if(customerRepository.findByBank(true).isEmpty()) throw new RuntimeException("Bank business unit does not exist");
         bank.add(customerRepository.findByBank(true).get());
         user.setCustomers(bank);
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        user.setCreationDetails("RAVIKANTH");
-        try {
-            notificationService.addMakerEvent(user, NotificationEvent.SUPER_ADMIN_CREATION);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        user.setCreationDetails(jwtUtil.extractUsernameFromRequest());
         return userMapper.userToUserDTO(userRepository.save(user));
     }
 
@@ -87,8 +82,7 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         existingUserDetails.setLastName(userDTO.getLastName());
         existingUserDetails.setEffectiveDate(userDTO.getEffectiveDate());
         existingUserDetails.setEmailAddress(userDTO.getEmailAddress());
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        existingUserDetails.setModificationDetails("RAVIKANTH");
+        existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }
@@ -97,8 +91,7 @@ public class SuperAdminServiceImpl implements SuperAdminService{
     public UserDTO authoriseSuperAdmin(String userId) {
         if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Super admin with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        existingUserDetails.setAuthorizationDetails("RAVIKANTH");
+        existingUserDetails.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }
@@ -115,8 +108,7 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Super admin with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
         existingUserDetails.setStatus(false);
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        existingUserDetails.setModificationDetails("RAVIKANTH");
+        existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }

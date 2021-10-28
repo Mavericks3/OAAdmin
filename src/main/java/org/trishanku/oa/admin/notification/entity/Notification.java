@@ -37,7 +37,9 @@ public class Notification extends Base {
     private byte[] attachments;
     @Column(name="STATUS")
     private NotificationStatusEnum notificationStatus;
-    private String type;
+    @Column(name="NOTIFICATION_EVENT")
+    private String notificationEvent;
     @Column(name="TRANSACTION_INFORMATION")
     private String transactionInformation;
+
 }
