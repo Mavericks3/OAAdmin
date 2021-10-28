@@ -51,7 +51,21 @@ public class NotificationAspect {
             "|| within(org.trishanku.oa.admin.service.BankUserService+) && execution(* addBankUser(..))" +
             "|| within(org.trishanku.oa.admin.service.BankUserService+) && execution(* modifyBankUser(..))" +
             "|| within(org.trishanku.oa.admin.service.BankUserService+) && execution(* authoriseBankUser(..))" +
-            "|| within(org.trishanku.oa.admin.service.BankUserService+) && execution(* deleteBankUser(..))"
+            "|| within(org.trishanku.oa.admin.service.BankUserService+) && execution(* deleteBankUser(..))" +
+
+
+            //Point cut on bank admin management
+            "|| within(org.trishanku.oa.admin.service.CustomerAdminService+) && execution(* addCustomerAdmin(..))" +
+            "|| within(org.trishanku.oa.admin.service.CustomerAdminService+) && execution(* modifyCustomerAdmin(..))" +
+            "|| within(org.trishanku.oa.admin.service.CustomerAdminService+) && execution(* authoriseCustomerAdmin(..))" +
+            "|| within(org.trishanku.oa.admin.service.CustomerAdminService+) && execution(* deleteCustomerAdmin(..))" +
+
+
+            //Point cut on bank user management
+            "|| within(org.trishanku.oa.admin.service.CustomerUserService+) && execution(* addCustomerUser(..))" +
+            "|| within(org.trishanku.oa.admin.service.CustomerUserService+) && execution(* modifyCustomerUser(..))" +
+            "|| within(org.trishanku.oa.admin.service.CustomerUserService+) && execution(* authoriseCustomerUser(..))" +
+            "|| within(org.trishanku.oa.admin.service.CustomerUserService+) && execution(* deleteCustomerUser(..))"
 
     )
 
@@ -89,6 +103,8 @@ public class NotificationAspect {
                         notificationService.addDeleteEvent(result, NotificationEvent.SUPER_ADMIN_DELETION);
                         break;
 
+
+
                     case  "addBankAdmin":
                         notificationService.addMakerEvent(result, NotificationEvent.BANK_ADMIN_CREATION);
                         break;
@@ -103,17 +119,31 @@ public class NotificationAspect {
                         break;
 
 
-                    case  "addBankUser":
-                        notificationService.addMakerEvent(result, NotificationEvent.BANK_USER_CREATION);
+                    case  "addCustomerAdmin":
+                        notificationService.addMakerEvent(result, NotificationEvent.CUSTOMER_ADMIN_CREATION);
                         break;
-                    case  "modifyBankUser":
-                        notificationService.addModificationEvent(result, NotificationEvent.BANK_USER_MODIFICATION);
+                    case  "modifyCustomerAdmin":
+                        notificationService.addModificationEvent(result, NotificationEvent.CUSTOMER_ADMIN_MODIFICATION);
                         break;
-                    case  "authoriseBankUser":
-                        notificationService.addCheckerEvent(result, NotificationEvent.BANK_USER_APPROVAL);
+                    case  "authoriseCustomerAdmin":
+                        notificationService.addCheckerEvent(result, NotificationEvent.CUSTOMER_ADMIN_APPROVAL);
                         break;
-                    case  "deleteBankUser":
-                        notificationService.addDeleteEvent(result, NotificationEvent.BANK_USER_DELETION);
+                    case  "deleteCustomerAdmin":
+                        notificationService.addDeleteEvent(result, NotificationEvent.CUSTOMER_ADMIN_DELETION);
+                        break;
+
+
+                    case  "addCustomerUser":
+                        notificationService.addMakerEvent(result, NotificationEvent.CUSTOMER_USER_CREATION);
+                        break;
+                    case  "modifyCustomerUser":
+                        notificationService.addModificationEvent(result, NotificationEvent.CUSTOMER_USER_MODIFICATION);
+                        break;
+                    case  "authoriseCustomerUser":
+                        notificationService.addCheckerEvent(result, NotificationEvent.CUSTOMER_USER_APPROVAL);
+                        break;
+                    case  "deleteCustomerUser":
+                        notificationService.addDeleteEvent(result, NotificationEvent.CUSTOMER_USER_DELETION);
                         break;
 
                 }
