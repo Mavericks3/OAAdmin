@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "USER_TABLE", schema = "ADMIN")
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -46,7 +45,6 @@ public class User extends Base{
     )
     private List<Customer> customers;
 
-    @Column(name = "EMAIL_ADDRESS", unique = true)
-
+    @Column(name = "EMAIL_ADDRESS")
     private String emailAddress;
 }

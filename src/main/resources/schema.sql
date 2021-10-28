@@ -300,7 +300,7 @@ create table if not exists admin.notification_table
     subject varchar(255),
     to_list varchar(255),
     transaction_information varchar(255),
-    notification_event varchar(255)
+    type varchar(255)
 );
 
 alter table admin.notification_table owner to postgres;
