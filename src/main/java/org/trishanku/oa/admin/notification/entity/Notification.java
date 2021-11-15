@@ -3,10 +3,7 @@ package org.trishanku.oa.admin.notification.entity;
 import lombok.*;
 import org.trishanku.oa.admin.entity.Base;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -36,10 +33,13 @@ public class Notification extends Base {
     @Column(name="ATTACHMENTS")
     private byte[] attachments;
     @Column(name="STATUS")
+    @Enumerated(EnumType.STRING)
     private NotificationStatusEnum notificationStatus;
+    @Enumerated(EnumType.STRING)
     @Column(name="NOTIFICATION_EVENT")
-    private String notificationEvent;
+    private NotificationEvent notificationEvent;
     @Column(name="TRANSACTION_INFORMATION")
     private String transactionInformation;
+
 
 }

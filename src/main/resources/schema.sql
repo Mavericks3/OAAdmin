@@ -28,7 +28,7 @@ create table if not exists admin.customer_table
     status                  varchar(255),
     tax_registration_number varchar(255),
     vat_registration_number varchar(255),
-    constraint customer_table_pkey
+    constraint pk_customertable_systemid
         primary key (system_id)
 );
 
@@ -47,7 +47,7 @@ create table if not exists admin.product_table
     transaction_status varchar(255),
     code               varchar(255),
     name               varchar(255),
-    constraint product_table_pkey
+    constraint pk_producttable_uuid
         primary key (uuid)
 );
 
@@ -71,9 +71,9 @@ create table if not exists admin.rm_table
     rm_id              varchar(255),
     active_status      boolean,
     valid_date         timestamp,
-    constraint rm_table_pkey
+    constraint pk_rmtable_systemid
         primary key (system_id),
-    constraint uk_kyeeo0b1k3f14c4d6c88jll96
+    constraint uk_rmtable_rmid
         unique (rm_id)
 );
 
@@ -101,17 +101,17 @@ create table if not exists admin.agreement_table
     anchor_customer_id        uuid,
     product_id                uuid,
     rm_id                     uuid,
-    constraint agreement_table_pkey
+    constraint pk_agrementtable_systemid
         primary key (system_id),
-    constraint uk_10l36pk4yfqddgox6yhr4nbti
+    constraint uk_agreementtable_contractdocumentnumber
         unique (contract_document_number),
-    constraint uk_l3nsw0msbtd45c2pxaqmd19lb
+    constraint uk_agreementtable_contractreferencenumber
         unique (contract_reference_number),
-    constraint fk8v027y1c13s4j1b58xugtst50
+    constraint fk_agreementtable_anchorcustomerid
         foreign key (anchor_customer_id) references admin.customer_table,
-    constraint fk135ttxdrmluvfjpfdmgmo34v5
+    constraint fk_agreementtable_productid
         foreign key (product_id) references admin.product_table,
-    constraint fk4fomn1tot37i3gngdhixwj8oi
+    constraint fk_agreementtable_rmid
         foreign key (rm_id) references admin.rm_table
 );
 
@@ -122,9 +122,9 @@ create table if not exists admin.agreement_counter_parties_table
 (
     agreement_id     uuid not null,
     counter_party_id uuid not null,
-    constraint fkd52tymo5m0jpph62w5r3mppt0
+    constraint fk_agremeentcounterpartiestable_counterpartyid
         foreign key (counter_party_id) references admin.customer_table,
-    constraint fkpq0t83bd01mmtn0vakg7f0xtr
+    constraint fk_agreementcounterpartiestable_agreementid
         foreign key (agreement_id) references admin.agreement_table
 );
 
@@ -142,7 +142,7 @@ create table if not exists admin.role_table
     modified_user      varchar(255),
     transaction_status varchar(255),
     role_name          varchar(255),
-    constraint role_table_pkey
+    constraint pk_roletable_roleid
         primary key (role_id)
 );
 
@@ -217,13 +217,13 @@ create table if not exists admin.sbr_table
     agreement_id                    uuid,
     anchor_customer_id              uuid,
     counter_party_id                uuid,
-    constraint sbr_table_pkey
+    constraint pk_sbrtable_systemid
         primary key (system_id),
-    constraint fkqi1xpmdvgqdjpeqbt6opkwbc5
+    constraint fk_sbrtable_agreementid
         foreign key (agreement_id) references admin.agreement_table,
-    constraint fkaxx2k2nd2xoo33hk0ixme1jbw
+    constraint fk_sbrtable_anchorcustomerid
         foreign key (anchor_customer_id) references admin.customer_table,
-    constraint fkqn1o52vblpmlic6oj526bmv7n
+    constraint fk_sbrtable_counterparytid
         foreign key (counter_party_id) references admin.customer_table
 );
 
@@ -232,23 +232,29 @@ alter table admin.sbr_table
 
 create table if not exists admin.user_table
 (
-    system_id          uuid not null,
+    system_id uuid not null
+        constraint user_table_pkey
+            primary key,
     authorisation_date timestamp,
-    authorised_user    varchar(255),
-    created_date       timestamp,
-    created_user       varchar(255),
-    modified_date      timestamp,
-    modified_user      varchar(255),
+    authorised_user varchar(255),
+    created_date timestamp,
+    created_user varchar(255),
+    modified_date timestamp,
+    modified_user varchar(255),
     transaction_status varchar(255),
-    effective_date     timestamp,
-    email_address      varchar(255),
-    first_name         varchar(255),
-    last_name          varchar(255),
-    active_status      boolean,
-    user_id            varchar(255),
-    constraint user_table_pkey
-        primary key (system_id)
+    effective_date timestamp,
+    email_address varchar(255)
+        constraint uk_usertable_emailaddress
+            unique,
+    first_name varchar(255),
+    last_name varchar(255),
+    active_status boolean,
+    user_id varchar(255)
 );
+
+alter table admin.user_table owner to postgres;
+
+
 
 alter table admin.user_table
     owner to postgres;
@@ -257,9 +263,9 @@ create table if not exists admin.user_customer_mapping
 (
     user_id     uuid not null,
     customer_id uuid not null,
-    constraint fkn81afod09fjiphjvs6hmxq8vb
+    constraint fk_usercustomermappingtable_customerid
         foreign key (customer_id) references admin.customer_table,
-    constraint fkge7lm9vcnrxwdt60d5tb3tm2b
+    constraint fk_usercustomermappingtable_userid
         foreign key (user_id) references admin.user_table
 );
 
@@ -270,9 +276,9 @@ create table if not exists admin.user_roles
 (
     user_id uuid not null,
     role_id uuid not null,
-    constraint fke786ne22ois769q419yn4y5fi
+    constraint fk_userrolestable_roleid
         foreign key (role_id) references admin.role_table,
-    constraint fkoxgn0x8mxxu1hovew528qckp9
+    constraint fk_userrolestable_userid
         foreign key (user_id) references admin.user_table
 );
 
@@ -281,29 +287,56 @@ alter table admin.user_roles
 
 create table if not exists admin.notification_table
 (
-    message_id uuid not null
-        constraint notification_table_pkey
+    message_id              uuid not null
+        constraint pk_notificationtable_messageid
             primary key,
-    authorisation_date timestamp,
-    authorised_user varchar(255),
-    created_date timestamp,
-    created_user varchar(255),
-    modified_date timestamp,
-    modified_user varchar(255),
-    transaction_status varchar(255),
-    attachments bytea,
-    bcc_list varchar(255),
-    cc_list varchar(255),
-    content varchar(255),
-    from_list varchar(255),
-    status integer,
-    subject varchar(255),
-    to_list varchar(255),
-    transaction_information varchar(255),
-    notification_event varchar(255)
+    authorisation_date      timestamp,
+    authorised_user         varchar(255),
+    created_date            timestamp,
+    created_user            varchar(255),
+    modified_date           timestamp,
+    modified_user           varchar(255),
+    transaction_status      varchar(255),
+    attachments             bytea,
+    bcc_list                varchar(255),
+    cc_list                 varchar(255),
+    content                 text,
+    from_list               varchar(255),
+    notification_event      varchar(255),
+    status                  varchar(255),
+    subject                 varchar(255),
+    to_list                 varchar(255),
+    transaction_information text
 );
 
-alter table admin.notification_table owner to postgres;
+alter table admin.notification_table
+    owner to postgres;
+
+
+
+
+create table if not exists admin.audit_table
+(
+    uuid uuid not null
+        constraint pk_audittable_uuid
+            primary key,
+    accessed_by varchar(255),
+    accessed_resource varchar(255),
+    event_action varchar(255),
+    event_at timestamp,
+    exception varchar(255),
+    input_parameters text,
+    jwt_token varchar(255),
+    remote_address varchar(255),
+    remote_host varchar(255),
+    remote_user varchar(255),
+    returned_result text
+);
+
+alter table admin.audit_table owner to postgres;
+
+
+
 
 
 
