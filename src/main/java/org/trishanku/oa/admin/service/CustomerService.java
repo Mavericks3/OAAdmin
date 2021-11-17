@@ -12,6 +12,8 @@ public interface CustomerService {
 
     List<CustomerDTO> getAllCustomers();
 
+    List<CustomerDTO> getAllCustomersPaginated(int page, int size);
+
     CustomerDTO getCustomerById(String customerId);
 
     CustomerDTO addCustomer(CustomerDTO customerDTO);

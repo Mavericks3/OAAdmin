@@ -13,6 +13,7 @@ public class JMSConfiguration {
 //    @Value("${oaadmin.notificaiton.queue}")
 //    public static String notificationQueue;
       public static final String notificationQueue = "oaadmin.notificaiton.queue";
+      public static final String portalQueue = "oaadmin.portal.queue";
 
     @Bean
     public MessageConverter messageConverter() {

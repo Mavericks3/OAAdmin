@@ -1,4 +1,4 @@
-package org.trishanku.oa.admin.autoprocess;
+package org.trishanku.oa.admin.notification.autoprocess;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +38,7 @@ public class NotificationTask {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Scheduled(fixedRate = 20000)
+    @Scheduled(fixedRate = 2000000000)
     public void sendMessage()
     {
         if(notificationRepository.findByNotificationStatus(NotificationStatusEnum.INITIATED).isPresent())

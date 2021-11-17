@@ -1,4 +1,4 @@
-package org.trishanku.oa.admin.aspect;
+package org.trishanku.oa.admin.notification.aspect;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;

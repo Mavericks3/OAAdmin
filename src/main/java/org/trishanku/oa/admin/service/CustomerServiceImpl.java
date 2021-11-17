@@ -2,6 +2,7 @@ package org.trishanku.oa.admin.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
+        List<Customer> customers = customerRepository.findAll();
+        if(customers.size()==0) throw new RuntimeException("No customers exists in the system");
+        List<CustomerDTO> customerDTOS = new ArrayList<>();
+        customers.forEach((customer) -> customerDTOS.add(customerMapper.customerToCustomerDTO(customer)));
+        return customerDTOS;
+
+    }
+
+    @Override
+    public List<CustomerDTO> getAllCustomersPaginated(int page, int size) {
+       // pagination to be implemented
         List<Customer> customers = customerRepository.findAll();
         if(customers.size()==0) throw new RuntimeException("No customers exists in the system");
         List<CustomerDTO> customerDTOS = new ArrayList<>();

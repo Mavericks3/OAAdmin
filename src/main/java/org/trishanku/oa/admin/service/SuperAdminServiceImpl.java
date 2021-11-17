@@ -3,6 +3,8 @@ package org.trishanku.oa.admin.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.Role;
@@ -21,6 +23,7 @@ import org.trishanku.oa.admin.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -42,7 +45,14 @@ public class SuperAdminServiceImpl implements SuperAdminService{
     @Override
     public List<UserDTO> getAllSuperAdmins() {
         List<User> users = userRepository.findByRoles(roleRepository.findByName("SUPER_ADMIN"));
+
+        //LOOP TO remove the deleted users
         if(users.size()==0) throw new RuntimeException("There are no super admin's currently in the system");
+        {
+            users.removeIf(user -> user.isStatus()==false && user.getTransactionStatus()==TransactionStatusEnum.MASTER);
+            if(users.size()==0) throw new RuntimeException("There are no super admin's currently in the system");
+        }
+
         return userMapper.userListToUserDTOList(users);
     }
 
