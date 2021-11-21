@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.Role;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
@@ -46,12 +47,13 @@ public class SuperAdminServiceImpl implements SuperAdminService{
     public List<UserDTO> getAllSuperAdmins() {
         List<User> users = userRepository.findByRoles(roleRepository.findByName("SUPER_ADMIN"));
 
-        //LOOP TO remove the deleted users
+
         if(users.size()==0) throw new RuntimeException("There are no super admin's currently in the system");
-        {
-            users.removeIf(user -> user.isStatus()==false && user.getTransactionStatus()==TransactionStatusEnum.MASTER);
-            if(users.size()==0) throw new RuntimeException("There are no super admin's currently in the system");
-        }
+        //LOOP TO remove the deleted users
+//        {
+//            users.removeIf(user -> user.isStatus()==false && user.getTransactionStatus()==TransactionStatusEnum.MASTER);
+//            if(users.size()==0) throw new RuntimeException("There are no super admin's currently in the system");
+//        }
 
         return userMapper.userListToUserDTOList(users);
     }
@@ -67,6 +69,7 @@ public class SuperAdminServiceImpl implements SuperAdminService{
     @Override
     public UserDTO addSuperAdmin(UserDTO userDTO) throws ResourceAlreadyExistsException {
         if(userRepository.findByUserId(userDTO.getUserId()).isPresent()) throw new ResourceAlreadyExistsException("Super admin with id " + userDTO.getUserId() + " already exists");
+
         User user = userMapper.userDTOToUser(userDTO);
         user.setUuid(UUID.randomUUID());
 
@@ -93,16 +96,19 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         existingUserDetails.setEffectiveDate(userDTO.getEffectiveDate());
         existingUserDetails.setEmailAddress(userDTO.getEmailAddress());
         existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
+        existingUserDetails.setStatus(userDTO.isStatus());
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }
 
     @Override
+    @Transactional
     public UserDTO authoriseSuperAdmin(String userId) {
         if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Super admin with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
         existingUserDetails.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
+        if(savedUser.isDeleteFlag()) userRepository.delete(savedUser);
         return userMapper.userToUserDTO(savedUser);
     }
 
@@ -118,8 +124,20 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Super admin with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
         existingUserDetails.setStatus(false);
+        existingUserDetails.setDeleteFlag(true);
         existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
+    }
+
+    @Override
+    public UserDTO activateSuperAdmin(String userId, UserDTO userDTO) {
+        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Super admin with id " + userId + " does not exist");
+        User existingUserDetails = userRepository.findByUserId(userId).get();
+        existingUserDetails.setStatus(userDTO.isStatus());
+        existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
+        User savedUser = userRepository.save(existingUserDetails);
+        return userMapper.userToUserDTO(savedUser);
+
     }
 }

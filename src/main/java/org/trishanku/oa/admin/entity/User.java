@@ -28,9 +28,11 @@ public class User extends Base{
     private String lastName;
     @Column(name = "EFFECTIVE_DATE")
     private Date effectiveDate;
+    @Column(name = "EXPIRY_DATE")
+    private Date expiryDate;
     @Column(name = "ACTIVE_STATUS")
     private boolean status;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.DETACH })
     @JoinTable(
             name = "USER_ROLES", schema = "ADMIN",
             joinColumns = { @JoinColumn(name = "USER_ID") },
@@ -38,7 +40,7 @@ public class User extends Base{
     )
     private List<Role> roles;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH })
     @JoinTable(
             name = "USER_CUSTOMER_MAPPING", schema = "ADMIN",
             joinColumns = { @JoinColumn(name = "USER_ID") },
@@ -49,4 +51,6 @@ public class User extends Base{
     @Column(name = "EMAIL_ADDRESS", unique = true)
 
     private String emailAddress;
+    @Column(name = "DELETE_FLAG")
+    private boolean deleteFlag;
 }

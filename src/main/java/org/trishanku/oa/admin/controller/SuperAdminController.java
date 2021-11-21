@@ -73,6 +73,15 @@ public class SuperAdminController {
     }
 
     //Mapping to delete a super admin
+    @PutMapping(path = "/activate/{userId}")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+    public ResponseEntity<UserDTO> activateSuperAdmin(@PathVariable(name="userId") String userId, @RequestBody UserDTO userDTO)
+    {
+        UserDTO superAdminDTO = superAdminService.activateSuperAdmin(userId, userDTO);
+        return new ResponseEntity<>(superAdminDTO, HttpStatus.OK);
+    }
+
+    //Mapping to delete a super admin
     @PutMapping(path = "/delete/{userId}")
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<UserDTO> deleteSuperAdmin(@PathVariable(name="userId") String userId)
@@ -80,6 +89,7 @@ public class SuperAdminController {
         UserDTO superAdminDTO = superAdminService.deleteSuperAdmin(userId);
         return new ResponseEntity<>(superAdminDTO, HttpStatus.OK);
     }
+
 
 
     //Mapping to authorise a super admin

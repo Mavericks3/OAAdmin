@@ -21,4 +21,6 @@ public interface SuperAdminService {
     List<UserDTO> getPendingSuperAdmins();
 
     UserDTO deleteSuperAdmin(String userId);
+
+    UserDTO activateSuperAdmin(String userId, UserDTO userDTO);
 }

@@ -240,16 +240,19 @@ create table if not exists admin.user_table
     created_date timestamp,
     created_user varchar(255),
     modified_date timestamp,
+
     modified_user varchar(255),
     transaction_status varchar(255),
     effective_date timestamp,
+    expiry_date timestamp,
     email_address varchar(255)
         constraint uk_usertable_emailaddress
             unique,
     first_name varchar(255),
     last_name varchar(255),
     active_status boolean,
-    user_id varchar(255)
+    user_id varchar(255),
+    delete_flag boolean
 );
 
 alter table admin.user_table owner to postgres;

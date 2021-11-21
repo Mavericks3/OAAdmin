@@ -31,10 +31,12 @@ public class UserDTO {
     private String lastName;
     @FutureOrPresent(message = "Effective date should be either present or future date")
     private Date effectiveDate;
+    private Date expiryDate;
     private boolean status;
     private List<RoleDTO> roles;
     private List<CustomerDTO> customers;
     @Email
     private String emailAddress;
     private TransactionStatusEnum transactionStatus;
+    private boolean deleteFlag;
 }
