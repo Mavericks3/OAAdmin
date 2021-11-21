@@ -105,7 +105,7 @@ public class BankAdminServiceImpl implements BankAdminService{
 
         List<Role> bankAdminRoles = new ArrayList<>();
         userDTO.getRoles().forEach(roleDTO -> bankAdminRoles.add(roleRepository.findByName(roleDTO.getName())));
-        //bankAdminRoles.add(roleRepository.findByName("BANK_ADMIN"));
+
         existingUserDetails.setRoles(bankAdminRoles);
         existingUserDetails.setStatus(userDTO.isStatus());
         existingUserDetails.setExpiryDate(userDTO.getExpiryDate());
