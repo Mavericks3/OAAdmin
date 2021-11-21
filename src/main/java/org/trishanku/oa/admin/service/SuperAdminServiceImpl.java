@@ -94,6 +94,7 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         existingUserDetails.setFirstName(userDTO.getFirstName());
         existingUserDetails.setLastName(userDTO.getLastName());
         existingUserDetails.setEffectiveDate(userDTO.getEffectiveDate());
+        existingUserDetails.setExpiryDate(userDTO.getExpiryDate());
         existingUserDetails.setEmailAddress(userDTO.getEmailAddress());
         existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         existingUserDetails.setStatus(userDTO.isStatus());
