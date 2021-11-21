@@ -3,6 +3,7 @@ package org.trishanku.oa.admin.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.Role;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
@@ -14,10 +15,12 @@ import org.trishanku.oa.admin.repository.CustomerRepository;
 import org.trishanku.oa.admin.repository.RoleRepository;
 import org.trishanku.oa.admin.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 @Service
 @Slf4j
@@ -40,11 +43,12 @@ public class BankAdminServiceImpl implements BankAdminService{
         List<User> users = userRepository.findByRolesIn(roleRepository.findByNameIn(Arrays.asList("BANK_ADMIN_MAKER","BANK_ADMIN_CHECKER","BANK_ADMIN_VIEWER")));
         if(users.size()==0)
             throw new RuntimeException("There are no bank admin's currently in the system");
-        else
-            users.removeIf(user -> user.isStatus()==false && user.getTransactionStatus()==TransactionStatusEnum.PENDING);
-        if(users.size()==0)
-            throw new RuntimeException("There are no bank admin's currently in the system");
-        return userMapper.userListToUserDTOList(users);
+      // to remove duplicates
+        List<User> distinctUsers = users.stream()
+                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(User::getUserId))),
+                        ArrayList::new));
+
+        return userMapper.userListToUserDTOList(distinctUsers);
     }
 
     @Override
@@ -63,7 +67,12 @@ public class BankAdminServiceImpl implements BankAdminService{
         user.setUuid(UUID.randomUUID());
 
         // to set bank admin roles
-        userDTO.getRoles().removeIf(roleDTO -> !roleDTO.getName().substring(0,3).equalsIgnoreCase("BANK"));
+        userDTO.getRoles().removeIf(roleDTO -> !
+                (roleDTO.getName().equalsIgnoreCase("BANK_ADMIN_MAKER")||
+                        roleDTO.getName().equalsIgnoreCase("BANK_ADMIN_CHECKER")
+                        ||
+                        roleDTO.getName().equalsIgnoreCase("BANK_ADMIN_VIEWER")));
+
         List<Role> bankAdminRoles = new ArrayList<>();
         userDTO.getRoles().forEach(roleDTO -> bankAdminRoles.add(roleRepository.findByName(roleDTO.getName())));
         //bankAdminRoles.add(roleRepository.findByName("BANK_ADMIN"));
@@ -88,12 +97,18 @@ public class BankAdminServiceImpl implements BankAdminService{
         existingUserDetails.setEmailAddress(userDTO.getEmailAddress());
 
         // to set bank admin roles
-        userDTO.getRoles().removeIf(roleDTO -> !roleDTO.getName().substring(0,3).equalsIgnoreCase("BANK"));
+        userDTO.getRoles().removeIf(roleDTO -> !
+                (roleDTO.getName().equalsIgnoreCase("BANK_ADMIN_MAKER")||
+                        roleDTO.getName().equalsIgnoreCase("BANK_ADMIN_CHECKER")
+                        ||
+                        roleDTO.getName().equalsIgnoreCase("BANK_ADMIN_VIEWER")));
+
         List<Role> bankAdminRoles = new ArrayList<>();
         userDTO.getRoles().forEach(roleDTO -> bankAdminRoles.add(roleRepository.findByName(roleDTO.getName())));
         //bankAdminRoles.add(roleRepository.findByName("BANK_ADMIN"));
         existingUserDetails.setRoles(bankAdminRoles);
-
+        existingUserDetails.setStatus(userDTO.isStatus());
+        existingUserDetails.setExpiryDate(userDTO.getExpiryDate());
 
         existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
@@ -101,27 +116,34 @@ public class BankAdminServiceImpl implements BankAdminService{
     }
 
     @Override
+    @Transactional
     public UserDTO authoriseBankAdmin(String userId) {
         if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Bank admin with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
 
         existingUserDetails.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
+        // to delete the user if marked for deletion
+        if(savedUser.isDeleteFlag()) userRepository.delete(savedUser);
         return userMapper.userToUserDTO(savedUser);
     }
 
     @Override
     public List<UserDTO> getPendingBankAdmins() {
-        List<User> users = userRepository.findByRolesAndTransactionStatus(roleRepository.findByName("BANK_ADMIN"), TransactionStatusEnum.PENDING);
+        List<User> users = userRepository.findByRolesInAndTransactionStatus(roleRepository.findByNameIn(Arrays.asList("BANK_ADMIN_MAKER","BANK_ADMIN_CHECKER","BANK_ADMIN_VIEWER")), TransactionStatusEnum.PENDING);
         if(users.size()==0) throw new RuntimeException("There are no pending bank admin's currently in the system");
-        return userMapper.userListToUserDTOList(users);
+        // to remove duplicates
+        List<User> distinctUsers = users.stream()
+                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(User::getUserId))),
+                        ArrayList::new));
+        return userMapper.userListToUserDTOList(distinctUsers);
     }
 
     @Override
     public UserDTO deleteBankAdmin(String userId) {
         if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Bank admin with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
-        existingUserDetails.setStatus(false);
+        existingUserDetails.setDeleteFlag(true);
 
         existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);

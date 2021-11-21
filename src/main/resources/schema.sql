@@ -1,3 +1,5 @@
+drop schema  if exists admin cascade;
+
 create schema if not exists admin;
 
 alter schema admin owner to postgres;
