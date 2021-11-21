@@ -58,9 +58,9 @@ public class PortalAspect {
 
                 switch (joinPoint.getSignature().getName()) {
 
-                    case  "authoriseCustomer":
-                        portalService.addCustomer(result);
-                        break;
+//                    case  "authoriseCustomer":
+//                        portalService.addCustomer(result);
+//                        break;
 
                     case  "authoriseRMUser":
                         portalService.addRM(result);

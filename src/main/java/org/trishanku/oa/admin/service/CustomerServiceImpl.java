@@ -6,8 +6,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
+import org.trishanku.oa.admin.jwtauthentication.configuration.service.JWTUtil;
 import org.trishanku.oa.admin.mapper.CustomerMapper;
 import org.trishanku.oa.admin.model.CustomerDTO;
 import org.trishanku.oa.admin.repository.CustomerRepository;
@@ -26,6 +28,8 @@ public class CustomerServiceImpl implements CustomerService {
     CustomerRepository customerRepository;
     @Autowired
     CustomerMapper customerMapper;
+    @Autowired
+    JWTUtil jwtUtil;
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
@@ -68,8 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
         customer.setUuid(UUID.randomUUID());
-        //below line to be changed to retrieve the user name from request
-        customer.setCreationDetails("ToBeChanged");
+        customer.setCreationDetails(jwtUtil.extractUsernameFromRequest());
 
         Customer savedCustomer = customerRepository.save(customer);
         CustomerDTO savedCustomerDTO = customerMapper.customerToCustomerDTO(savedCustomer);
@@ -91,8 +94,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setCreatedUser(currentCustomerDetails.getCreatedUser());
         customer.setCreatedDate(currentCustomerDetails.getCreatedDate());
         customer.setCustomerId(customerId);
-        //below line to be changed to retrieve the user name from request
-        customer.setModificationDetails("ToBeChanged");
+        customer.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         log.debug("customer to be saved is " + customer);
         Customer savedCustomer = customerRepository.save(customer);
         CustomerDTO savedCustomerDTO = customerMapper.customerToCustomerDTO(savedCustomer);
@@ -101,16 +103,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
     public CustomerDTO authoriseCustomer(String customerId)
     {
         log.debug("in authorise customer method " + customerId);
         // to check if a customer with the given does not exist
         if(customerRepository.findByCustomerId(customerId).isEmpty()) throw new RuntimeException("customer with id " + customerId + " does not exist");
         Customer customer = customerRepository.findByCustomerId(customerId).get();
-        //below line to be changed to retrieve the user name from request
-        customer.setAuthorizationDetails("ToBeChanged");
+        customer.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         Customer savedCustomer = customerRepository.save(customer);
         CustomerDTO savedCustomerDTO = customerMapper.customerToCustomerDTO(savedCustomer);
+        customerRepository.delete(savedCustomer);
         return savedCustomerDTO;
 
     }
@@ -133,7 +136,9 @@ public class CustomerServiceImpl implements CustomerService {
         // to check if a customer with the given does not exist
         if(customerRepository.findByCustomerId(customerId).isEmpty()) throw new RuntimeException("customer with id " + customerId + " does not exist");
         Customer toDeleteCustomer = customerRepository.findByCustomerId(customerId).get();
-        customerRepository.deleteById(toDeleteCustomer.getUuid());
+        toDeleteCustomer.setDeleteFlag(true);
+        toDeleteCustomer.setModificationDetails(jwtUtil.extractUsernameFromRequest());
+        customerRepository.save(toDeleteCustomer);
         return customerMapper.customerToCustomerDTO(toDeleteCustomer);
 
     }

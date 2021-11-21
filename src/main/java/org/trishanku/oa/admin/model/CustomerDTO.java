@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 
+import java.util.Date;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -30,8 +31,11 @@ public class CustomerDTO {
     private String directorDetails;
     private String sponsorName;
     private String sponsorDetails;
-    private String status;
+    private boolean status;
     private boolean bank;
+    private Date effectiveDate;
+    private Date expiryDate;
+    private boolean deleteFlag;
     private TransactionStatusEnum transactionStatus;
 
 }

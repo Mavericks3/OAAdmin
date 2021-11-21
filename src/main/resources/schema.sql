@@ -27,9 +27,12 @@ create table if not exists admin.customer_table
     po_box                  varchar(255),
     sponsor_details         varchar(255),
     sponsor_name            varchar(255),
-    status                  varchar(255),
+    status                  boolean,
     tax_registration_number varchar(255),
     vat_registration_number varchar(255),
+    delete_flag boolean,
+    effective_date timestamp,
+    expiry_date timestamp,
     constraint pk_customertable_systemid
         primary key (system_id)
 );

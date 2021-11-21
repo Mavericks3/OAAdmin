@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -49,8 +50,15 @@ public class Customer extends Base{
     @Column(name = "SPONSOR_DETAILS")
     private String sponsorDetails;
     @Column(name = "STATUS")
-    private String status;
+    private boolean status;
     @Column(name = "IS_BANK")
     private boolean bank;
+    @Column(name = "DELETE_FLAG")
+    private boolean deleteFlag;
+    @Column(name = "EFFECTIVE_DATE")
+    private Date effectiveDate;
+    @Column(name = "EXPIRY_DATE")
+    private Date expiryDate;
+
 
 }
