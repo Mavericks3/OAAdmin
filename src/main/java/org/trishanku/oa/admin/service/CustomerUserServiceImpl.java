@@ -3,10 +3,12 @@ package org.trishanku.oa.admin.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.Role;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.entity.User;
+import org.trishanku.oa.admin.jwtauthentication.configuration.service.JWTUtil;
 import org.trishanku.oa.admin.mapper.RoleMapper;
 import org.trishanku.oa.admin.mapper.UserMapper;
 import org.trishanku.oa.admin.model.RoleDTO;
@@ -30,6 +32,8 @@ public class CustomerUserServiceImpl implements CustomerUserService{
     RoleRepository roleRepository;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    JWTUtil jwtUtil;
 
     @Autowired
     RoleMapper roleMapper;
@@ -71,7 +75,14 @@ public class CustomerUserServiceImpl implements CustomerUserService{
         User user = userMapper.userDTOToUser(userDTO);
         user.setUuid(UUID.randomUUID());
 
-        // to set customer admin role
+        // to set customer user role
+        userDTO.getRoles().removeIf(roleDTO -> !
+                (roleDTO.getName().equalsIgnoreCase("CORPORATE_USER_MAKER")||
+                        roleDTO.getName().equalsIgnoreCase("CORPORATE_USER_CHECKER")
+                        ||
+                        roleDTO.getName().equalsIgnoreCase("CORPORATE_USER_VIEWER")));
+
+
         List<Role> customerUserRoles = new ArrayList<>();
         for(RoleDTO roleDTO: userDTO.getRoles())
         {
@@ -84,8 +95,7 @@ public class CustomerUserServiceImpl implements CustomerUserService{
         if(customerRepository.findByCustomerIdAndBank(userDTO.getCustomers().get(0).getCustomerId(),false).isEmpty()) throw new RuntimeException("Customer business unit does not exist");
         customer.add(customerRepository.findByCustomerIdAndBank(userDTO.getCustomers().get(0).getCustomerId(),false).get());
         user.setCustomers(customer);
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        user.setCreationDetails("RAVIKANTH");
+        user.setCreationDetails(jwtUtil.extractUsernameFromRequest());
         return userMapper.userToUserDTO(userRepository.save(user));
     }
 
@@ -97,6 +107,15 @@ public class CustomerUserServiceImpl implements CustomerUserService{
         existingUserDetails.setLastName(userDTO.getLastName());
         existingUserDetails.setEffectiveDate(userDTO.getEffectiveDate());
         existingUserDetails.setEmailAddress(userDTO.getEmailAddress());
+        existingUserDetails.setStatus(userDTO.isStatus());
+        existingUserDetails.setExpiryDate(userDTO.getExpiryDate());
+
+        // to set customer user role
+        userDTO.getRoles().removeIf(roleDTO -> !
+                (roleDTO.getName().equalsIgnoreCase("CORPORATE_USER_MAKER")||
+                        roleDTO.getName().equalsIgnoreCase("CORPORATE_USER_CHECKER")
+                        ||
+                        roleDTO.getName().equalsIgnoreCase("CORPORATE_USER_VIEWER")));
 
         //to get role ids
         List<Role> newRoles = new ArrayList<>();
@@ -114,19 +133,21 @@ public class CustomerUserServiceImpl implements CustomerUserService{
         existingUserDetails.setCustomers(customer);
 
         existingUserDetails.setRoles(newRoles);
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        existingUserDetails.setModificationDetails("RAVIKANTH");
+
+        existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }
 
     @Override
+    @Transactional
     public UserDTO authoriseCustomerUser(String userId) {
         if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Customer admin with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        existingUserDetails.setAuthorizationDetails("RAVIKANTH");
+
+        existingUserDetails.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
+        if(savedUser.isDeleteFlag()) userRepository.delete(savedUser);
         return userMapper.userToUserDTO(savedUser);
     }
 
@@ -155,9 +176,8 @@ public class CustomerUserServiceImpl implements CustomerUserService{
     public UserDTO deleteCustomerUser(String userId) {
         if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Customer admin with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
-        existingUserDetails.setStatus(false);
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        existingUserDetails.setModificationDetails("RAVIKANTH");
+        existingUserDetails.setDeleteFlag(true);
+        existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }

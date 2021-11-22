@@ -3,6 +3,7 @@ package org.trishanku.oa.admin.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.trishanku.oa.admin.model.UserDTO;
 import org.trishanku.oa.admin.service.BankUserService;
@@ -20,6 +21,8 @@ public class CustomerUserController {
 
     //Mapping to get all customer users
     @GetMapping
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'" +
+            ",'CORPORATE_ADMIN_MAKER','CORPORATE_ADMIN_VIEWER','CORPORATE_ADMIN_CHECKER'})")
     public ResponseEntity<List<UserDTO>> getAllCustomerUsers()
     {
         List<UserDTO> customerUserDTOS = customerUserService.getAllCustomerUsers();
@@ -28,6 +31,8 @@ public class CustomerUserController {
 
     //Mapping to get all pending customer users
     @GetMapping(path = "/pending")
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'" +
+            ",'CORPORATE_ADMIN_MAKER','CORPORATE_ADMIN_VIEWER','CORPORATE_ADMIN_CHECKER'})")
     public ResponseEntity<List<UserDTO>> getPendingCustomerUsers()
     {
         List<UserDTO> customerUserDTOS = customerUserService.getPendingCustomerUsers();
@@ -36,6 +41,8 @@ public class CustomerUserController {
 
     //Mapping to get a specific customer user
     @GetMapping(path = "/{userId}")
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'" +
+            ",'CORPORATE_ADMIN_MAKER','CORPORATE_ADMIN_VIEWER','CORPORATE_ADMIN_CHECKER'})")
     public ResponseEntity<UserDTO> getCustomerUserById(@PathVariable(name="userId") String userId)
     {
         UserDTO customerUserDTO = customerUserService.getCustomerUserById(userId);
@@ -45,6 +52,7 @@ public class CustomerUserController {
     //Mapping to add a customer user
 
     @PostMapping()
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','CORPORATE_ADMIN_MAKER'})")
     public ResponseEntity<UserDTO> addCustomerUser(@Valid @RequestBody UserDTO userDTO)
     {
         UserDTO customerUserDTO = customerUserService.addCustomerUser(userDTO);
@@ -54,6 +62,7 @@ public class CustomerUserController {
     //Mapping to modify a customer user
 
     @PutMapping(path = "/{userId}")
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','CORPORATE_ADMIN_MAKER'})")
     public ResponseEntity<UserDTO> modifyCustomerUser(@PathVariable(name="userId") String userId, @RequestBody UserDTO userDTO)
     {
         UserDTO customerUserDTO = customerUserService.modifyCustomerUser(userId, userDTO);
@@ -62,6 +71,7 @@ public class CustomerUserController {
 
     //Mapping to delete a customer user
     @PutMapping(path = "/delete/{userId}")
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','CORPORATE_ADMIN_MAKER'})")
     public ResponseEntity<UserDTO> deleteCustomerUser(@PathVariable(name="userId") String userId)
     {
         UserDTO customerUserDTO = customerUserService.deleteCustomerUser(userId);
@@ -72,6 +82,7 @@ public class CustomerUserController {
     //Mapping to authorise a customer user
 
     @PutMapping(path = "/authorise/{userId}")
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_CHECKER','CORPORATE_ADMIN_CHECKER'})")
     public ResponseEntity<UserDTO> authorizeCustomerUser(@PathVariable(name="userId") String userId)
     {
         UserDTO customerUserDTO = customerUserService.authoriseCustomerUser(userId);
