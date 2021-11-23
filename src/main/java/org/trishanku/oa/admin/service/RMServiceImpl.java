@@ -4,8 +4,10 @@ package org.trishanku.oa.admin.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.trishanku.oa.admin.entity.RM;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
+import org.trishanku.oa.admin.jwtauthentication.configuration.service.JWTUtil;
 import org.trishanku.oa.admin.mapper.RMMapper;
 import org.trishanku.oa.admin.model.RMDTO;
 import org.trishanku.oa.admin.repository.RMRepository;
@@ -23,7 +25,8 @@ public class RMServiceImpl implements RMService{
 
     @Autowired
     RMMapper rmMapper;
-
+    @Autowired
+    JWTUtil jwtUtil;
     @Override
     public List<RMDTO> getAllRMUsers() {
         return rmMapper.RMsToRMDTOs(rmRepository.findAll());
@@ -38,10 +41,9 @@ public class RMServiceImpl implements RMService{
     public RMDTO addRMUser(RMDTO rmdto) {
 
         RM newRM = rmMapper.RMDTOToRM(rmdto);
-        // to be changed once the user details are retrieved from JSON
         newRM.setUuid(UUID.randomUUID());
         newRM.setStatus(true);
-        newRM.setCreationDetails("RAVIKANTH");
+        newRM.setCreationDetails(jwtUtil.extractUsernameFromRequest());
         return rmMapper.RMToRMDTO(rmRepository.save(newRM));
 
     }
@@ -54,19 +56,19 @@ public class RMServiceImpl implements RMService{
         currentRM.setJoiningDate(rmDTO.getJoiningDate());
         currentRM.setValidDate(rmDTO.getValidDate());
         currentRM.setExpiryDate(rmDTO.getExpiryDate());
-
-        //set modification details once the details are fetched from JSON
-        currentRM.setModificationDetails("RAVIKANTH");
+        currentRM.setModificationDetails(jwtUtil.extractUsernameFromRequest());
 
         return rmMapper.RMToRMDTO(rmRepository.save(currentRM));
     }
 
     @Override
+    @Transactional
     public RMDTO authoriseRMUser(String rmId) {
         RM currentRM = rmRepository.findByRmId(rmId);
-        //set authorization details once the details are fetched from JSON
-        currentRM.setAuthorizationDetails("RAVIKANTH");
-        return rmMapper.RMToRMDTO(rmRepository.save(currentRM));
+        currentRM.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
+        RM savedRM = rmRepository.save(currentRM);
+        if(currentRM.isDeleteFlag()) rmRepository.delete(savedRM);
+        return rmMapper.RMToRMDTO(savedRM);
     }
 
     @Override
@@ -77,9 +79,8 @@ public class RMServiceImpl implements RMService{
     @Override
     public RMDTO deleteRMUser(String rmId) {
         RM currentRM = rmRepository.findByRmId(rmId);
-        currentRM.setStatus(false);
-        //set modification details once the details are fetched from JSON
-        currentRM.setModificationDetails("RAVIKANTH");
+        currentRM.setDeleteFlag(true);
+        currentRM.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         return rmMapper.RMToRMDTO(rmRepository.save(currentRM));
     }
 }

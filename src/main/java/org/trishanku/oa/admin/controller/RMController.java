@@ -3,6 +3,7 @@ package org.trishanku.oa.admin.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.trishanku.oa.admin.model.RMDTO;
 import org.trishanku.oa.admin.model.UserDTO;
@@ -20,6 +21,7 @@ public class RMController {
 
     //Mapping to get all rm users
     @GetMapping
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'})")
     public ResponseEntity<List<RMDTO>> getAllRMUsers()
     {
         List<RMDTO> rmDTOS = rmService.getAllRMUsers();
@@ -28,6 +30,7 @@ public class RMController {
 
     //Mapping to get all pending rm users
     @GetMapping(path = "/pending")
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'})")
     public ResponseEntity<List<RMDTO>> getPendingRMUsers()
     {
         List<RMDTO> rmDTOS = rmService.getPendingRMUsers();
@@ -36,6 +39,7 @@ public class RMController {
 
     //Mapping to get a specific rm user
     @GetMapping(path = "/{rmId}")
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'})")
     public ResponseEntity<RMDTO> getRMUserById(@PathVariable(name="rmId") String rmId)
     {
         RMDTO rmDTO = rmService.getRMUserById(rmId);
@@ -45,6 +49,7 @@ public class RMController {
     //Mapping to add a rm user
 
     @PostMapping()
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER'})")
     public ResponseEntity<RMDTO> addRMUser(@RequestBody RMDTO rmDTO)
     {
         RMDTO rmdto = rmService.addRMUser(rmDTO);
@@ -54,6 +59,7 @@ public class RMController {
     //Mapping to modify a rm user
 
     @PutMapping(path = "/{rmId}")
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER'})")
     public ResponseEntity<RMDTO> modifyRMUser(@PathVariable(name="rmId") String rmId, @RequestBody RMDTO rmDTO)
     {
         RMDTO modifiedDTO = rmService.modifyRMUser(rmId, rmDTO);
@@ -62,6 +68,7 @@ public class RMController {
 
     //Mapping to delete a rm user
     @PutMapping(path = "/delete/{rmId}")
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER'})")
     public ResponseEntity<RMDTO> deleteRMUser(@PathVariable(name="rmId") String rmId)
     {
         RMDTO deleteRMUser = rmService.deleteRMUser(rmId);
@@ -72,6 +79,7 @@ public class RMController {
     //Mapping to authorise a rm user
 
     @PutMapping(path = "/authorise/{rmId}")
+    @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_CHECKER'})")
     public ResponseEntity<RMDTO> authorizeRMUser(@PathVariable(name="rmId") String rmId)
     {
         RMDTO rmDTO = rmService.authoriseRMUser(rmId);

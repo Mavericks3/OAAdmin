@@ -62,9 +62,9 @@ public class PortalAspect {
 //                        portalService.addCustomer(result);
 //                        break;
 
-                    case  "authoriseRMUser":
-                        portalService.addRM(result);
-                        break;
+//                    case  "authoriseRMUser":
+//                        portalService.addRM(result);
+//                        break;
 
                     case  "authoriseCustomerAdmin":
                         portalService.addCustomerAdmin(result);

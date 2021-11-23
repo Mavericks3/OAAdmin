@@ -38,4 +38,6 @@ public class RM extends Base {
     private Date expiryDate;
     @Column(name = "ACTIVE_STATUS")
     private boolean status;
+    @Column(name = "DELETE_FLAG")
+    private boolean deleteFlag;
 }

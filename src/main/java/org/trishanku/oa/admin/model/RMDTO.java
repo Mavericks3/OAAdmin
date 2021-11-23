@@ -21,5 +21,6 @@ public class RMDTO {
     private Date validDate;
     private Date expiryDate;
     private boolean status;
+    private boolean deleteFlag;
 
 }

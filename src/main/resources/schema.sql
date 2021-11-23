@@ -75,6 +75,7 @@ create table if not exists admin.rm_table
     rm_name            varchar(255),
     rm_id              varchar(255),
     active_status      boolean,
+    delete_flag        boolean,
     valid_date         timestamp,
     constraint pk_rmtable_systemid
         primary key (system_id),
