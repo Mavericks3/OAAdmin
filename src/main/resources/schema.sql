@@ -42,7 +42,7 @@ alter table admin.customer_table
 
 create table if not exists admin.product_table
 (
-    uuid               uuid not null,
+    system_id               uuid not null,
     authorisation_date timestamp,
     authorised_user    varchar(255),
     created_date       timestamp,
@@ -50,10 +50,14 @@ create table if not exists admin.product_table
     modified_date      timestamp,
     modified_user      varchar(255),
     transaction_status varchar(255),
-    code               varchar(255),
-    name               varchar(255),
+    product_code               varchar(255),
+    product_name               varchar(255),
+    effective_date      timestamp,
+    expiry_date timestamp,
+    delete_flag boolean,
+    active_status boolean,
     constraint pk_producttable_uuid
-        primary key (uuid)
+        primary key (system_id)
 );
 
 alter table admin.product_table

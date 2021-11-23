@@ -21,8 +21,8 @@ DELETE FROM admin.user_roles;
 
 
 
-INSERT INTO admin.product_table (uuid, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, code, name) VALUES ('cd320922-df66-497a-841e-798c6fc1b0c3', null, null, null, null, null, null, null, null, 'Supplier Finance');
-INSERT INTO admin.product_table (uuid, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, code, name) VALUES ('55442dfa-9e08-49ef-bead-8615714c2ad1', null, null, null, null, null, null, null, null, 'Receivable Finance');
+INSERT INTO admin.product_table (system_id, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, product_code, product_name,effective_date,expiry_date,active_status,delete_flag) VALUES ('cd320922-df66-497a-841e-798c6fc1b0c3', null, null, null, null, null, null, null, 'Product1', 'Supplier Finance','2021-09-09 13:21:57.000000','2021-09-09 13:21:57.000000',true,false);
+INSERT INTO admin.product_table (system_id, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, product_code, product_name,effective_date,expiry_date,active_status,delete_flag) VALUES ('55442dfa-9e08-49ef-bead-8615714c2ad1', null, null, null, null, null, null, null, 'Product2', 'Receivable Finance','2021-09-09 13:21:57.000000','2021-09-09 13:21:57.000000',true,false);
 
 
 

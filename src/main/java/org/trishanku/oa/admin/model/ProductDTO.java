@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -18,8 +19,16 @@ import java.util.UUID;
 @Data
 public class ProductDTO {
 
-    @JsonIgnore
-    private UUID uuid;
+    //@JsonIgnore
+    @JsonProperty(value = "system_id")
+    private UUID systemId;
     @JsonProperty(value = "product_name")
     private String name;
+    @JsonProperty(value = "product_code")
+    private String code;
+    private Date effectiveDate;
+    private Date expiryDate;
+    private boolean status;
+    private boolean deleteFlag;
+
 }
