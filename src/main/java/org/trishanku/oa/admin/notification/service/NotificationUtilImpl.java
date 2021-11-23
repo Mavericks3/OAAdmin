@@ -3,9 +3,12 @@ package org.trishanku.oa.admin.notification.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.trishanku.oa.admin.entity.User;
 import org.trishanku.oa.admin.notification.entity.NotificationEvent;
 import org.trishanku.oa.admin.repository.RoleRepository;
 import org.trishanku.oa.admin.repository.UserRepository;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -18,25 +21,21 @@ public class NotificationUtilImpl implements NotificationUtil {
     RoleRepository roleRepository;
 
     @Override
-    public String getEventDefaultToAddresses(NotificationEvent notificationEvent) {
+    public String getEventDefaultToAddresses(NotificationEvent notificationEvent, String userId) {
         String emailAddressList= "";
         switch (notificationEvent)
         {
             case SUPER_ADMIN_APPROVAL:
-                emailAddressList = getEmailAddressList("SUPER_ADMIN");
-                log.info("get super admin mail id's");
+                emailAddressList = getApprovalEmailAddressList("SUPER_ADMIN",userId);
                 break;
             case SUPER_ADMIN_CREATION:
                 emailAddressList = getEmailAddressList("SUPER_ADMIN");
-                log.info("get super admin mail id's");
                 break;
             case SUPER_ADMIN_DELETION:
                 emailAddressList = getEmailAddressList("SUPER_ADMIN");
-                log.info("get super admin mail id's");
                 break;
             case SUPER_ADMIN_MODIFICATION:
                 emailAddressList = getEmailAddressList("SUPER_ADMIN");
-                log.info("get super admin mail id's");
                 break;
             case BANK_ADMIN_CREATION:
                 log.info("get BANK admin mail id's");
@@ -149,5 +148,13 @@ public class NotificationUtilImpl implements NotificationUtil {
             emailAddressList.append(user.getEmailAddress()).append(";");
         });
         return emailAddressList.toString();
+    }
+
+    private String getApprovalEmailAddressList(String roleName,String userId)
+    {
+        Optional<User> user = userRepository.findByUserId(userId);
+        if(user.isEmpty()) return "";
+        else if (user.get().getModifiedUser().equalsIgnoreCase("")) return user.get().getCreatedUser();
+        else return user.get().getModifiedUser();
     }
 }

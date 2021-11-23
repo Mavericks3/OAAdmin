@@ -80,7 +80,8 @@ public class TemplateUtilImpl implements TemplateUtil {
                 if(fieldFromTransaction.equalsIgnoreCase("DEFAULT"))
                 {
                     //implementation to get email addresses as per the event
-                    valueFromTransaction = notificationUtil.getEventDefaultToAddresses(notificationEvent);
+                    String userId = objectMapper.readTree(transactionInformation).findValue("userId").asText();
+                    valueFromTransaction = notificationUtil.getEventDefaultToAddresses(notificationEvent,userId);
                 }
                 else if (objectMapper.readTree(transactionInformation).findValue(fieldFromTransaction) != null)
                     valueFromTransaction = objectMapper.readTree(transactionInformation).findValue(fieldFromTransaction).asText();

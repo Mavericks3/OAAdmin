@@ -3,7 +3,7 @@
     <toAddress><![CDATA[<%emailAddress%>;<%DEFAULT%>]]></toAddress>
     <ccAddress><![CDATA[<%emailAddress%>;ccaddress@gmail.com]]></ccAddress>
     <bccAddress><![CDATA[<%emailAddress%>;bccaddress@gmail.com]]></bccAddress>
-    <mailSubject><![CDATA[OA ADMIN Super admin creation with Id - <%userId%>  is crated]]></mailSubject>
+    <mailSubject><![CDATA[OA ADMIN Super admin approval with Id - <%userId%>  is crated]]></mailSubject>
     <fromAddress/>
     <mailContent><![CDATA[Dear User,
 
