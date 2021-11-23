@@ -4,10 +4,12 @@ import com.netflix.discovery.converters.Auto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.Role;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.entity.User;
+import org.trishanku.oa.admin.jwtauthentication.configuration.service.JWTUtil;
 import org.trishanku.oa.admin.mapper.RoleMapper;
 import org.trishanku.oa.admin.mapper.UserMapper;
 import org.trishanku.oa.admin.model.RoleDTO;
@@ -31,27 +33,23 @@ public class BankUserServiceImpl implements BankUserService{
     RoleRepository roleRepository;
     @Autowired
     UserMapper userMapper;
-
+    @Autowired
+    JWTUtil jwtUtil;
     @Autowired
     RoleMapper roleMapper;
 
     @Autowired
     CustomerRepository customerRepository;
 
-    private static final List<String> bankUsersRoles =  Arrays.asList("CORPORATE_USER_MAKER","CORPORATE_USER_CHECKER","CORPORATE_USER_VIEWER");
+    private static final List<String> bankUsersRoles =  Arrays.asList("BANK_USER_MAKER","BANK_USER_CHECKER","BANK_USER_VIEWER");
 
     @Override
     public List<UserDTO> getAllBankUsers() {
-        List<Role> rolesList = roleRepository.findByNameIn(bankUsersRoles);
-        for(Role role: rolesList)
-        {
-            log.debug("Role is " + role);
-        }
-        List<User> users = userRepository.findByRolesIn(rolesList);
+
+        List<User> users = userRepository.findByRolesIn(roleRepository.findByNameIn(bankUsersRoles));
         if(users.size()==0) throw new RuntimeException("There are no bank user's currently in the system");
 
         //remove duplicates
-
         List<User> unique = users.stream()
                 .collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(User::getUserId))),
                         ArrayList::new));
@@ -85,8 +83,8 @@ public class BankUserServiceImpl implements BankUserService{
         if(customerRepository.findByBank(true).isEmpty()) throw new RuntimeException("Bank business unit does not exist");
         bank.add(customerRepository.findByBank(true).get());
         user.setCustomers(bank);
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        user.setCreationDetails("RAVIKANTH");
+
+        user.setCreationDetails(jwtUtil.extractUsernameFromRequest());
         return userMapper.userToUserDTO(userRepository.save(user));
     }
 
@@ -99,7 +97,15 @@ public class BankUserServiceImpl implements BankUserService{
         existingUserDetails.setEffectiveDate(userDTO.getEffectiveDate());
         existingUserDetails.setEmailAddress(userDTO.getEmailAddress());
 
+        // to set customer user role
+        userDTO.getRoles().removeIf(roleDTO -> !
+                (roleDTO.getName().equalsIgnoreCase("BANK_USER_MAKER")||
+                        roleDTO.getName().equalsIgnoreCase("BANK_USER_CHECKER")
+                        ||
+                        roleDTO.getName().equalsIgnoreCase("BANK_USER_VIEWER")));
+
         //to get role ids
+
         List<Role> newRoles = new ArrayList<>();
         for(RoleDTO roleDTO:userDTO.getRoles())
         {
@@ -109,19 +115,21 @@ public class BankUserServiceImpl implements BankUserService{
         }
 
         existingUserDetails.setRoles(newRoles);
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        existingUserDetails.setModificationDetails("RAVIKANTH");
+        existingUserDetails.setStatus(userDTO.isStatus());
+        existingUserDetails.setExpiryDate(userDTO.getExpiryDate());
+        existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }
 
     @Override
+    @Transactional
     public UserDTO authoriseBankUser(String userId) {
-        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Bank admin with id " + userId + " does not exist");
+        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Bank user with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        existingUserDetails.setAuthorizationDetails("RAVIKANTH");
+        existingUserDetails.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
+        if(savedUser.isDeleteFlag()) userRepository.delete(savedUser);
         return userMapper.userToUserDTO(savedUser);
     }
 
@@ -129,10 +137,6 @@ public class BankUserServiceImpl implements BankUserService{
     public List<UserDTO> getPendingBankUsers() {
 
         List<Role> rolesList = roleRepository.findByNameIn(bankUsersRoles);
-        for(Role role: rolesList)
-        {
-            log.debug("Role is " + role);
-        }
         List<User> users = userRepository.findByRolesInAndTransactionStatus(rolesList,TransactionStatusEnum.PENDING);
         if(users.size()==0) throw new RuntimeException("There are no bank user's currently in the system");
 
@@ -148,11 +152,10 @@ public class BankUserServiceImpl implements BankUserService{
 
     @Override
     public UserDTO deleteBankUser(String userId) {
-        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Bank admin with id " + userId + " does not exist");
+        if(userRepository.findByUserId(userId).isEmpty()) throw new RuntimeException("Bank user with id " + userId + " does not exist");
         User existingUserDetails = userRepository.findByUserId(userId).get();
-        existingUserDetails.setStatus(false);
-        //BELOW LINE TO BE CHANGED TO GET THE USER DETAILS FROM REQUEST
-        existingUserDetails.setModificationDetails("RAVIKANTH");
+        existingUserDetails.setDeleteFlag(true);
+        existingUserDetails.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }
