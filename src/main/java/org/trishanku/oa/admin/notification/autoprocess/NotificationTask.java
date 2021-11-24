@@ -38,7 +38,7 @@ public class NotificationTask {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Scheduled(fixedRate = 200)
+    @Scheduled(fixedRate = 20000)
     public void sendMessage()
     {
         if(notificationRepository.findByNotificationStatus(NotificationStatusEnum.INITIATED).isPresent())
