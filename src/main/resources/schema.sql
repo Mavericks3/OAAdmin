@@ -605,6 +605,23 @@ create table if not exists admin.portal_user_roles
 
 alter table admin.portal_user_roles owner to postgres;
 
+create table if not exists admin.portal_table
+(
+    message_id          uuid,
+    insert_time timestamp,
+    processed_time timestamp,
+    transmit_time timestamp,
+    message text,
+    message_type varchar(255),
+    transmit_retry_count int,
+    process_retry_count int,
+    status varchar(255),
+    constraint pk_portabletable_messageid
+    primary key (message_id)
+    );
+
+alter table admin.portal_table owner to postgres;
+
 
 
 

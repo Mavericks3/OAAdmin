@@ -27,7 +27,7 @@ public class PortalAspect {
      * Pointcut that matches all Spring beans in the application's main packages.
      */
     @Pointcut(
-            //Point cut on super admin management
+
            "within(org.trishanku.oa.admin.service.CustomerService+) && execution(* authoriseCustomer(..))" +
                    "|| within(org.trishanku.oa.admin.service.RMService+) && execution(* authoriseRMUser(..))" +
                    "|| within(org.trishanku.oa.admin.service.CustomerAdminService+) && execution(* authoriseCustomerAdmin(..))" +
@@ -49,7 +49,7 @@ public class PortalAspect {
      * @throws Throwable throws IllegalArgumentException
      */
     @Around("portalPointcut()")
-    public Object recordNotificationEvent(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object recordPortalEvent(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
             Object result = joinPoint.proceed();
 
@@ -58,13 +58,13 @@ public class PortalAspect {
 
                 switch (joinPoint.getSignature().getName()) {
 
-//                    case  "authoriseCustomer":
-//                        portalService.addCustomer(result);
-//                        break;
+                    case  "authoriseCustomer":
+                        portalService.addCustomer(result);
+                        break;
 
-//                    case  "authoriseRMUser":
-//                        portalService.addRM(result);
-//                        break;
+                    case  "authoriseRMUser":
+                        portalService.addRM(result);
+                        break;
 
                     case  "authoriseCustomerAdmin":
                         portalService.addCustomerAdmin(result);

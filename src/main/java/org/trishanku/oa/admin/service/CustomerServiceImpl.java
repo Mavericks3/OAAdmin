@@ -112,8 +112,9 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findByCustomerId(customerId).get();
         customer.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         Customer savedCustomer = customerRepository.save(customer);
+        if(savedCustomer.isDeleteFlag()) customerRepository.delete(savedCustomer);
         CustomerDTO savedCustomerDTO = customerMapper.customerToCustomerDTO(savedCustomer);
-        customerRepository.delete(savedCustomer);
+
         return savedCustomerDTO;
 
     }

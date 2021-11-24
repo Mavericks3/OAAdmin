@@ -136,7 +136,7 @@ public class CustomerAdminServiceImpl implements CustomerAdminService{
 
         existingUserDetails.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         User savedUser = userRepository.save(existingUserDetails);
-        userRepository.delete(savedUser);
+        if(savedUser.isDeleteFlag()) userRepository.delete(savedUser);
         return userMapper.userToUserDTO(savedUser);
     }
 
