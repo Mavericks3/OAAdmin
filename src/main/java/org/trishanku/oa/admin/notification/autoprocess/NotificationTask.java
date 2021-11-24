@@ -48,10 +48,13 @@ public class NotificationTask {
 
                 try {
                     log.debug("Sending Notification object ==>" + objectMapper.writeValueAsString(notification));
+                    jmsTemplate.convertAndSend(JMSConfiguration.notificationQueue,notification);
+                    notificationService.updateSentStatus(notification);
+
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
-                jmsTemplate.convertAndSend(JMSConfiguration.notificationQueue,notification);
+
             });
         }
 

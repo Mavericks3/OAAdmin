@@ -74,8 +74,8 @@ public class PortalServiceImpl implements PortalService {
     @Override
     public void addRM(Object result) {
         RMDTO rmdto = (RMDTO) result;
-        RM rm = rmRepository.findByRmId(rmdto.getRmId());
-        PortalRM portalRM = portalRMMapper.rmToPortalRM(rm);
+        Optional<RM> rm = rmRepository.findByRmId(rmdto.getRmId());
+        PortalRM portalRM = portalRMMapper.rmToPortalRM(rm.get());
         portalRM.setMessageId(UUID.randomUUID());
         portalRM.setTransmissionStatus(TransmissionStatusEnum.READY_TO_BE_SENT);
         portalRMRepository.save(portalRM);

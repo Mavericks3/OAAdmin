@@ -18,4 +18,6 @@ public interface NotificationService {
     void addDeleteEvent(Object result, NotificationEvent notificationEvent)throws JsonProcessingException;
 
     boolean prepareForSend(Notification notification);
+
+    boolean updateSentStatus(Notification notification);
 }

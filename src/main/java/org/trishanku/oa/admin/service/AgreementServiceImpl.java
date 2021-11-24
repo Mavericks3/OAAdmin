@@ -61,7 +61,7 @@ public class AgreementServiceImpl implements AgreementService {
         agreement.setBusinessType(productRepository.findByName(agreement.getBusinessType().getName()));
         agreement.setStatus(true);
         agreement.setAnchorCustomer(customerRepository.findByCustomerId(agreement.getAnchorCustomer().getCustomerId()).get());
-        agreement.setRm(rmRepository.findByRmId(agreement.getRm().getRmId()));
+        agreement.setRm(rmRepository.findByRmId(agreement.getRm().getRmId()).get());
         List<Customer> counterParties = new ArrayList<>();
         agreement.getCounterParties().forEach(customer -> counterParties.add(customerRepository.findByCustomerId(customer.getCustomerId()).get()));
         agreement.setCounterParties(counterParties);
@@ -79,7 +79,7 @@ public class AgreementServiceImpl implements AgreementService {
         newAgreementDetails.setUuid(agreement.getUuid());
         newAgreementDetails.setBusinessType(productRepository.findByName(newAgreementDetails.getBusinessType().getName()));
         newAgreementDetails.setAnchorCustomer(customerRepository.findByCustomerId(newAgreementDetails.getAnchorCustomer().getCustomerId()).get());
-        newAgreementDetails.setRm(rmRepository.findByRmId(newAgreementDetails.getRm().getRmId()));
+        newAgreementDetails.setRm(rmRepository.findByRmId(newAgreementDetails.getRm().getRmId()).get());
         List<Customer> counterParties = new ArrayList<>();
         newAgreementDetails.getCounterParties().forEach(customer -> counterParties.add(customerRepository.findByCustomerId(customer.getCustomerId()).get()));
         newAgreementDetails.setCounterParties(counterParties);

@@ -127,4 +127,16 @@ public class NotificationServiceImpl implements NotificationService {
         return true;
     }
 
+
+    @Override
+    public boolean updateSentStatus(Notification notification) {
+
+        notification.setNotificationStatus(NotificationStatusEnum.SENT);
+        notificationRepository.save(notification);
+
+
+        return true;
+    }
+
+
 }

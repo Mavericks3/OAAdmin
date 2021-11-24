@@ -34,7 +34,7 @@ public class RMServiceImpl implements RMService{
 
     @Override
     public RMDTO getRMUserById(String rmId) {
-        return rmMapper.RMToRMDTO(rmRepository.findByRmId((rmId)));
+        return rmMapper.RMToRMDTO(rmRepository.findByRmId((rmId)).get());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class RMServiceImpl implements RMService{
 
     @Override
     public RMDTO modifyRMUser(String rmId, RMDTO rmDTO) {
-        RM currentRM = rmRepository.findByRmId(rmId);
+        RM currentRM = rmRepository.findByRmId(rmId).get();
         currentRM.setName(rmDTO.getName());
         currentRM.setEmailAddress(rmDTO.getEmailAddress());
         currentRM.setJoiningDate(rmDTO.getJoiningDate());
@@ -64,7 +64,7 @@ public class RMServiceImpl implements RMService{
     @Override
     @Transactional
     public RMDTO authoriseRMUser(String rmId) {
-        RM currentRM = rmRepository.findByRmId(rmId);
+        RM currentRM = rmRepository.findByRmId(rmId).get();
         currentRM.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         RM savedRM = rmRepository.save(currentRM);
         if(currentRM.isDeleteFlag()) rmRepository.delete(savedRM);
@@ -78,7 +78,7 @@ public class RMServiceImpl implements RMService{
 
     @Override
     public RMDTO deleteRMUser(String rmId) {
-        RM currentRM = rmRepository.findByRmId(rmId);
+        RM currentRM = rmRepository.findByRmId(rmId).get();
         currentRM.setDeleteFlag(true);
         currentRM.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         return rmMapper.RMToRMDTO(rmRepository.save(currentRM));

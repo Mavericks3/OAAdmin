@@ -6,9 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.trishanku.oa.admin.entity.Customer;
+import org.trishanku.oa.admin.entity.RM;
 import org.trishanku.oa.admin.entity.User;
 import org.trishanku.oa.admin.notification.entity.NotificationEvent;
 import org.trishanku.oa.admin.repository.CustomerRepository;
+import org.trishanku.oa.admin.repository.RMRepository;
 import org.trishanku.oa.admin.repository.RoleRepository;
 import org.trishanku.oa.admin.repository.UserRepository;
 
@@ -24,6 +26,8 @@ public class NotificationUtilImpl implements NotificationUtil {
     ObjectMapper objectMapper;
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    RMRepository rmRepository;
 
     @Autowired
     RoleRepository roleRepository;
@@ -81,40 +85,41 @@ public class NotificationUtilImpl implements NotificationUtil {
             case CUSTOMER_ADMIN_MODIFICATION:
                 emailAddressList = getEmailAddressList("BANK_ADMIN_CHECKER");
                 break;
-
             case BANK_USER_CREATION:
-                log.info("get BANK user checker id's");
-                emailAddressList = getEmailAddressList("BANK_USER_CHECKER");
+                emailAddressList = getEmailAddressList("BANK_ADMIN_CHECKER");
                 break;
             case BANK_USER_DELETION:
-                log.info("get BANK user checker id's");
-                emailAddressList = getEmailAddressList("BANK_USER_CHECKER");
+                emailAddressList = getEmailAddressList("BANK_ADMIN_CHECKER");
                 break;
             case BANK_USER_MODIFICATION:
-                log.info("get BANK user checker id's");
-                emailAddressList = getEmailAddressList("BANK_USER_CHECKER");
+                emailAddressList = getEmailAddressList("BANK_ADMIN_CHECKER");
                 break;
             case BANK_USER_APPROVAL:
-                log.info("get BANK user maker id");
-                // TO BE CHANGED TO RETRIEVE THE MAKER USER EMAIL ADDRESS
-                emailAddressList = getEmailAddressList("BANK_USER_MAKER");
+                emailAddressList = getApprovalEmailAddressList(notificationEvent,transactionInformation);
                 break;
             case CUSTOMER_USER_CREATION:
-                log.info("get customer admin mail id's");
-                emailAddressList = getEmailAddressList("CORPORATE_USER_CHECKER");
+                emailAddressList = getEmailAddressList("CORPORATE_ADMIN_CHECKER");
                 break;
             case CUSTOMER_USER_DELETION:
-                log.info("get customer admin mail id's");
-                emailAddressList = getEmailAddressList("CORPORATE_USER_CHECKER");
+                emailAddressList = getEmailAddressList("CORPORATE_ADMIN_CHECKER");
                 break;
             case CUSTOMER_USER_MODIFICATION:
-                log.info("get customer admin mail id's");
-                emailAddressList = getEmailAddressList("CORPORATE_USER_CHECKER");
+                emailAddressList = getEmailAddressList("CORPORATE_ADMIN_CHECKER");
                 break;
             case CUSTOMER_USER_APPROVAL:
-                log.info("get customer user mail id's");
-                // TO BE CHANGED TO RETRIEVE THE MAKER USER EMAIL ADDRESS
-                emailAddressList = getEmailAddressList("CORPORATE_USER_MAKER");
+                emailAddressList = getApprovalEmailAddressList(notificationEvent,transactionInformation);
+                break;
+            case RM_CREATION:
+                emailAddressList = getEmailAddressList("BANK_ADMIN_CHECKER");
+                break;
+            case RM_DELETION:
+                emailAddressList = getEmailAddressList("BANK_ADMIN_CHECKER");
+                break;
+            case RM_MODIFICATION:
+                emailAddressList = getEmailAddressList("BANK_ADMIN_CHECKER");
+                break;
+            case RM_APPROVAL:
+                emailAddressList = getApprovalEmailAddressList(notificationEvent,transactionInformation);
                 break;
 
 
@@ -174,6 +179,17 @@ public class NotificationUtilImpl implements NotificationUtil {
                     if (customer.isEmpty()) return "";
                     else if (customer.get().getModifiedUser().equalsIgnoreCase("")) return customer.get().getCreatedUser();
                     else return customer.get().getModifiedUser();
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case RM_APPROVAL:
+                try {
+                    String rmId = objectMapper.readTree(transactionInformation).findValue("rmId").asText();
+                    Optional<RM> rm = rmRepository.findByRmId(rmId);
+                    if (rm.isEmpty()) return "";
+                    else if (rm.get().getModifiedUser().equalsIgnoreCase("")) return rm.get().getCreatedUser();
+                    else return rm.get().getModifiedUser();
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }

@@ -71,7 +71,13 @@ public class NotificationAspect {
             "|| within(org.trishanku.oa.admin.service.CustomerService+) && execution(* addCustomer(..))" +
             "|| within(org.trishanku.oa.admin.service.CustomerService+) && execution(* modifyCustomer(..))" +
             "|| within(org.trishanku.oa.admin.service.CustomerService+) && execution(* authoriseCustomer(..))" +
-            "|| within(org.trishanku.oa.admin.service.CustomerService+) && execution(* deleteCustomer(..))"
+            "|| within(org.trishanku.oa.admin.service.CustomerService+) && execution(* deleteCustomer(..))" +
+
+            //Point cut on bank user management
+            "|| within(org.trishanku.oa.admin.service.RMService+) && execution(* addRMUser(..))" +
+            "|| within(org.trishanku.oa.admin.service.RMService+) && execution(* modifyRMUser(..))" +
+            "|| within(org.trishanku.oa.admin.service.RMService+) && execution(* authoriseRMUser(..))" +
+            "|| within(org.trishanku.oa.admin.service.RMService+) && execution(* deleteRMUser(..))"
 
     )
 
@@ -164,6 +170,19 @@ public class NotificationAspect {
                         break;
                     case  "deleteCustomer":
                         notificationService.addDeleteEvent(result, NotificationEvent.CUSTOMER_DELETION);
+                        break;
+
+                    case  "addRMUser":
+                        notificationService.addMakerEvent(result, NotificationEvent.RM_CREATION);
+                        break;
+                    case  "modifyRMUser":
+                        notificationService.addModificationEvent(result, NotificationEvent.RM_MODIFICATION);
+                        break;
+                    case  "authoriseRMUser":
+                        notificationService.addCheckerEvent(result, NotificationEvent.RM_APPROVAL);
+                        break;
+                    case  "deleteRMUser":
+                        notificationService.addDeleteEvent(result, NotificationEvent.RM_DELETION);
                         break;
 
                 }
