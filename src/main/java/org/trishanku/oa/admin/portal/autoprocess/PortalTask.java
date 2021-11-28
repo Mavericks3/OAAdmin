@@ -30,6 +30,8 @@ public class PortalTask {
     PortalUserRepository portalUserRepository;
     @Autowired
     PortalCustomerRepository portalCustomerRepository;
+    @Autowired
+    PortalRepository portalRepository;
 
     @Autowired
     JmsTemplate jmsTemplate;
@@ -39,99 +41,29 @@ public class PortalTask {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Scheduled(fixedRate = 2000000000)
+    @Scheduled(fixedRate = 2000)
     public void sendMessage()
     {
 
-        //block to send customer information to portal
-        if(portalCustomerRepository.findByTransmissionStatus(TransmissionStatusEnum.READY_TO_BE_SENT).isPresent())
+        //block to send  information to portal
+        if(portalRepository.findByStatus(TransmissionStatusEnum.READY_TO_BE_SENT).isPresent())
         {
-            log.debug("Placing Customers information on the Portal queue  ==>" + JMSConfiguration.portalQueue);
-            portalCustomerRepository.findByTransmissionStatus(TransmissionStatusEnum.READY_TO_BE_SENT).get().stream().forEach( portalCustomer -> {
+            log.debug("Placing  information on the Portal queue  ==>" + JMSConfiguration.portalQueue);
+            portalRepository.findByStatus(TransmissionStatusEnum.READY_TO_BE_SENT).get().stream().forEach( portal -> {
 
 
                 try {
-                    log.debug("Sending Notification object ==>" + objectMapper.writeValueAsString(portalCustomer));
+                    log.debug("Sending Notification object ==>" + objectMapper.writeValueAsString(portal));
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
-                jmsTemplate.convertAndSend(JMSConfiguration.portalQueue,portalCustomer);
-                portalCustomer.setTransmissionStatus(TransmissionStatusEnum.SENT);
-                portalCustomerRepository.save(portalCustomer);
+                jmsTemplate.convertAndSend(JMSConfiguration.portalQueue,portal);
+                portal.setStatus(TransmissionStatusEnum.SENT);
+                portalRepository.save(portal);
             });
         }
 
-        //block to send user (Customer Admin and Customer User) information to portal
-        if(portalUserRepository.findByTransmissionStatus(TransmissionStatusEnum.READY_TO_BE_SENT).isPresent())
-        {
-            log.debug("Placing Users information on the Portal queue  ==>" + JMSConfiguration.portalQueue);
-            portalUserRepository.findByTransmissionStatus(TransmissionStatusEnum.READY_TO_BE_SENT).get().stream().forEach( portalUser -> {
 
-
-                try {
-                    log.debug("Sending Notification object ==>" + objectMapper.writeValueAsString(portalUser));
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-                jmsTemplate.convertAndSend(JMSConfiguration.portalQueue,portalUser);
-                portalUser.setTransmissionStatus(TransmissionStatusEnum.SENT);
-                portalUserRepository.save(portalUser);
-            });
-        }
-
-        //block to send RM  information to portal
-        if(portalRMRepository.findByTransmissionStatus(TransmissionStatusEnum.READY_TO_BE_SENT).isPresent())
-        {
-            log.debug("Placing RMs information on the Portal queue  ==>" + JMSConfiguration.portalQueue);
-            portalRMRepository.findByTransmissionStatus(TransmissionStatusEnum.READY_TO_BE_SENT).get().stream().forEach( portalRM -> {
-
-
-                try {
-                    log.debug("Sending Notification object ==>" + objectMapper.writeValueAsString(portalRM));
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-                jmsTemplate.convertAndSend(JMSConfiguration.portalQueue,portalRM);
-                portalRM.setTransmissionStatus(TransmissionStatusEnum.SENT);
-                portalRMRepository.save(portalRM);
-            });
-        }
-
-        //block to send Agreement  information to portal
-        if(portalAgreementRepository.findByTransmissionStatus(TransmissionStatusEnum.READY_TO_BE_SENT).isPresent())
-        {
-            log.debug("Placing Agreements information on the Portal queue  ==>" + JMSConfiguration.portalQueue);
-            portalAgreementRepository.findByTransmissionStatus(TransmissionStatusEnum.READY_TO_BE_SENT).get().stream().forEach( portalAgreement -> {
-
-
-                try {
-                    log.debug("Sending Notification object ==>" + objectMapper.writeValueAsString(portalAgreement));
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-                jmsTemplate.convertAndSend(JMSConfiguration.portalQueue,portalAgreement);
-                portalAgreement.setTransmissionStatus(TransmissionStatusEnum.SENT);
-                portalAgreementRepository.save(portalAgreement);
-            });
-        }
-
-        //block to send SBR  information to portal
-        if(portalSBRRepository.findByTransmissionStatus(TransmissionStatusEnum.READY_TO_BE_SENT).isPresent())
-        {
-            log.debug("Placing SBR's information on the Portal queue  ==>" + JMSConfiguration.portalQueue);
-            portalSBRRepository.findByTransmissionStatus(TransmissionStatusEnum.READY_TO_BE_SENT).get().stream().forEach( portalSBR -> {
-
-
-                try {
-                    log.debug("Sending Notification object ==>" + objectMapper.writeValueAsString(portalSBR));
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-                jmsTemplate.convertAndSend(JMSConfiguration.portalQueue,portalSBR);
-                portalSBR.setTransmissionStatus(TransmissionStatusEnum.SENT);
-                portalSBRRepository.save(portalSBR);
-            });
-        }
 
 
     }
