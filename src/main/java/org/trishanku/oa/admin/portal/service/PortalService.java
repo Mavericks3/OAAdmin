@@ -11,5 +11,5 @@ public interface PortalService {
     void addAgreement(Object result);
     void addSBR(Object result);
     void add(String message, PortalMessageType messageType);
-
+    void addBankUser(Object result);
 }

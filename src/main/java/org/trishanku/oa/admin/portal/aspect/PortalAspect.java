@@ -33,7 +33,9 @@ public class PortalAspect {
                    "|| within(org.trishanku.oa.admin.service.CustomerAdminService+) && execution(* authoriseCustomerAdmin(..))" +
                    "|| within(org.trishanku.oa.admin.service.CustomerUserService+) && execution(* authoriseCustomerUser(..))" +
                    "|| within(org.trishanku.oa.admin.service.AgreementService+) && execution(* authoriseAgreement(..))" +
-                   "|| within(org.trishanku.oa.admin.service.SBRService+) && execution(* authorise(..))"
+                   "|| within(org.trishanku.oa.admin.service.SBRService+) && execution(* authorise(..))" +
+                   "|| within(org.trishanku.oa.admin.service.BankUserService+) && execution(* authoriseBankUser(..))"
+
              )
 
     public void portalPointcut() {
@@ -80,6 +82,10 @@ public class PortalAspect {
 
                     case  "authorise":
                         portalService.addSBR(result);
+                        break;
+
+                    case  "authoriseBankUser":
+                        portalService.addBankUser(result);
                         break;
 
 

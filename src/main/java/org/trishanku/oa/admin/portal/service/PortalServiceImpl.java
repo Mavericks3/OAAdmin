@@ -140,6 +140,11 @@ public class PortalServiceImpl implements PortalService {
     }
 
     @Override
+    public void addBankUser(Object result) {
+        addCustomerAdmin(result);
+    }
+
+    @Override
     public void addAgreement(Object result) {
         AgreementDTO agreementDTO = (AgreementDTO) result;
         Agreement agreement = agreementRepository.getById(agreementDTO.getUuid());
