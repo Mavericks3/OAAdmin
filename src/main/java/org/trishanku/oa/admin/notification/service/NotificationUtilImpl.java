@@ -5,14 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.trishanku.oa.admin.entity.Agreement;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.RM;
 import org.trishanku.oa.admin.entity.User;
 import org.trishanku.oa.admin.notification.entity.NotificationEvent;
-import org.trishanku.oa.admin.repository.CustomerRepository;
-import org.trishanku.oa.admin.repository.RMRepository;
-import org.trishanku.oa.admin.repository.RoleRepository;
-import org.trishanku.oa.admin.repository.UserRepository;
+import org.trishanku.oa.admin.repository.*;
 
 import java.util.Optional;
 
@@ -28,6 +26,8 @@ public class NotificationUtilImpl implements NotificationUtil {
     CustomerRepository customerRepository;
     @Autowired
     RMRepository rmRepository;
+    @Autowired
+    AgreementRepository agreementRepository;
 
     @Autowired
     RoleRepository roleRepository;
@@ -121,6 +121,18 @@ public class NotificationUtilImpl implements NotificationUtil {
             case RM_APPROVAL:
                 emailAddressList = getApprovalEmailAddressList(notificationEvent,transactionInformation);
                 break;
+            case AGREEMENT_CREATION:
+                emailAddressList = getEmailAddressList("BANK_USER_CHECKER");
+                break;
+            case AGREEMENT_DELETION:
+                emailAddressList = getEmailAddressList("BANK_USER_CHECKER");
+                break;
+            case AGREEMENT_MODIFICATION:
+                emailAddressList = getEmailAddressList("BANK_USER_CHECKER");
+                break;
+            case AGREEMENT_APPROVAL:
+                emailAddressList = getApprovalEmailAddressList(notificationEvent,transactionInformation);
+                break;
 
 
             default:
@@ -194,6 +206,18 @@ public class NotificationUtilImpl implements NotificationUtil {
                     e.printStackTrace();
                 }
                 break;
+            case AGREEMENT_APPROVAL:
+                try {
+                    String contractReferenceNumber = objectMapper.readTree(transactionInformation).findValue("contractReferenceNumber").asText();
+                    Optional<Agreement> agreement = agreementRepository.findByContractReferenceNumber(contractReferenceNumber);
+                    if (agreement.isEmpty()) return "";
+                    else if (agreement.get().getModifiedUser().equalsIgnoreCase("")) return agreement.get().getCreatedUser();
+                    else return agreement.get().getModifiedUser();
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                break;
+
 
         }
         return "";

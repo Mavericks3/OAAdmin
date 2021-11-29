@@ -77,8 +77,13 @@ public class NotificationAspect {
             "|| within(org.trishanku.oa.admin.service.RMService+) && execution(* addRMUser(..))" +
             "|| within(org.trishanku.oa.admin.service.RMService+) && execution(* modifyRMUser(..))" +
             "|| within(org.trishanku.oa.admin.service.RMService+) && execution(* authoriseRMUser(..))" +
-            "|| within(org.trishanku.oa.admin.service.RMService+) && execution(* deleteRMUser(..))"
+            "|| within(org.trishanku.oa.admin.service.RMService+) && execution(* deleteRMUser(..))" +
 
+            //Point cut on agreement management
+            "|| within(org.trishanku.oa.admin.service.AgreementService+) && execution(* addAgreement(..))" +
+            "|| within(org.trishanku.oa.admin.service.AgreementService+) && execution(* modifyAgreement(..))" +
+            "|| within(org.trishanku.oa.admin.service.AgreementService+) && execution(* authoriseAgreement(..))" +
+            "|| within(org.trishanku.oa.admin.service.AgreementService+) && execution(* deleteAgreement(..))"
     )
 
     public void notificationPointcut() {
@@ -184,6 +189,20 @@ public class NotificationAspect {
                     case  "deleteRMUser":
                         notificationService.addDeleteEvent(result, NotificationEvent.RM_DELETION);
                         break;
+
+                    case  "addAgreement":
+                        notificationService.addMakerEvent(result, NotificationEvent.AGREEMENT_CREATION);
+                        break;
+                    case  "modifyAgreement":
+                        notificationService.addModificationEvent(result, NotificationEvent.AGREEMENT_MODIFICATION);
+                        break;
+                    case  "authoriseAgreement":
+                        notificationService.addCheckerEvent(result, NotificationEvent.AGREEMENT_APPROVAL);
+                        break;
+                    case  "deleteAgreement":
+                        notificationService.addDeleteEvent(result, NotificationEvent.AGREEMENT_DELETION);
+                        break;
+
 
                 }
             } catch (JsonProcessingException e) {
