@@ -6,11 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
 
-import org.trishanku.oa.admin.entity.Customer;
-import org.trishanku.oa.admin.entity.Product;
-import org.trishanku.oa.admin.entity.RM;
+import org.trishanku.oa.admin.entity.*;
 
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -34,5 +36,11 @@ public class AgreementDTO {
     private Date expiryDate;
     private int numberOfCounterParties;
     private List<Customer> counterParties;
+    private String limitReference;
+    private Date limitExpiry;
+    private CurrencyEnum limitCurrency;
+    private BigDecimal limitAmount;
+    private float cashMargin;
     private boolean status;
+    private TransactionStatusEnum transactionStatus;
 }

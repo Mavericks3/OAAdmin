@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -51,6 +52,17 @@ public class Agreement extends Base{
             inverseJoinColumns = { @JoinColumn(name = "COUNTER_PARTY_ID") }
     )
     private List<Customer> counterParties;
+    @Column(name= "LIMIT_REFERENCE")
+    private String limitReference;
+    @Column(name= "LIMIT_EXPIRY")
+    private Date limitExpiry;
+    @Enumerated(EnumType.STRING)
+    @Column(name= "LIMIT_CURRENCY")
+    private CurrencyEnum limitCurrency;
+    @Column(name= "LIMIT_AMOUNT")
+    private BigDecimal limitAmount;
+    @Column(name= "CASH_MARGIN")
+    private BigDecimal cashMargin;
     @Column(name = "STATUS")
     private boolean status;
 }

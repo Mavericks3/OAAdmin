@@ -111,6 +111,11 @@ create table if not exists admin.agreement_table
     anchor_customer_id        uuid,
     product_id                uuid,
     rm_id                     uuid,
+    limit_amount numeric(19,2),
+    limit_currency varchar(255),
+    limit_expiry timestamp,
+    limit_reference varchar(255),
+    cash_margin numeric(19,2),
     constraint pk_agrementtable_systemid
         primary key (system_id),
     constraint uk_agreementtable_contractdocumentnumber
@@ -269,8 +274,6 @@ alter table admin.user_table owner to postgres;
 
 
 
-alter table admin.user_table
-    owner to postgres;
 
 create table if not exists admin.user_customer_mapping
 (

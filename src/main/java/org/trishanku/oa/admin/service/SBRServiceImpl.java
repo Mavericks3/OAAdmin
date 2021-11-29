@@ -53,7 +53,7 @@ public class SBRServiceImpl implements SBRService {
         SBR sbr = sbrMapper.SBRDTOToSBR(sbrdto);
         sbr.setUuid(UUID.randomUUID());
 
-        sbr.setAgreement(agreementRepository.findByContractReferenceNumber(sbr.getAgreement().getContractReferenceNumber()));
+        sbr.setAgreement(agreementRepository.findByContractReferenceNumber(sbr.getAgreement().getContractReferenceNumber()).get());
         sbr.setAnchorCustomer(customerRepository.findByCustomerId(sbr.getAnchorCustomer().getCustomerId()).get());
         sbr.setCounterParty(customerRepository.findByCustomerId(sbr.getCounterParty().getCustomerId()).get());
         //to be changed once the user details are retrieved from JWT
@@ -66,7 +66,7 @@ public class SBRServiceImpl implements SBRService {
     public SBRDTO edit(SBRDTO sbrdto) {
         SBR sbr = sbrMapper.SBRDTOToSBR(sbrdto);
         sbr.setUuid(sbrRepository.findBySbrId(sbr.getSbrId()).getUuid());
-        sbr.setAgreement(agreementRepository.findByContractReferenceNumber(sbr.getAgreement().getContractReferenceNumber()));
+        sbr.setAgreement(agreementRepository.findByContractReferenceNumber(sbr.getAgreement().getContractReferenceNumber()).get());
         sbr.setAnchorCustomer(customerRepository.findByCustomerId(sbr.getAnchorCustomer().getCustomerId()).get());
         sbr.setCounterParty(customerRepository.findByCustomerId(sbr.getCounterParty().getCustomerId()).get());
         //to be changed once the user details are retrieved from JWT
