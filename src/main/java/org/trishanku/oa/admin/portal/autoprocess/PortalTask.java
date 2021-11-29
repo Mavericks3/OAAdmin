@@ -41,7 +41,7 @@ public class PortalTask {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Scheduled(fixedRate = 20000000)
+    @Scheduled(fixedRate = 2000)
     public void sendMessage()
     {
 
