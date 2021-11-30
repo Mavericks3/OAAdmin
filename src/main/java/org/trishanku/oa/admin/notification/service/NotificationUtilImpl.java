@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.trishanku.oa.admin.entity.Agreement;
-import org.trishanku.oa.admin.entity.Customer;
-import org.trishanku.oa.admin.entity.RM;
-import org.trishanku.oa.admin.entity.User;
+import org.trishanku.oa.admin.entity.*;
 import org.trishanku.oa.admin.notification.entity.NotificationEvent;
 import org.trishanku.oa.admin.repository.*;
 
@@ -28,6 +25,8 @@ public class NotificationUtilImpl implements NotificationUtil {
     RMRepository rmRepository;
     @Autowired
     AgreementRepository agreementRepository;
+    @Autowired
+    SBRRepository sbrRepository;
 
     @Autowired
     RoleRepository roleRepository;
@@ -133,6 +132,18 @@ public class NotificationUtilImpl implements NotificationUtil {
             case AGREEMENT_APPROVAL:
                 emailAddressList = getApprovalEmailAddressList(notificationEvent,transactionInformation);
                 break;
+            case SBR_CREATION:
+                emailAddressList = getEmailAddressList("BANK_USER_CHECKER");
+                break;
+            case SBR_MODIFICATION:
+                emailAddressList = getEmailAddressList("BANK_USER_CHECKER");
+                break;
+            case SBR_DELETION:
+                emailAddressList = getEmailAddressList("BANK_USER_CHECKER");
+                break;
+            case SBR_APPROVAL:
+                emailAddressList = getApprovalEmailAddressList(notificationEvent,transactionInformation);
+                break;
 
 
             default:
@@ -217,7 +228,17 @@ public class NotificationUtilImpl implements NotificationUtil {
                     e.printStackTrace();
                 }
                 break;
-
+            case SBR_APPROVAL:
+                try {
+                    String sbrId = objectMapper.readTree(transactionInformation).findValue("sbrId").asText();
+                    Optional<SBR> sbr = sbrRepository.findBySbrId(sbrId);
+                    if (sbr.isEmpty()) return "";
+                    else if (sbr.get().getModifiedUser().equalsIgnoreCase("")) return sbr.get().getCreatedUser();
+                    else return sbr.get().getModifiedUser();
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                break;
 
         }
         return "";

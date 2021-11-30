@@ -1,11 +1,4 @@
-DELETE FROM ADMIN.PORTAL_SBR_TABLE;
-DELETE FROM ADMIN.PORTAL_AGREEMENT_TABLE;
-DELETE FROM ADMIN.portal_agreement_counter_parties_table;
-DELETE FROM ADMIN.PORTAL_user_roles;
-DELETE FROM admin.PORTAL_user_customer_mapping;
-DELETE FROM ADMIN.portal_customer_table;
-DELETE FROM ADMIN.portal_rm_table;
-DELETE FROM ADMIN.portal_user_table;
+
 
 DELETE FROM ADMIN.SBR_TABLE;
 DELETE FROM ADMIN.AGREEMENT_TABLE;
@@ -17,7 +10,7 @@ DELETE FROM ADMIN.RM_TABLE;
 DELETE FROM ADMIN.ROLE_TABLE;
 DELETE FROM ADMIN.USER_TABLE;
 DELETE FROM admin.user_roles;
-
+DELETE FROM ADMIN.portal_table;
 
 
 
@@ -41,6 +34,8 @@ INSERT INTO admin.rm_table (system_id, authorisation_date, authorised_user, crea
 INSERT INTO admin.agreement_table (system_id, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, contract_document_number, contract_reference_number, expiry_date, number_of_counter_parties, remarks, status, transaction_date, valid_date, anchor_customer_id, product_id, rm_id,limit_amount,limit_currency,limit_expiry,limit_reference,cash_margin)
  VALUES ('4ddb7042-f11f-4eb3-9c58-dbf79e4c0791', null, null, null, null, null, null, 'PENDING', 'CONTDOC00001', 'CONTREF00001', '2050-09-20 15:29:01.000000', 2, 'AGREEMENT REMARK', true, '2021-09-20 15:29:16.000000', '2021-09-20 15:29:19.000000', 'a855476b-3836-433d-81cb-35ec255db192', 'cd320922-df66-497a-841e-798c6fc1b0c3', 'e7ef392f-09ba-4ca1-b680-722308527d77',1234567.89,'USD','2060-09-20 15:10:12.107000','LimitRef1234',1000000.00);
 
+INSERT INTO admin.agreement_counter_parties_table (agreement_id, counter_party_id) VALUES ('4ddb7042-f11f-4eb3-9c58-dbf79e4c0791', '8e40ab59-8c91-431f-a695-6c3150eb65ed');
+INSERT INTO admin.agreement_counter_parties_table (agreement_id, counter_party_id) VALUES ('4ddb7042-f11f-4eb3-9c58-dbf79e4c0791', '373c3c01-2bda-423f-bcdc-c5eae7c177c4');
 
 INSERT INTO admin.role_table (role_id, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, role_name) VALUES ('be10ce93-499b-4bff-8f9f-dbe9d2474190', '2021-09-09 13:21:49.000000', 'RAVIKANTH', '2021-09-09 13:21:57.000000', null, null, null, 'MASTER', 'BANK_ADMIN_MAKER');
 INSERT INTO admin.role_table (role_id, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, role_name) VALUES ('0d55bdcd-05f2-497b-9c6a-8e999ddcc4d2', '2021-09-09 13:21:49.000000', 'RAVIKANTH', '2021-09-09 13:21:57.000000', null, null, null, 'MASTER', 'BANK_ADMIN_VIEWER');

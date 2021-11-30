@@ -20,16 +20,7 @@ public class PortalTask {
 
 
 
-    @Autowired
-    PortalSBRRepository portalSBRRepository;
-    @Autowired
-    PortalAgreementRepository portalAgreementRepository;
-    @Autowired
-    PortalRMRepository portalRMRepository;
-    @Autowired
-    PortalUserRepository portalUserRepository;
-    @Autowired
-    PortalCustomerRepository portalCustomerRepository;
+
     @Autowired
     PortalRepository portalRepository;
 

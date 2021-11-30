@@ -83,7 +83,13 @@ public class NotificationAspect {
             "|| within(org.trishanku.oa.admin.service.AgreementService+) && execution(* addAgreement(..))" +
             "|| within(org.trishanku.oa.admin.service.AgreementService+) && execution(* modifyAgreement(..))" +
             "|| within(org.trishanku.oa.admin.service.AgreementService+) && execution(* authoriseAgreement(..))" +
-            "|| within(org.trishanku.oa.admin.service.AgreementService+) && execution(* deleteAgreement(..))"
+            "|| within(org.trishanku.oa.admin.service.AgreementService+) && execution(* deleteAgreement(..))" +
+
+            //Point cut on agreement management
+            "|| within(org.trishanku.oa.admin.service.SBRService+) && execution(* addSBR(..))" +
+            "|| within(org.trishanku.oa.admin.service.SBRService+) && execution(* editSBR(..))" +
+            "|| within(org.trishanku.oa.admin.service.SBRService+) && execution(* authoriseSBR(..))" +
+            "|| within(org.trishanku.oa.admin.service.SBRService+) && execution(* deleteSBR(..))"
     )
 
     public void notificationPointcut() {
@@ -202,6 +208,22 @@ public class NotificationAspect {
                     case  "deleteAgreement":
                         notificationService.addDeleteEvent(result, NotificationEvent.AGREEMENT_DELETION);
                         break;
+
+                    case  "addSBR":
+                        notificationService.addMakerEvent(result, NotificationEvent.SBR_CREATION);
+                        break;
+                    case  "editSBR":
+                        notificationService.addModificationEvent(result, NotificationEvent.SBR_MODIFICATION);
+                        break;
+                    case  "authoriseSBR":
+                        notificationService.addCheckerEvent(result, NotificationEvent.SBR_APPROVAL);
+                        break;
+                    case  "deleteSBR":
+                        notificationService.addDeleteEvent(result, NotificationEvent.SBR_DELETION);
+                        break;
+
+
+
 
 
                 }
