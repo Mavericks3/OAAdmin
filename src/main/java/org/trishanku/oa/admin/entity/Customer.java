@@ -59,6 +59,8 @@ public class Customer extends Base{
     private Date effectiveDate;
     @Column(name = "EXPIRY_DATE")
     private Date expiryDate;
+    @Column(name="NON_CUSTOMER")
+    private boolean nonCustomer;
 
 
 }

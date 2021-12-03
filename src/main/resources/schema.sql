@@ -18,6 +18,7 @@ create table if not exists admin.customer_table
     address_line2           varchar(255),
     address_line3           varchar(255),
     is_bank                 boolean,
+    non_customer            boolean,
     country                 varchar(255),
     customer_id             varchar(255),
     director_details        varchar(255),

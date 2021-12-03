@@ -58,12 +58,6 @@ public class RMServiceImpl implements RMService{
        });
        if(rmCustomers.size()!=0) newRM.setCustomers(rmCustomers);
         newRM.setCreationDetails(jwtUtil.extractUsernameFromRequest());
-        try {
-            String valueAsString = objectMapper.writeValueAsString(newRM);
-            log.info("RM object to be saved is" + valueAsString);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
         RM savedRM = rmRepository.save(newRM);
         return rmMapper.RMToRMDTO(savedRM);
 

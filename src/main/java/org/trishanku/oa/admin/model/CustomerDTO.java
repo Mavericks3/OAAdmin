@@ -33,6 +33,7 @@ public class CustomerDTO {
     private String sponsorDetails;
     private boolean status;
     private boolean bank;
+    private boolean nonCustomer;
     private Date effectiveDate;
     private Date expiryDate;
     private boolean deleteFlag;

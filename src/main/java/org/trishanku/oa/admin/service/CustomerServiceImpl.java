@@ -94,6 +94,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setCreatedUser(currentCustomerDetails.getCreatedUser());
         customer.setCreatedDate(currentCustomerDetails.getCreatedDate());
         customer.setCustomerId(customerId);
+
         customer.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         log.debug("customer to be saved is " + customer);
         Customer savedCustomer = customerRepository.save(customer);
