@@ -76,11 +76,12 @@ create table if not exists admin.rm_table
     email_address      varchar(255),
     expiry_date        timestamp,
     joining_date       timestamp,
-    rm_name            varchar(255),
+    first_name            varchar(255),
+    last_name            varchar(255),
     rm_id              varchar(255),
     active_status      boolean,
     delete_flag        boolean,
-    valid_date         timestamp,
+    effective_date         timestamp,
     constraint pk_rmtable_systemid
         primary key (system_id),
     constraint uk_rmtable_rmid
@@ -88,6 +89,19 @@ create table if not exists admin.rm_table
 );
 
 alter table admin.rm_table
+    owner to postgres;
+
+create table if not exists admin.rm_customers_table
+(
+    rm_id     uuid not null,
+    customer_id uuid not null,
+    constraint fk_rmcustomerstable_rmid
+    foreign key (rm_id) references admin.rm_table,
+    constraint fk_rmcustomerstable_customerid
+    foreign key (customer_id) references admin.customer_table
+    );
+
+alter table admin.rm_customers_table
     owner to postgres;
 
 create table if not exists admin.agreement_table

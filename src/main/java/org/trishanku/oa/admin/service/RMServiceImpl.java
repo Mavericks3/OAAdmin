@@ -1,15 +1,19 @@
 package org.trishanku.oa.admin.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.RM;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.jwtauthentication.configuration.service.JWTUtil;
 import org.trishanku.oa.admin.mapper.RMMapper;
 import org.trishanku.oa.admin.model.RMDTO;
+import org.trishanku.oa.admin.repository.CustomerRepository;
 import org.trishanku.oa.admin.repository.RMRepository;
 
 import java.util.*;
@@ -22,11 +26,15 @@ public class RMServiceImpl implements RMService{
 
     @Autowired
     RMRepository rmRepository;
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Autowired
     RMMapper rmMapper;
     @Autowired
     JWTUtil jwtUtil;
+    @Autowired
+    ObjectMapper objectMapper;
     @Override
     public List<RMDTO> getAllRMUsers() {
         return rmMapper.RMsToRMDTOs(rmRepository.findAll());
@@ -42,21 +50,43 @@ public class RMServiceImpl implements RMService{
 
         RM newRM = rmMapper.RMDTOToRM(rmdto);
         newRM.setUuid(UUID.randomUUID());
-        newRM.setStatus(true);
+        List<Customer> rmCustomers = new ArrayList<Customer>();
+       rmdto.getCustomers().forEach(customer -> {
+           Optional<Customer> customerTemp = customerRepository.findByCustomerId(customer.getCustomerId());
+           if(customerTemp.isPresent())
+               rmCustomers.add(customerTemp.get());
+       });
+       if(rmCustomers.size()!=0) newRM.setCustomers(rmCustomers);
         newRM.setCreationDetails(jwtUtil.extractUsernameFromRequest());
-        return rmMapper.RMToRMDTO(rmRepository.save(newRM));
+        try {
+            String valueAsString = objectMapper.writeValueAsString(newRM);
+            log.info("RM object to be saved is" + valueAsString);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        RM savedRM = rmRepository.save(newRM);
+        return rmMapper.RMToRMDTO(savedRM);
 
     }
 
     @Override
     public RMDTO modifyRMUser(String rmId, RMDTO rmDTO) {
+        if(rmRepository.findByRmId(rmId).isEmpty()) throw  new RuntimeException("RM with id " + rmId + " does not exist");
         RM currentRM = rmRepository.findByRmId(rmId).get();
-        currentRM.setName(rmDTO.getName());
+        currentRM.setFirstName(rmDTO.getFirstName());
+        currentRM.setLastName(rmDTO.getLastName());
         currentRM.setEmailAddress(rmDTO.getEmailAddress());
         currentRM.setJoiningDate(rmDTO.getJoiningDate());
-        currentRM.setValidDate(rmDTO.getValidDate());
+        currentRM.setEffectiveDate(rmDTO.getEffectiveDate());
         currentRM.setExpiryDate(rmDTO.getExpiryDate());
         currentRM.setModificationDetails(jwtUtil.extractUsernameFromRequest());
+        List<Customer> rmCustomers = new ArrayList<Customer>();
+        rmDTO.getCustomers().forEach(customer -> {
+            Optional<Customer> customerTemp = customerRepository.findByCustomerId(customer.getCustomerId());
+            if(customerTemp.isPresent())
+                rmCustomers.add(customerTemp.get());
+        });
+        if(rmCustomers.size()!=0) currentRM.setCustomers(rmCustomers);
 
         return rmMapper.RMToRMDTO(rmRepository.save(currentRM));
     }
@@ -64,6 +94,7 @@ public class RMServiceImpl implements RMService{
     @Override
     @Transactional
     public RMDTO authoriseRMUser(String rmId) {
+        if(rmRepository.findByRmId(rmId).isEmpty()) throw  new RuntimeException("RM with id " + rmId + " does not exist");
         RM currentRM = rmRepository.findByRmId(rmId).get();
         currentRM.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         RM savedRM = rmRepository.save(currentRM);

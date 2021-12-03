@@ -8,8 +8,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.trishanku.oa.admin.notification.entity.NotificationEvent;
-import org.trishanku.oa.admin.notification.service.NotificationService;
 import org.trishanku.oa.admin.portal.service.PortalService;
 
 import java.util.Arrays;
