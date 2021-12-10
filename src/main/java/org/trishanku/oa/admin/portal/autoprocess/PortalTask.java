@@ -33,6 +33,7 @@ public class PortalTask {
     ObjectMapper objectMapper;
 
     //@Scheduled(fixedRate = 2000000)
+    @Scheduled(fixedRateString ="${PortalTask.interval}", initialDelay=1000)
     public void sendMessage()
     {
 

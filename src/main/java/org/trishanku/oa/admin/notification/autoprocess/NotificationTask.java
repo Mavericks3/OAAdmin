@@ -32,6 +32,7 @@ public class NotificationTask {
     ObjectMapper objectMapper;
 
     //@Scheduled(fixedRate = 20000000)
+    @Scheduled(fixedRateString ="${NotificationTask.interval}", initialDelay=1000)
     public void sendMessage()
     {
         if(notificationRepository.findByNotificationStatus(NotificationStatusEnum.INITIATED).isPresent())
