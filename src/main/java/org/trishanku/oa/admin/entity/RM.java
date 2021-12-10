@@ -40,7 +40,7 @@ public class RM extends Base {
     private boolean status;
     @Column(name = "DELETE_FLAG")
     private boolean deleteFlag;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH })
     @JoinTable(
             name = "RM_CUSTOMERS_TABLE", schema = "ADMIN",
             joinColumns = { @JoinColumn(name = "RM_ID") },

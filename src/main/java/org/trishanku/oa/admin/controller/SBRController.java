@@ -48,7 +48,15 @@ public class SBRController {
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER' })")
     public ResponseEntity<SBRReturnDTO> getSBRById(@PathVariable(name="sbrId") String sbrId)
     {
-        return  new ResponseEntity<>(sbrService.getSBRById(sbrId), HttpStatus.OK);
+        try {
+            SBRReturnDTO sbrReturnDTO = sbrService.getSBRById(sbrId);
+            return  new ResponseEntity<>(sbrReturnDTO, HttpStatus.OK);
+        }
+        catch(Exception e)
+        {
+            return  new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
     }
 
 

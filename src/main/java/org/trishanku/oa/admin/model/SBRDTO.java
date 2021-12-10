@@ -5,6 +5,7 @@ import lombok.*;
 import org.trishanku.oa.admin.entity.*;
 
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
@@ -76,4 +77,5 @@ public class SBRDTO {
     private BigDecimal limitAmount;
     private float cashMargin;
     private boolean status;
+    private Date expiryDate;
 }

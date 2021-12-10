@@ -247,6 +247,7 @@ create table if not exists admin.sbr_table
     agreement_id                    uuid,
     anchor_customer_id              uuid,
     counter_party_id                uuid,
+    expiry_date                    timestamp,
     constraint pk_sbrtable_systemid
         primary key (system_id),
     constraint fk_sbrtable_agreementid

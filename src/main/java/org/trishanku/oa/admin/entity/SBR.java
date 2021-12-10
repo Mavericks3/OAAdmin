@@ -151,4 +151,6 @@ public class SBR extends Base{
     private float cashMargin;
     @Column(name= "STATUS")
     private boolean status;
+    @Column(name = "EXPIRY_DATE")
+    private Date expiryDate;
 }

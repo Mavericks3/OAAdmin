@@ -24,4 +24,9 @@ public class UserAdminServiceImpl implements UserAdminService {
     public UserDTO getProfileDetails(String userEmailAddress) {
         return userMapper.userToUserDTO(userRepository.findByEmailAddress(userEmailAddress).orElseThrow(() -> new ResourceNotFoundException("User details not found")));
     }
+
+    @Override
+    public User getUserDetails(String emailAddress) {
+        return userRepository.findByEmailAddress(emailAddress).orElseThrow(() -> new ResourceNotFoundException("User details not found"));
+    }
 }

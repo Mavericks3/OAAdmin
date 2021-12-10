@@ -76,4 +76,5 @@ public class SBRReturnDTO {
     private BigDecimal limitAmount;
     private float cashMargin;
     private boolean status;
+    private Date expiryDate;
 }

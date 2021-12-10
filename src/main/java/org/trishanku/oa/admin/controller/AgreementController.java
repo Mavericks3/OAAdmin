@@ -19,7 +19,7 @@ public class AgreementController {
     @Autowired
     AgreementService agreementService;
 
-    //Get pending agreements
+    //Get all agreements
     @GetMapping
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER' })")
     public ResponseEntity<List<AgreementDTO>> getAgreements()
