@@ -7,23 +7,23 @@ import org.trishanku.oa.admin.model.SBRReturnDTO;
 import java.util.List;
 
 public interface SBRService {
-    List<SBRReturnDTO> getAllSBRs();
+    List<SBRDTO> getAllSBRs();
 
-    List<SBRReturnDTO> getAllPendingSBRs();
+    List<SBRDTO> getAllPendingSBRs();
 
-    List<SBRReturnDTO> getAllMasterSBRs();
+    List<SBRDTO> getAllMasterSBRs();
 
-    SBRReturnDTO addSBR(SBRDTO sbrdto);
+    SBRDTO addSBR(SBRDTO sbrdto);
 
-    SBRReturnDTO authoriseSBR(SBRDTO sbrdto);
+    SBRDTO authoriseSBR(SBRDTO sbrdto);
 
-    SBRReturnDTO getSBRById(String sbrId);
+    SBRDTO getSBRById(String sbrId);
 
-    SBRReturnDTO deleteSBR(SBRDTO sbrdto);
+    SBRDTO deleteSBR(SBRDTO sbrdto);
 
-    List<SBRReturnDTO> getSBRsByAnchorCustomer(String anchorCustomerId);
+    List<SBRDTO> getSBRsByAnchorCustomer(String anchorCustomerId);
 
-    List<SBRReturnDTO> getSBRsByCounterParty(String counterPartyId);
+    List<SBRDTO> getSBRsByCounterParty(String counterPartyId);
 
-    SBRReturnDTO editSBR(SBRDTO sbrdto);
+    SBRDTO editSBR(SBRDTO sbrdto);
 }
