@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -24,13 +21,14 @@ public class Account extends Base {
     @Column(name = "SYSTEM_ID")
     private UUID systemId;
     @Column(name = "ID", unique = true)
-    private String id;
+    private String accountId;
     @Column(name = "NAME")
     private String name;
     @Column(name = "TYPE")
     private String type;
     @Column(name = "DESCRIPTION")
     private String description;
+    @Enumerated(EnumType.STRING)
     @Column(name = "CURRENCY")
     private CurrencyEnum currency;
     @Column(name = "STATUS")

@@ -397,7 +397,7 @@ create table if not exists admin.account_table
     modified_date      timestamp,
     modified_user      varchar(255),
     transaction_status varchar(255),
-    currency           integer,
+    currency           varchar(255),
     deleteflag         boolean,
     description        varchar(255),
     id                 varchar(255)

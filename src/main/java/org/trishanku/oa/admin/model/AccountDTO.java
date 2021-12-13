@@ -10,12 +10,11 @@ import org.trishanku.oa.admin.entity.CurrencyEnum;
 @Builder
 public class AccountDTO {
 
-    private String id;
+    private String accountId;
     private String name;
     private String type;
     private String description;
     private CurrencyEnum currency;
     private boolean status;
-    private boolean deleteFlag;
 
 }

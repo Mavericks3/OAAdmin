@@ -11,6 +11,7 @@ DELETE FROM ADMIN.ROLE_TABLE;
 DELETE FROM ADMIN.USER_TABLE;
 DELETE FROM admin.user_roles;
 DELETE FROM ADMIN.portal_table;
+DELETE FROM admin.account_table;
 
 
 
@@ -69,3 +70,6 @@ INSERT INTO admin.user_roles (user_id, role_id) VALUES ('c39a8961-97b6-492a-8d1a
 
 
 INSERT INTO admin.user_customer_mapping (user_id, customer_id) VALUES ('4853916d-7e7e-4935-87c3-015ece538734', '793a2fa1-6a9f-44c2-88bd-dcf90a9089d4');
+
+
+INSERT INTO admin.account_table (system_id, authorisation_date, authorised_user, created_date, created_user, modified_date, modified_user, transaction_status, currency, deleteflag, description, id, name, status, type) VALUES ('13f65b03-e4c3-4ba7-9069-f4bcca8b3d75', null, null, null, null, null, null, null, 'USD', false, 'PF Debit Account', 'PF Debit', 'GL Account', true, 'GL');
