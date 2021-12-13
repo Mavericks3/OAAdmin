@@ -385,6 +385,34 @@ create table if not exists admin.portal_table
 
 alter table admin.portal_table owner to postgres;
 
+create table if not exists admin.account_table
+(
+    system_id          uuid not null
+        constraint account_table_pkey
+            primary key,
+    authorisation_date timestamp,
+    authorised_user    varchar(255),
+    created_date       timestamp,
+    created_user       varchar(255),
+    modified_date      timestamp,
+    modified_user      varchar(255),
+    transaction_status varchar(255),
+    currency           integer,
+    deleteflag         boolean,
+    description        varchar(255),
+    id                 varchar(255)
+        constraint uk_5acbu68wyasufjcd3f6hbktiv
+            unique,
+    name               varchar(255),
+    status             boolean,
+    type               varchar(255)
+);
+
+alter table admin.account_table
+    owner to postgres;
+
+
+
 
 
 
