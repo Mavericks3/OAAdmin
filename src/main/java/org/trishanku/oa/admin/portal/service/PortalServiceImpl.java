@@ -145,8 +145,8 @@ public class PortalServiceImpl implements PortalService {
     @Override
     public void addSBR(Object result) {
 
-        SBRReturnDTO sbrReturnDTO = (SBRReturnDTO) result;
-        SBR sbr = sbrRepository.getById(sbrReturnDTO.getUuid());
+        SBRDTO sbrDTO = (SBRDTO) result;
+        SBR sbr = sbrRepository.getById(sbrDTO.getUuid());
         String message = "";
         try {
             message = objectMapper.writeValueAsString(sbr);

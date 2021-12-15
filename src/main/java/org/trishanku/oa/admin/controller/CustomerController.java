@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
@@ -34,12 +35,14 @@ public class CustomerController {
 
     @GetMapping()
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'})")
+    @Transactional
     public ResponseEntity<List<CustomerDTO>> getCustomersList()
     {
         return new ResponseEntity<>(customerService.getAllCustomers(),HttpStatus.OK);
     }
 
     @GetMapping(path="/paginated")
+    @Transactional
     public ResponseEntity<List<CustomerDTO>> getCustomersListPaginated(@RequestParam("page") int page, @RequestParam("size") int size)
     {
         return new ResponseEntity<>(customerService.getAllCustomersPaginated(page,size),HttpStatus.OK);
@@ -47,6 +50,7 @@ public class CustomerController {
 
     @GetMapping("/pending")
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'})")
+    @Transactional
     public ResponseEntity<List<CustomerDTO>> getPendingCustomersList()
     {
         return new ResponseEntity<>(customerService.getPendingCustomers(),HttpStatus.OK);
@@ -54,6 +58,7 @@ public class CustomerController {
 
     @GetMapping(path = "/{customerId}")
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'})")
+    @Transactional
     public ResponseEntity<CustomerDTO> getCustomerByCustomerId(@PathVariable(name="customerId") String customerId)
     {
 
@@ -62,6 +67,7 @@ public class CustomerController {
 
     @PostMapping()
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER'})")
+    @Transactional
     public ResponseEntity<CustomerDTO> addCustomer(@RequestBody CustomerDTO customerDTO)
     {
         return new ResponseEntity<>(customerService.addCustomer(customerDTO),HttpStatus.CREATED);
@@ -69,6 +75,7 @@ public class CustomerController {
 
     @PutMapping(path="/{customerId}")
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER'})")
+    @Transactional
     public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable(name="customerId") String customerId, @RequestBody CustomerDTO customerDTO)
     {
         return new ResponseEntity<>(customerService.modifyCustomer(customerId,customerDTO),HttpStatus.ACCEPTED);
@@ -76,6 +83,7 @@ public class CustomerController {
 
     @DeleteMapping(path="/{customerId}")
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER'})")
+    @Transactional
     public ResponseEntity deleteCustomer(@PathVariable(name="customerId") String customerId)
     {
         return new ResponseEntity<>(customerService.deleteCustomer(customerId),HttpStatus.NO_CONTENT);
@@ -84,6 +92,7 @@ public class CustomerController {
 
     @PutMapping(path="/authorise/{customerId}")
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_CHECKER'})")
+    @Transactional
     public ResponseEntity<CustomerDTO> authoriseCustomer(@PathVariable(name="customerId") String customerId)
     {
         return new ResponseEntity<>(customerService.authoriseCustomer(customerId),HttpStatus.ACCEPTED);

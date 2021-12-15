@@ -8,6 +8,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.trishanku.oa.admin.exception.ResourceAlreadyExistsException;
 import org.trishanku.oa.admin.model.UserDTO;
@@ -27,6 +28,7 @@ public class SuperAdminController {
     //Mapping to get all super admins
     @GetMapping
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+    @Transactional
     public ResponseEntity<List<UserDTO>> getAllSuperAdmins()
     {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -38,6 +40,7 @@ public class SuperAdminController {
     //Mapping to get all pending super admins
     @GetMapping(path = "/pending")
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+    @Transactional
     public ResponseEntity<List<UserDTO>> getPendingSuperAdmins()
     {
         List<UserDTO> superAdminDTOS = superAdminService.getPendingSuperAdmins();
@@ -47,6 +50,7 @@ public class SuperAdminController {
     //Mapping to get a specific super admin
     @GetMapping(path = "/{userId}")
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+    @Transactional
     public ResponseEntity<UserDTO> getSuperAdminById(@PathVariable(name="userId") String userId)
     {
         UserDTO superAdminDTO = superAdminService.getSuperAdminById(userId);
@@ -57,6 +61,7 @@ public class SuperAdminController {
 
     @PostMapping()
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+    @Transactional
     public ResponseEntity<UserDTO> addSuperAdmin(@RequestBody UserDTO userDTO) throws ResourceAlreadyExistsException {
         UserDTO superAdminDTO = superAdminService.addSuperAdmin(userDTO);
         return new ResponseEntity<>(superAdminDTO, HttpStatus.OK);
@@ -66,6 +71,7 @@ public class SuperAdminController {
 
     @PutMapping(path = "/{userId}")
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+    @Transactional
     public ResponseEntity<UserDTO> modifySuperAdmin(@PathVariable(name="userId") String userId, @RequestBody UserDTO userDTO)
     {
         UserDTO superAdminDTO = superAdminService.modifySuperAdmin(userId, userDTO);
@@ -75,6 +81,7 @@ public class SuperAdminController {
     //Mapping to delete a super admin
     @PutMapping(path = "/activate/{userId}")
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+    @Transactional
     public ResponseEntity<UserDTO> activateSuperAdmin(@PathVariable(name="userId") String userId, @RequestBody UserDTO userDTO)
     {
         UserDTO superAdminDTO = superAdminService.activateSuperAdmin(userId, userDTO);
@@ -84,6 +91,7 @@ public class SuperAdminController {
     //Mapping to delete a super admin
     @PutMapping(path = "/delete/{userId}")
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+    @Transactional
     public ResponseEntity<UserDTO> deleteSuperAdmin(@PathVariable(name="userId") String userId)
     {
         UserDTO superAdminDTO = superAdminService.deleteSuperAdmin(userId);
@@ -96,6 +104,7 @@ public class SuperAdminController {
 
     @PutMapping(path = "/authorise/{userId}")
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+    @Transactional
     public ResponseEntity<UserDTO> authorizeSuperAdmin(@PathVariable(name="userId") String userId)
     {
         UserDTO superAdminDTO = superAdminService.authoriseSuperAdmin(userId);

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.trishanku.oa.admin.entity.Product;
 import org.trishanku.oa.admin.mapper.AccountMapper;
@@ -26,6 +27,7 @@ public class AccountController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER' })")
+    @Transactional
     public ResponseEntity<AccountDTO> addAccount(@RequestBody AccountDTO accountDTO)
     {
         AccountDTO addAccount = accountService.addAccount(accountDTO);
@@ -35,6 +37,7 @@ public class AccountController {
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER'})")
+    @Transactional
     public ResponseEntity<List<AccountDTO>> getAllAccounts(@RequestParam(name = "transactionStatus",required=false)  String transactionStatus,
                                                            @RequestParam(name ="status",required=false) String status,
                                                            @RequestParam(name ="accountId",required=false) String accountId,
@@ -48,6 +51,7 @@ public class AccountController {
 
     @PutMapping()
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER'})")
+    @Transactional
     public ResponseEntity<AccountDTO> modifyAccount(@RequestBody AccountDTO accountDTO)
     {
         AccountDTO modifiedDTO = accountService.modifyAccount(accountDTO);
@@ -56,6 +60,7 @@ public class AccountController {
 
     @PutMapping(path = "/delete")
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER'})")
+    @Transactional
     public ResponseEntity<AccountDTO> deleteAccount(@RequestBody AccountDTO accountDTO)
     {
         AccountDTO deletedDTO = accountService.deleteAccount(accountDTO);
@@ -64,6 +69,7 @@ public class AccountController {
 
     @PutMapping(path = "/authorise")
     @PreAuthorize("hasAnyAuthority({'BANK_USER_CHECKER'})")
+    @Transactional
     public ResponseEntity<AccountDTO> authoriseAccount(@RequestBody AccountDTO accountDTO)
     {
         AccountDTO authorisedDTO = accountService.authoriseAccount(accountDTO);

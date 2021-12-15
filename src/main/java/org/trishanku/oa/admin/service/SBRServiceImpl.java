@@ -1,5 +1,7 @@
 package org.trishanku.oa.admin.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,12 +12,11 @@ import org.trishanku.oa.admin.jwtauthentication.configuration.service.JWTUtil;
 import org.trishanku.oa.admin.mapper.SBRMapper;
 import org.trishanku.oa.admin.mapper.SBRReturnMapper;
 import org.trishanku.oa.admin.model.SBRDTO;
-import org.trishanku.oa.admin.model.SBRReturnDTO;
 import org.trishanku.oa.admin.repository.AgreementRepository;
 import org.trishanku.oa.admin.repository.CustomerRepository;
 import org.trishanku.oa.admin.repository.SBRRepository;
 
-import java.util.Collections;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,8 +38,10 @@ public class SBRServiceImpl implements SBRService {
 
     @Autowired
     SBRMapper sbrMapper;
+
     @Autowired
-    SBRReturnMapper sbrReturnMapper;
+    ObjectMapper objectMapper;
+
 
     @Autowired
     JWTUtil jwtUtil;
@@ -98,7 +101,14 @@ public class SBRServiceImpl implements SBRService {
         if(sbr == null) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
 
         sbr.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
-        return  sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
+        SBR save = sbrRepository.save(sbr);
+
+        try {
+            log.info("saved sbr is " + objectMapper.writeValueAsString(save));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return  sbrMapper.SBRToSBRDTO(save);
     }
 
     @Override

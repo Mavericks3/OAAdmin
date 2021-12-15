@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.trishanku.oa.admin.model.AgreementDTO;
 import org.trishanku.oa.admin.model.UserDTO;
@@ -22,6 +23,7 @@ public class AgreementController {
     //Get all agreements
     @GetMapping
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER' })")
+    @Transactional
     public ResponseEntity<List<AgreementDTO>> getAgreements()
     {
         return new ResponseEntity(agreementService.getAllAgreements(),HttpStatus.OK);
@@ -30,6 +32,7 @@ public class AgreementController {
     //Get Agreement by Contact reference Number
     @GetMapping(path = "/byreferencenumber/{contractReferenceNumber}")
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER' })")
+    @Transactional
     public ResponseEntity<AgreementDTO> getAgreementByContractReferenceNumber(@PathVariable(name="contractReferenceNumber") String contractReferenceNumber)
     {
         return new ResponseEntity(agreementService.getAgreementByContractReferenceNumber(contractReferenceNumber),HttpStatus.OK);
@@ -39,6 +42,7 @@ public class AgreementController {
     //Get Agreement by Contract Document Number
     @GetMapping(path = "/bydocumentnumber/{contractDocumentNumber}")
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER' })")
+    @Transactional
     public ResponseEntity<AgreementDTO> getAgreementByContractDocumentNumber(@PathVariable(name="contractDocumentNumber") String contractDocumentNumber)
     {
         return new ResponseEntity(agreementService.getAgreementByContractDocumentNumber(contractDocumentNumber),HttpStatus.OK);
@@ -47,6 +51,7 @@ public class AgreementController {
     //Get Pending Agreements
     @GetMapping(path = "/pending")
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER' })")
+    @Transactional
     public ResponseEntity<List<AgreementDTO>> getPendingAgreements()
     {
         List<AgreementDTO> agreementDTOS = agreementService.getPendingAgreements();
@@ -56,6 +61,7 @@ public class AgreementController {
     //Add Agreement
     @PostMapping()
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER' })")
+    @Transactional
     public ResponseEntity<AgreementDTO> addAgreement(@RequestBody AgreementDTO agreementDTO)
     {
 
@@ -66,6 +72,7 @@ public class AgreementController {
     //Modify Agreement
     @PutMapping()
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER' })")
+    @Transactional
     public ResponseEntity<AgreementDTO> modifyAgreement( @RequestBody AgreementDTO agreementDTO)
     {
 
@@ -75,6 +82,7 @@ public class AgreementController {
     //Authorise Agreement
     @PutMapping(path= "/authorise")
     @PreAuthorize("hasAnyAuthority({'BANK_USER_CHECKER' })")
+    @Transactional
     public ResponseEntity<AgreementDTO> authoriseAgreement( @RequestBody AgreementDTO agreementDTO)
     {
 
@@ -84,6 +92,7 @@ public class AgreementController {
     //Delete Agreement
     @PutMapping(path= "/delete")
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER' })")
+    @Transactional
     public ResponseEntity<AgreementDTO> deleteAgreement( @RequestBody AgreementDTO agreementDTO)
     {
 

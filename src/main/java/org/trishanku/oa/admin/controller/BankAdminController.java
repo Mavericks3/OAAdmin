@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.trishanku.oa.admin.model.UserDTO;
 import org.trishanku.oa.admin.service.BankAdminService;
@@ -21,6 +22,7 @@ public class BankAdminController {
     //Mapping to get all bank admins
     @GetMapping
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'})")
+    @Transactional
     public ResponseEntity<List<UserDTO>> getAllBankAdmins()
     {
         List<UserDTO> bankAdminDTOS = bankAdminService.getAllBankAdmins();
@@ -30,6 +32,7 @@ public class BankAdminController {
     //Mapping to get all pending bank admins
     @GetMapping(path = "/pending")
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'})")
+    @Transactional
     public ResponseEntity<List<UserDTO>> getPendingBankAdmins()
     {
         List<UserDTO> bankAdminDTOS = bankAdminService.getPendingBankAdmins();
@@ -39,6 +42,7 @@ public class BankAdminController {
     //Mapping to get a specific bank admin
     @GetMapping(path = "/{userId}")
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER'})")
+    @Transactional
     public ResponseEntity<UserDTO> getBankAdminById(@PathVariable(name="userId") String userId)
     {
         UserDTO bankAdminDTO = bankAdminService.getBankAdminById(userId);
@@ -49,6 +53,7 @@ public class BankAdminController {
 
     @PostMapping()
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER'})")
+    @Transactional
     public ResponseEntity<UserDTO> addBankAdmin(@RequestBody UserDTO userDTO)
     {
         UserDTO bankAdminDTO = bankAdminService.addBankAdmin(userDTO);
@@ -59,6 +64,7 @@ public class BankAdminController {
 
     @PutMapping(path = "/{userId}")
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER'})")
+    @Transactional
     public ResponseEntity<UserDTO> modifyBankAdmin(@PathVariable(name="userId") String userId, @RequestBody UserDTO userDTO)
     {
         UserDTO bankAdminDTO = bankAdminService.modifyBankAdmin(userId, userDTO);
@@ -68,6 +74,7 @@ public class BankAdminController {
     //Mapping to delete a bank admin
     @PutMapping(path = "/delete/{userId}")
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER'})")
+    @Transactional
     public ResponseEntity<UserDTO> deleteBankAdmin(@PathVariable(name="userId") String userId)
     {
         UserDTO bankAdminDTO = bankAdminService.deleteBankAdmin(userId);
@@ -79,6 +86,7 @@ public class BankAdminController {
 
     @PutMapping(path = "/authorise/{userId}")
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_CHECKER'})")
+    @Transactional
     public ResponseEntity<UserDTO> authorizeBankAdmin(@PathVariable(name="userId") String userId)
     {
         UserDTO bankAdminDTO = bankAdminService.authoriseBankAdmin(userId);
