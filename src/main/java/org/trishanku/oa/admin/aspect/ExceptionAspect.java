@@ -2,6 +2,8 @@ package org.trishanku.oa.admin.aspect;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,10 @@ import org.trishanku.oa.admin.exception.ResourceAlreadyExistsException;
 
 @ControllerAdvice
 public class ExceptionAspect {
+
+    Logger errorLog = LoggerFactory.getLogger("ErrorLog");
+
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         OAException oaException = new OAException(new Date(), ex.getMessage(), request.getDescription(false));
@@ -27,6 +33,7 @@ public class ExceptionAspect {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> globalExceptionHandler(Exception ex, WebRequest request) {
+        errorLog.error(ex.getLocalizedMessage(), ex);
         OAException oaException = new OAException(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(oaException, HttpStatus.INTERNAL_SERVER_ERROR);
     }

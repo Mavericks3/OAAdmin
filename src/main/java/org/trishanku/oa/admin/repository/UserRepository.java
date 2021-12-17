@@ -20,6 +20,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     User findByRolesInAndUserId(List<Role> roles,String userId);
     Optional<User> findByUserId(String userId);
     Optional<User> findByEmailAddress(String emailAddress);
+    Optional<User> findByEmailAddressAndTransactionStatus(String emailAddress,TransactionStatusEnum transactionStatus);
     List<User> findByRolesAndTransactionStatus(Role role, TransactionStatusEnum transactionStatus);
     List<User> findByRolesAndStatus(Role role, boolean status );
 

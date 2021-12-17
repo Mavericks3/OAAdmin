@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.entity.User;
 import org.trishanku.oa.admin.repository.UserRepository;
 
@@ -17,7 +18,7 @@ public class AssistUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String emailAddress) throws UsernameNotFoundException {
 
-        User user= userRepository.findByEmailAddress(emailAddress).orElseThrow(() -> new RuntimeException("user with the given email address not found"));
+        User user= userRepository.findByEmailAddressAndTransactionStatus(emailAddress, TransactionStatusEnum.MASTER).orElseThrow(() -> new RuntimeException("user with the given email address not found"));
         return new AssistUserDetails(user);
     }
 
