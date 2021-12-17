@@ -128,9 +128,16 @@ create table if not exists admin.agreement_table
     rm_id                     uuid,
     limit_amount numeric(19,2),
     limit_currency varchar(255),
+    limit_allocated_amount numeric(19,2),
+    limit_unallocated_amount numeric(19,2),
     limit_expiry timestamp,
     limit_reference varchar(255),
     cash_margin numeric(19,2),
+    finance_charge_currency varchar(255),
+    finance_charge_amount numeric(19,2),
+    settlement_charge_currency varchar(255),
+    settlement_charge_amount numeric(19,2),
+
     constraint pk_agrementtable_systemid
         primary key (system_id),
     constraint uk_agreementtable_contractdocumentnumber

@@ -61,8 +61,22 @@ public class Agreement extends Base{
     private CurrencyEnum limitCurrency;
     @Column(name= "LIMIT_AMOUNT")
     private BigDecimal limitAmount;
+    @Column(name= "LIMIT_ALLOCATED_AMOUNT")
+    private BigDecimal limitAllocatedAmount;
+    @Column(name= "LIMIT_UNALLOCATED_AMOUNT")
+    private BigDecimal limitUnallocatedAmount;
     @Column(name= "CASH_MARGIN")
     private BigDecimal cashMargin;
     @Column(name = "STATUS")
     private boolean status;
+    @Enumerated(EnumType.STRING)
+    @Column(name= "FINANCE_CHARGE_CURRENCY")
+    private CurrencyEnum financeChargeCurrency;
+    @Column(name= "FINANCE_CHARGE_AMOUNT")
+    private BigDecimal financeChargeAmount;
+    @Enumerated(EnumType.STRING)
+    @Column(name= "SETTLEMENT_CHARGE_CURRENCY")
+    private CurrencyEnum settlementChargeCurrency;
+    @Column(name= "SETTLEMENT_CHARGE_AMOUNT")
+    private BigDecimal settlementChargeAmount;
 }

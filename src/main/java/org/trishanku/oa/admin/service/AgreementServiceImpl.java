@@ -63,6 +63,7 @@ public class AgreementServiceImpl implements AgreementService {
 
     @Override
     public AgreementDTO addAgreement(AgreementDTO agreementDTO) {
+
         if(!agreementValidationService.isValid(agreementDTO)) throw new RuntimeException(" Validation failed on the request");
         Agreement agreement = agreementMapper.AgreementDTOToAgreement(agreementDTO);
         agreement.setUuid(UUID.randomUUID());

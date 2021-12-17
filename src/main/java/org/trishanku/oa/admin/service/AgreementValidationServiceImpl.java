@@ -11,10 +11,8 @@ import org.trishanku.oa.admin.repository.CustomerRepository;
 import org.trishanku.oa.admin.repository.ProductRepository;
 import org.trishanku.oa.admin.repository.RMRepository;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.TreeSet;
+import java.math.BigDecimal;
+import java.util.*;
 
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toCollection;
@@ -40,6 +38,7 @@ public class AgreementValidationServiceImpl implements AgreementValidationServic
 
         else if(agreementExists(agreementDTO)) return false;
         else if(incorrectCounterParties(agreementDTO)) return false;
+        else if(limitImbalance(agreementDTO)) return false;
 
         return true;
     }
@@ -51,14 +50,27 @@ public class AgreementValidationServiceImpl implements AgreementValidationServic
         else if(invalidCounterParties(agreementDTO)) return false;
 
         else if(incorrectCounterParties(agreementDTO)) return false;
+        else if(limitImbalance(agreementDTO)) return false;
 
         return true;
     }
 
+    private boolean limitImbalance(AgreementDTO agreementDTO)
+    {
+        if(agreementDTO.getLimitAmount().compareTo(agreementDTO.getLimitAllocatedAmount().add(agreementDTO.getLimitUnallocatedAmount()))!=0)
+            throw new RuntimeException("Limit Amount is not equal to Limit allocated amount + Limit unallocated amount");
+        return false;
+    }
+
     private boolean invalidAnchorCustomer(AgreementDTO agreementDTO)
     {
-        if(customerRepository.findByCustomerId(agreementDTO.getAnchorCustomer().getCustomerId()).isEmpty())
+        Optional<Customer> customerOptional =customerRepository.findByCustomerId(agreementDTO.getAnchorCustomer().getCustomerId());
+        if(customerOptional.isEmpty())
             throw new RuntimeException("Anchor customer " + agreementDTO.getAnchorCustomer().getCustomerId() + " does not exist");
+        else if(!(customerOptional.get().isStatus()))
+            throw new RuntimeException("Anchor customer " + agreementDTO.getAnchorCustomer().getCustomerId() + " is not active");
+        else if(customerOptional.get().getExpiryDate().before(agreementDTO.getExpiryDate()))
+            throw new RuntimeException("Anchor customer expiry  " + customerOptional.get().getExpiryDate() + " is prior to agreement expiry " + agreementDTO.getExpiryDate());
         return false;
     }
 
@@ -71,9 +83,14 @@ public class AgreementValidationServiceImpl implements AgreementValidationServic
 
     private boolean invalidCounterParties(AgreementDTO agreementDTO)
     {
-        agreementDTO.getCounterParties().forEach(customer -> {
-            if (customerRepository.findByCustomerId(customer.getCustomerId()).isEmpty())
-                throw new RuntimeException("Counter party customer " + customer.getCustomerId() + " does not exist");
+        agreementDTO.getCounterParties().forEach(counterParty -> {
+            Optional<Customer> customerOptional =customerRepository.findByCustomerId(counterParty.getCustomerId());
+            if (customerOptional.isEmpty())
+                throw new RuntimeException("Counter party customer " + counterParty.getCustomerId() + " does not exist");
+            else if(!(customerOptional.get().isStatus()))
+                throw new RuntimeException("Counter party customer " + counterParty.getCustomerId() + " is not active");
+            else if(customerOptional.get().getExpiryDate().before(agreementDTO.getExpiryDate()))
+                throw new RuntimeException("Counter party customer expiry  " + customerOptional.get().getExpiryDate() + " is prior to agreement expiry " + agreementDTO.getExpiryDate());
         });
         return false;
     }
