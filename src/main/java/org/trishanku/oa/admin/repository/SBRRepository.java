@@ -23,4 +23,6 @@ public interface SBRRepository extends JpaRepository<SBR, UUID> {
     Optional<List<SBR>> findByCounterParty(Customer counterParty);
 
     Optional<SBR> findByAgreementAndAnchorCustomerAndCounterParty(Agreement agreement, Customer anchorCustomer, Customer counterParty);
+
+    Optional<List<SBR>> findByAgreement(Agreement agreement);
 }

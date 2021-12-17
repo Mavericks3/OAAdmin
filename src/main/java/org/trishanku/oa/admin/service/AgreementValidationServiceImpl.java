@@ -4,12 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.trishanku.oa.admin.entity.Customer;
+import org.trishanku.oa.admin.entity.SBR;
 import org.trishanku.oa.admin.entity.User;
 import org.trishanku.oa.admin.model.AgreementDTO;
-import org.trishanku.oa.admin.repository.AgreementRepository;
-import org.trishanku.oa.admin.repository.CustomerRepository;
-import org.trishanku.oa.admin.repository.ProductRepository;
-import org.trishanku.oa.admin.repository.RMRepository;
+import org.trishanku.oa.admin.repository.*;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -29,6 +27,8 @@ public class AgreementValidationServiceImpl implements AgreementValidationServic
     ProductRepository productRepository;
     @Autowired
     RMRepository rmRepository;
+    @Autowired
+    SBRRepository sbrRepository;
 
     @Override
     public boolean isValid(AgreementDTO agreementDTO) {
@@ -51,10 +51,25 @@ public class AgreementValidationServiceImpl implements AgreementValidationServic
 
         else if(incorrectCounterParties(agreementDTO)) return false;
         else if(limitImbalance(agreementDTO)) return false;
+        else if(sbrsExpiringBefore(agreementDTO)) return false;
 
         return true;
     }
 
+    private boolean sbrsExpiringBefore(AgreementDTO agreementDTO)
+    {
+        List<String> willBeInvalidated = new ArrayList<>();
+        Optional<List<SBR>> optionalSBRList = sbrRepository.findByAgreement(agreementRepository.findByContractReferenceNumber(agreementDTO.getContractReferenceNumber()).get());
+        optionalSBRList.ifPresent(sbrList -> {
+            sbrList.forEach(sbr -> {
+                if(sbr.getExpiryDate().before(agreementDTO.getExpiryDate())) willBeInvalidated.add(sbr.getSbrId());
+            });
+        });
+        if(!(willBeInvalidated.isEmpty())) {
+            throw new RuntimeException("SBR's " + willBeInvalidated + "expire before the Agreement expiry date");
+        }
+        return false;
+    }
     private boolean limitImbalance(AgreementDTO agreementDTO)
     {
         if(agreementDTO.getLimitAmount().compareTo(agreementDTO.getLimitAllocatedAmount().add(agreementDTO.getLimitUnallocatedAmount()))!=0)
