@@ -15,6 +15,7 @@ import java.util.UUID;
 public interface SBRRepository extends JpaRepository<SBR, UUID> {
 
     Optional<List<SBR>> findByTransactionStatus(TransactionStatusEnum transactionStatus);
+    Optional<List<SBR>> findByAgreementAndTransactionStatus(Agreement agreement, TransactionStatusEnum transactionStatus);
 
     Optional<SBR> findBySbrId(String sbrId);
 

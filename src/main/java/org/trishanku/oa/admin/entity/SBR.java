@@ -136,19 +136,11 @@ public class SBR extends Base{
     private ProfitRateEnum profitRateType;
     @Column(name= "DOCUMENTS_REQUIRED")
     private String documentsRequired;
-    @Column(name= "LIMIT_REFERENCE")
-    private String limitReference;
-    @Column(name= "EAR_MARK_REFERENCE")
-    private String earMarkReference;
-    @Column(name= "LIMIT_EXPIRY")
-    private Date limitExpiry;
     @Enumerated(EnumType.STRING)
     @Column(name= "LIMIT_CURRENCY")
     private CurrencyEnum limitCurrency;
     @Column(name= "LIMIT_AMOUNT")
     private BigDecimal limitAmount;
-    @Column(name= "CASH_MARGIN")
-    private float cashMargin;
     @Column(name= "STATUS")
     private boolean status;
     @Column(name = "EXPIRY_DATE")

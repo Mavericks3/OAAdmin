@@ -5,18 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.trishanku.oa.admin.entity.Customer;
-import org.trishanku.oa.admin.entity.SBR;
-import org.trishanku.oa.admin.entity.TransactionStatusEnum;
+import org.trishanku.oa.admin.entity.*;
 import org.trishanku.oa.admin.jwtauthentication.configuration.service.JWTUtil;
 import org.trishanku.oa.admin.mapper.SBRMapper;
-import org.trishanku.oa.admin.mapper.SBRReturnMapper;
 import org.trishanku.oa.admin.model.SBRDTO;
 import org.trishanku.oa.admin.repository.AgreementRepository;
 import org.trishanku.oa.admin.repository.CustomerRepository;
 import org.trishanku.oa.admin.repository.SBRRepository;
 
-
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,6 +32,7 @@ public class SBRServiceImpl implements SBRService {
 
     @Autowired
     AgreementRepository agreementRepository;
+
 
     @Autowired
     SBRMapper sbrMapper;
@@ -99,9 +97,27 @@ public class SBRServiceImpl implements SBRService {
     public SBRDTO authoriseSBR(SBRDTO sbrdto) {
         SBR sbr = sbrRepository.findBySbrId(sbrdto.getSbrId()).get();
         if(sbr == null) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
+        if(! (sbrValidationService.isValidAuthorization(sbrdto))) throw new RuntimeException("validation failed on the request");
 
+        // logic to set Limit allocated and unallocated amounts on agreement
+
+        BigDecimal sbrsTotalLimitAmount = new BigDecimal(0);
+        Agreement agreement = sbrRepository.findBySbrId(sbrdto.getSbrId()).get().getAgreement();
+        sbrRepository.findByAgreementAndTransactionStatus(agreement, TransactionStatusEnum.MASTER).ifPresent(sbrList -> {
+            sbrList.forEach(sbrItem -> {
+                sbrsTotalLimitAmount.add(sbrItem.getLimitAmount());
+            });
+
+        });
+
+        BigDecimal limitAllocatedAmount = sbrsTotalLimitAmount.add(sbrRepository.findBySbrId(sbrdto.getSbrId()).get().getLimitAmount());
+        agreement.setLimitAllocatedAmount(limitAllocatedAmount);
+        agreement.setLimitUnallocatedAmount(agreement.getLimitAmount().subtract(limitAllocatedAmount));
+        agreementRepository.save(agreement);
+        // logic to set Limit allocated and unallocated amounts on agreement - ends here
         sbr.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         SBR save = sbrRepository.save(sbr);
+
 
         try {
             log.info("saved sbr is " + objectMapper.writeValueAsString(save));

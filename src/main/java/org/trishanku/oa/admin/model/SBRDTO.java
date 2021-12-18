@@ -70,12 +70,8 @@ public class SBRDTO {
     private float maxLoanPercentage;
     private ProfitRateEnum profitRateType;
     private String documentsRequired;
-    private String limitReference;
-    private String earMarkReference;
-    private Date limitExpiry;
     private CurrencyEnum limitCurrency;
     private BigDecimal limitAmount;
-    private float cashMargin;
     private boolean status;
     private Date expiryDate;
 }

@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import org.trishanku.oa.admin.entity.Agreement;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.SBR;
+import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.model.AgreementDTO;
 import org.trishanku.oa.admin.model.SBRDTO;
 import org.trishanku.oa.admin.repository.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static java.util.stream.Collectors.collectingAndThen;
@@ -39,6 +41,7 @@ public class SBRValidationServiceImpl implements SBRValidationService {
 
         else if(sbrExists(sbrdto)) return false;
         else if(incorrectParties(sbrdto)) return  false;
+        else if(invalidSbrLimit(sbrdto)) return false;
 
 
         return true;
@@ -51,14 +54,50 @@ public class SBRValidationServiceImpl implements SBRValidationService {
 
 
         else if(incorrectParties(sbrdto)) return false;
+        else if(invalidSbrLimit(sbrdto)) return false;
 
         return true;
     }
 
+    @Override
+    public boolean isValidAuthorization(SBRDTO sbrdto) {
+        if(agreementLimitBreach(sbrdto)) return false;
+        return true;
+    }
+
+    private boolean agreementLimitBreach(SBRDTO sbrdto)
+    {
+        BigDecimal sbrsTotalLimitAmount = BigDecimal.ZERO;
+        Agreement agreement = sbrRepository.findBySbrId(sbrdto.getSbrId()).get().getAgreement();
+        sbrRepository.findByAgreementAndTransactionStatus(agreement, TransactionStatusEnum.MASTER).ifPresent(sbrList -> {
+            sbrList.forEach(sbr -> {
+                sbrsTotalLimitAmount.add(sbr.getLimitAmount());
+            });
+
+        });
+
+        if((sbrsTotalLimitAmount.add(sbrRepository.findBySbrId(sbrdto.getSbrId()).get().getLimitAmount())).compareTo(agreement.getLimitAmount())>1)
+            throw new RuntimeException("Agreement Limit amount breach , Agreement allocated amount " + sbrsTotalLimitAmount + " , SBR Limit amount is " + sbrdto.getLimitAmount() );
+        return  false;
+    }
+
+    private boolean invalidSbrLimit(SBRDTO sbrdto)
+    {
+        BigDecimal agreementUnallocatedAmount = agreementRepository.findByContractReferenceNumber(sbrdto.getAgreement().getContractReferenceNumber()).get().getLimitUnallocatedAmount();
+        if(sbrdto.getLimitAmount().compareTo(agreementUnallocatedAmount)>0)
+            throw new RuntimeException("SBR Limit Amount " + sbrdto.getLimitAmount() + " cannot be greater than agreement unallocated amount" + agreementUnallocatedAmount);
+        return false;
+    }
+
     private boolean invalidAgreement(SBRDTO sbrdto)
     {
-        if(agreementRepository.findByContractReferenceNumber(sbrdto.getAgreement().getContractReferenceNumber()).isEmpty())
+        Optional<Agreement> optionalAgreement = agreementRepository.findByContractReferenceNumber(sbrdto.getAgreement().getContractReferenceNumber());
+        if(optionalAgreement.isEmpty())
             throw new RuntimeException("Agreement with contract reference number " + sbrdto.getAgreement().getContractReferenceNumber() + " does not exist");
+        else if(!(optionalAgreement.get().isStatus()))
+            throw new RuntimeException("Agreement with contract reference number " + sbrdto.getAgreement().getContractReferenceNumber() + " is not active");
+        else if(optionalAgreement.get().getExpiryDate().before(sbrdto.getExpiryDate()))
+            throw new RuntimeException("Agreement expiry  " + optionalAgreement.get().getExpiryDate() + " is prior to SBR expiry " + sbrdto.getExpiryDate());
         return false;
     }
 

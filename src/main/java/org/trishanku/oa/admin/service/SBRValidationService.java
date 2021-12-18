@@ -7,4 +7,5 @@ public interface SBRValidationService {
 
     boolean isValid(SBRDTO sbrdto);
     boolean isValidModification(SBRDTO sbrdto);
+    boolean isValidAuthorization(SBRDTO sbrdto);
 }

@@ -151,7 +151,7 @@
     <logger name="RepositoryLog" level="trace" additivity="false">
         <appender-ref ref="RepositoryRef"/>
     </logger>
-    <logger name="errorLog" level="trace" additivity="false">
+    <logger name="ErrorLog" level="trace" additivity="false">
         <appender-ref ref="errorRef"/>
     </logger>
 

@@ -156,9 +156,13 @@ public class LoggingAspect {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
+        String username= "";
+        if(!(joinPoint.getSignature().getName().equalsIgnoreCase("authenticate")))
+            username = jwtUtil.extractUsernameFromRequest();
 
-        // TO BE REPLACED WITH THE DETAILS RETRIEVED FROM JWT
-        auditRepository.save(Audit.builder().accessedBy(jwtUtil.extractUsernameFromRequest()).accessedResource(joinPoint.getSignature().getDeclaringTypeName() + "-->" + joinPoint.getSignature().getName()).eventAt(new Date())
+
+
+        auditRepository.save(Audit.builder().accessedBy(username).accessedResource(joinPoint.getSignature().getDeclaringTypeName() + "-->" + joinPoint.getSignature().getName()).eventAt(new Date())
                 .inputParameters(Arrays.toString(joinPoint.getArgs())).uuid(UUID.randomUUID()).eventAction("Entry").remoteAddress(request.getRemoteAddr()).remoteHost(request.getRemoteHost())
                 .remoteUser(request.getRemoteUser()).build());
 
@@ -169,7 +173,7 @@ public class LoggingAspect {
             controllerLog.info("Exit: {}.{}() with result = {}", joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(), result);
 
-            auditRepository.save(Audit.builder().accessedBy(jwtUtil.extractUsernameFromRequest()).accessedResource(joinPoint.getSignature().getDeclaringTypeName() + "-->" + joinPoint.getSignature().getName()).eventAt(new Date())
+            auditRepository.save(Audit.builder().accessedBy(username).accessedResource(joinPoint.getSignature().getDeclaringTypeName() + "-->" + joinPoint.getSignature().getName()).eventAt(new Date())
                     .returnedResult(objectMapper.writeValueAsString(result)).uuid(UUID.randomUUID()).eventAction("Exit")
                     .remoteAddress(request.getRemoteAddr()).remoteHost(request.getRemoteHost())
                     .remoteUser(request.getRemoteUser()).build());
@@ -179,7 +183,7 @@ public class LoggingAspect {
             controllerLog.error("Illegal argument: {} in {}.{}()", Arrays.toString(joinPoint.getArgs()),
                     joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
 
-            auditRepository.save(Audit.builder().accessedBy(jwtUtil.extractUsernameFromRequest()).accessedResource(joinPoint.getSignature().getDeclaringTypeName() + "-->" + joinPoint.getSignature().getName()).eventAt(new Date())
+            auditRepository.save(Audit.builder().accessedBy(username).accessedResource(joinPoint.getSignature().getDeclaringTypeName() + "-->" + joinPoint.getSignature().getName()).eventAt(new Date())
                     .inputParameters(Arrays.toString(joinPoint.getArgs())).uuid(UUID.randomUUID()).eventAction("Illegal Argument")
                     .remoteAddress(request.getRemoteAddr()).remoteHost(request.getRemoteHost())
                     .remoteUser(request.getRemoteUser()).build());
