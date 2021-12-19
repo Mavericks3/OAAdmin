@@ -31,10 +31,22 @@ public class SuperAdminController {
     @Transactional
     public ResponseEntity<List<UserDTO>> getAllSuperAdmins()
     {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth!=null) auth.getAuthorities().stream().forEach(grantedAuthority -> log.info("authority of the user" + grantedAuthority.getAuthority()));
+       // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+       // if(auth!=null) auth.getAuthorities().stream().forEach(grantedAuthority -> log.info("authority of the user" + grantedAuthority.getAuthority()));
         List<UserDTO> superAdminDTOS = superAdminService.getAllSuperAdmins();
         return new ResponseEntity<>(superAdminDTOS, HttpStatus.OK);
+    }
+
+
+    //Mapping to get reference
+    @GetMapping(path = "/getNewReference")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+    @Transactional
+    public ResponseEntity<String> getNewReference()
+    {
+
+        String newReference= superAdminService.getNewReference();
+        return new ResponseEntity<>(newReference, HttpStatus.OK);
     }
 
     //Mapping to get all pending super admins

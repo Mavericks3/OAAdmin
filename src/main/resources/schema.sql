@@ -416,6 +416,65 @@ alter table admin.account_table
 
 
 
+create sequence IF NOT EXISTS admin."SuperAdminSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."SuperAdminSequence" owner to postgres;
+
+create sequence IF NOT EXISTS admin."BankAdminSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."BankAdminSequence" owner to postgres;
+
+create sequence IF NOT EXISTS admin."BankUserSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."BankUserSequence" owner to postgres;
+
+create sequence IF NOT EXISTS admin."CustomerSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."CustomerSequence" owner to postgres;
+
+create sequence IF NOT EXISTS admin."CustomerAdminSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."CustomerAdminSequence" owner to postgres;
+
+create sequence IF NOT EXISTS admin."CustomerUserSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."CustomerUserSequence" owner to postgres;
+
+create sequence IF NOT EXISTS admin."AgreementSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."AgreementSequence" owner to postgres;
+
+create sequence IF NOT EXISTS admin."SBRSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."SBRSequence" owner to postgres;
+
+create sequence IF NOT EXISTS admin."RMSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."RMSequence" owner to postgres;
+
+create sequence IF NOT EXISTS admin."ProductSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."ProductSequence" owner to postgres;
+
+create sequence IF NOT EXISTS admin."RoleSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."RoleSequence" owner to postgres;
+
+create sequence IF NOT EXISTS admin."AccountSequence"
+    maxvalue 9999999999999;
+
+alter sequence admin."AccountSequence" owner to postgres;
 
 
 

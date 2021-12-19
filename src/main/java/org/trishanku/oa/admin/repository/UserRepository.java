@@ -1,6 +1,7 @@
 package org.trishanku.oa.admin.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.trishanku.oa.admin.entity.Role;
 import org.trishanku.oa.admin.entity.TransactionStatusEnum;
@@ -25,4 +26,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     List<User> findByRolesAndStatus(Role role, boolean status );
 
     List<User> findByRolesInAndTransactionStatus(List<Role> roles, TransactionStatusEnum transactionStatus);
+
+    @Query(value = "SELECT nextval('admin.\"SuperAdminSequence\"')", nativeQuery=true)
+
+    String getSuperAdminSequence();
 }

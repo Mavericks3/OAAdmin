@@ -22,6 +22,7 @@ import org.trishanku.oa.admin.repository.RoleRepository;
 import org.trishanku.oa.admin.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -140,5 +141,12 @@ public class SuperAdminServiceImpl implements SuperAdminService{
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
 
+    }
+
+    @Override
+    public String getNewReference() {
+
+        String superAdminSequence = userRepository.getSuperAdminSequence();
+        return "SuperAdmin" + Calendar.getInstance().get(Calendar.YEAR) + superAdminSequence;
     }
 }

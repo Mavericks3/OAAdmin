@@ -23,4 +23,6 @@ public interface SuperAdminService {
     UserDTO deleteSuperAdmin(String userId);
 
     UserDTO activateSuperAdmin(String userId, UserDTO userDTO);
+
+    String getNewReference();
 }
