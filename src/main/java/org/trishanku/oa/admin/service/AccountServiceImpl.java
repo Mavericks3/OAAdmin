@@ -10,6 +10,7 @@ import org.trishanku.oa.admin.mapper.AccountMapper;
 import org.trishanku.oa.admin.model.AccountDTO;
 import org.trishanku.oa.admin.repository.AccountRepository;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -82,5 +83,12 @@ public class AccountServiceImpl implements AccountService {
         account.get().setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         Account accountSaved = accountRepository.save(account.get());
         return accountMapper.accountToAccountDTO(accountSaved);
+    }
+
+    @Override
+    public String getNewReference() {
+
+        String accountSequence = accountRepository.getAccountSequence();
+        return "Account" + Calendar.getInstance().get(Calendar.YEAR) + accountSequence;
     }
 }

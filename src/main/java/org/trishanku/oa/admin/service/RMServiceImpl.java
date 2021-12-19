@@ -108,4 +108,12 @@ public class RMServiceImpl implements RMService{
         currentRM.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         return rmMapper.RMToRMDTO(rmRepository.save(currentRM));
     }
+
+    @Override
+    public String getNewReference() {
+
+        String rmSequence = rmRepository.getRMSequence();
+        return "RM" + Calendar.getInstance().get(Calendar.YEAR) + rmSequence;
+    }
+
 }

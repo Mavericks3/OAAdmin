@@ -20,4 +20,6 @@ public interface CustomerAdminService {
     List<UserDTO> getPendingCustomerAdmins();
 
     UserDTO deleteCustomerAdmin(String userId);
+
+    String getNewReference();
 }

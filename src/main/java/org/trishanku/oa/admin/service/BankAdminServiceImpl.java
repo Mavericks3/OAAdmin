@@ -149,4 +149,11 @@ public class BankAdminServiceImpl implements BankAdminService{
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }
+
+    @Override
+    public String getNewReference() {
+
+        String bankAdminSequence = userRepository.getBankAdminSequence();
+        return "BankAdmin" + Calendar.getInstance().get(Calendar.YEAR) + bankAdminSequence;
+    }
 }

@@ -29,6 +29,17 @@ public class BankUserController {
         return new ResponseEntity<>(bankUserDTOS, HttpStatus.OK);
     }
 
+    //Mapping to get reference
+    @GetMapping(path = "/getNewReference")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER')")
+    @Transactional
+    public ResponseEntity<String> getNewReference()
+    {
+
+        String newReference= bankUserService.getNewReference();
+        return new ResponseEntity<>(newReference, HttpStatus.OK);
+    }
+
     //Mapping to get all pending bank users
     @GetMapping(path = "/pending")
     @PreAuthorize("hasAnyAuthority({'SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER' })")

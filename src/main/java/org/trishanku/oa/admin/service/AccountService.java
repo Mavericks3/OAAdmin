@@ -11,6 +11,6 @@ public interface AccountService {
     AccountDTO deleteAccount(AccountDTO accountDTO);
     AccountDTO authoriseAccount(AccountDTO accountDTO);
     List<AccountDTO> getAccounts(String accountId, String accountName, String accountType, String accountCurrency, String status, String transactionStatus);
-
+    String getNewReference();
 
 }

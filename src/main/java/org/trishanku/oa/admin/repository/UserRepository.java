@@ -30,4 +30,21 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query(value = "SELECT nextval('admin.\"SuperAdminSequence\"')", nativeQuery=true)
 
     String getSuperAdminSequence();
+
+    @Query(value = "SELECT nextval('admin.\"BankAdminSequence\"')", nativeQuery=true)
+
+    String getBankAdminSequence();
+
+    @Query(value = "SELECT nextval('admin.\"BankUserSequence\"')", nativeQuery=true)
+
+    String getBankUserSequence();
+
+
+    @Query(value = "SELECT nextval('admin.\"CustomerAdminSequence\"')", nativeQuery=true)
+
+    String getCustomerAdminSequence();
+
+    @Query(value = "SELECT nextval('admin.\"CustomerUserSequence\"')", nativeQuery=true)
+
+    String getCustomerUserSequence();
 }

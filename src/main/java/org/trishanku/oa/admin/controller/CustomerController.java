@@ -41,6 +41,17 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.getAllCustomers(),HttpStatus.OK);
     }
 
+    //Mapping to get reference
+    @GetMapping(path = "/getNewReference")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','BANK_ADMIN_MAKER','BANK_ADMIN_VIEWER','BANK_ADMIN_CHECKER')")
+    @Transactional
+    public ResponseEntity<String> getNewReference()
+    {
+
+        String newReference= customerService.getNewReference();
+        return new ResponseEntity<>(newReference, HttpStatus.OK);
+    }
+
     @GetMapping(path="/paginated")
     @Transactional
     public ResponseEntity<List<CustomerDTO>> getCustomersListPaginated(@RequestParam("page") int page, @RequestParam("size") int size)

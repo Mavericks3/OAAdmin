@@ -49,6 +49,9 @@ Optional<List<Account>> findByAccountIdAndNameAndTypeAndCurrencyAndStatusAndTran
                                                          String accountType,
                                                          CurrencyEnum accountCurrency);
 
+    @Query(value = "SELECT nextval('admin.\"AccountSequence\"')", nativeQuery=true)
+
+    String getAccountSequence();
 
 
 }

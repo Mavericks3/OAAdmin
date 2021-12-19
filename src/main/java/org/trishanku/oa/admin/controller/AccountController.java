@@ -34,6 +34,17 @@ public class AccountController {
         return new ResponseEntity<>(addAccount, HttpStatus.OK);
     }
 
+    //Mapping to get reference
+    @GetMapping(path = "/getNewReference")
+    @PreAuthorize("hasAnyAuthority('BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER')")
+    @Transactional
+    public ResponseEntity<String> getNewReference()
+    {
+
+        String newReference= accountService.getNewReference();
+        return new ResponseEntity<>(newReference, HttpStatus.OK);
+    }
+
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER'})")

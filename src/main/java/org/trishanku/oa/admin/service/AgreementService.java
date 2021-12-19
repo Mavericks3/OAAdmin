@@ -24,4 +24,6 @@ public interface AgreementService {
     AgreementDTO authoriseAgreement(String contractReferenceNumber, AgreementDTO agreementDTO);
 
     AgreementDTO deleteAgreement(String contractReferenceNumber, AgreementDTO agreementDTO);
+
+    String getNewReference();
 }

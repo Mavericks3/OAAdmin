@@ -1,6 +1,7 @@
 package org.trishanku.oa.admin.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.trishanku.oa.admin.entity.Agreement;
 import org.trishanku.oa.admin.entity.Customer;
@@ -26,4 +27,8 @@ public interface SBRRepository extends JpaRepository<SBR, UUID> {
     Optional<SBR> findByAgreementAndAnchorCustomerAndCounterParty(Agreement agreement, Customer anchorCustomer, Customer counterParty);
 
     Optional<List<SBR>> findByAgreement(Agreement agreement);
+
+    @Query(value = "SELECT nextval('admin.\"SBRSequence\"')", nativeQuery=true)
+
+    String getSBRSequence();
 }

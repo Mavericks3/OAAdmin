@@ -181,4 +181,11 @@ public class CustomerUserServiceImpl implements CustomerUserService{
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }
+
+    @Override
+    public String getNewReference() {
+
+        String customerUserSequence = userRepository.getCustomerUserSequence();
+        return "CustomerUser" + Calendar.getInstance().get(Calendar.YEAR) + customerUserSequence;
+    }
 }

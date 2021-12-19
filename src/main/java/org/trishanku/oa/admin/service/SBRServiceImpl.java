@@ -14,6 +14,7 @@ import org.trishanku.oa.admin.repository.CustomerRepository;
 import org.trishanku.oa.admin.repository.SBRRepository;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -153,5 +154,12 @@ public class SBRServiceImpl implements SBRService {
         Customer counterParty = customerRepository.findByCustomerId(counterPartyId).orElseThrow(() -> new RuntimeException("customer with id " + counterPartyId + " does not exist"));
         List<SBR> sbrList = sbrRepository.findByCounterParty(counterParty).get();
         return sbrMapper.SBRsToSBRDTOs(sbrList);
+    }
+
+    @Override
+    public String getNewReference() {
+
+        String sbrSequence = sbrRepository.getSBRSequence();
+        return "SBR" + Calendar.getInstance().get(Calendar.YEAR) + sbrSequence;
     }
 }

@@ -159,4 +159,11 @@ public class BankUserServiceImpl implements BankUserService{
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }
+
+    @Override
+    public String getNewReference() {
+
+        String bankUserSequence = userRepository.getBankUserSequence();
+        return "BankUser" + Calendar.getInstance().get(Calendar.YEAR) + bankUserSequence;
+    }
 }

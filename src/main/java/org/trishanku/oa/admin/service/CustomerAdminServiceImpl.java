@@ -160,4 +160,10 @@ public class CustomerAdminServiceImpl implements CustomerAdminService{
         User savedUser = userRepository.save(existingUserDetails);
         return userMapper.userToUserDTO(savedUser);
     }
+    @Override
+    public String getNewReference() {
+
+        String customerAdminSequence = userRepository.getCustomerAdminSequence();
+        return "CustomerAdmin" + Calendar.getInstance().get(Calendar.YEAR) + customerAdminSequence;
+    }
 }

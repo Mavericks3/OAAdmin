@@ -21,4 +21,6 @@ public interface RMService {
     List<RMDTO> getPendingRMUsers();
 
     RMDTO deleteRMUser(String rmId);
+
+    String getNewReference();
 }

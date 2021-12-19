@@ -1,6 +1,7 @@
 package org.trishanku.oa.admin.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.trishanku.oa.admin.entity.Agreement;
 import org.trishanku.oa.admin.entity.Customer;
@@ -22,6 +23,9 @@ public interface AgreementRepository extends JpaRepository<Agreement, UUID> {
 
     Optional<Agreement> findByContractReferenceNumber(String contractReferenceNumber);
 
+    @Query(value = "SELECT nextval('admin.\"AgreementSequence\"')", nativeQuery=true)
+
+    String getAgreementSequence();
 
 
 }

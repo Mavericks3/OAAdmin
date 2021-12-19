@@ -26,4 +26,6 @@ public interface SBRService {
     List<SBRDTO> getSBRsByCounterParty(String counterPartyId);
 
     SBRDTO editSBR(SBRDTO sbrdto);
+
+    String getNewReference();
 }

@@ -27,6 +27,17 @@ public class SBRController {
         return  new ResponseEntity<>(sbrService.getAllSBRs(), HttpStatus.OK);
     }
 
+    //Mapping to get reference
+    @GetMapping(path = "/getNewReference")
+    @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER' })")
+    @Transactional
+    public ResponseEntity<String> getNewReference()
+    {
+
+        String newReference= sbrService.getNewReference();
+        return new ResponseEntity<>(newReference, HttpStatus.OK);
+    }
+
     //to get a list of all pending SBR's
     @GetMapping(path = "/pending")
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER' })")

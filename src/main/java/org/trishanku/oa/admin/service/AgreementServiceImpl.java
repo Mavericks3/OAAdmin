@@ -15,6 +15,7 @@ import org.trishanku.oa.admin.repository.ProductRepository;
 import org.trishanku.oa.admin.repository.RMRepository;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -119,5 +120,12 @@ public class AgreementServiceImpl implements AgreementService {
         agreement.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         agreementRepository.save(agreement);
         return agreementMapper.AgreementToAgreementDTO(agreement);
+    }
+
+    @Override
+    public String getNewReference() {
+
+        String agreementSequence = agreementRepository.getAgreementSequence();
+        return "Agreement" + Calendar.getInstance().get(Calendar.YEAR) + agreementSequence;
     }
 }

@@ -14,10 +14,7 @@ import org.trishanku.oa.admin.mapper.CustomerMapper;
 import org.trishanku.oa.admin.model.CustomerDTO;
 import org.trishanku.oa.admin.repository.CustomerRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -144,4 +141,12 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.customerToCustomerDTO(toDeleteCustomer);
 
     }
+
+    @Override
+    public String getNewReference() {
+
+        String customerSequence = customerRepository.getCustomerSequence();
+        return "Customer" + Calendar.getInstance().get(Calendar.YEAR) + customerSequence;
+    }
+
 }

@@ -29,6 +29,18 @@ public class AgreementController {
         return new ResponseEntity(agreementService.getAllAgreements(),HttpStatus.OK);
     }
 
+    //Mapping to get reference
+    @GetMapping(path = "/getNewReference")
+    @PreAuthorize("hasAnyAuthority('BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER')")
+    @Transactional
+    public ResponseEntity<String> getNewReference()
+    {
+
+        String newReference= agreementService.getNewReference();
+        return new ResponseEntity<>(newReference, HttpStatus.OK);
+    }
+
+
     //Get Agreement by Contact reference Number
     @GetMapping(path = "/byreferencenumber/{contractReferenceNumber}")
     @PreAuthorize("hasAnyAuthority({'BANK_USER_MAKER','BANK_USER_VIEWER','BANK_USER_CHECKER' })")

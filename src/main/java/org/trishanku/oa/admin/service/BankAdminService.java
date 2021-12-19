@@ -20,4 +20,6 @@ public interface BankAdminService {
     List<UserDTO> getPendingBankAdmins();
 
     UserDTO deleteBankAdmin(String userId);
+
+    String getNewReference();
 }

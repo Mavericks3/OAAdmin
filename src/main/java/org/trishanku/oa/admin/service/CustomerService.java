@@ -25,4 +25,6 @@ public interface CustomerService {
     List<CustomerDTO> getPendingCustomers();
 
     CustomerDTO deleteCustomer(String customerId);
+
+    String getNewReference();
 }
