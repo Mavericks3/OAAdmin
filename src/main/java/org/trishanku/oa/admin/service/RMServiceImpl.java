@@ -47,16 +47,17 @@ public class RMServiceImpl implements RMService{
 
     @Override
     public RMDTO addRMUser(RMDTO rmdto) {
-
+        if(rmRepository.findByRmId(rmdto.getRmId()).isPresent()) throw  new RuntimeException("RM with id " + rmdto.getRmId() + " already exists");
         RM newRM = rmMapper.RMDTOToRM(rmdto);
         newRM.setUuid(UUID.randomUUID());
         List<Customer> rmCustomers = new ArrayList<Customer>();
        rmdto.getCustomers().forEach(customer -> {
-           Optional<Customer> customerTemp = customerRepository.findByCustomerId(customer.getCustomerId());
+           Optional<Customer> customerTemp = customerRepository.findByCustomerIdAndTransactionStatus(customer.getCustomerId(),TransactionStatusEnum.MASTER);
            if(customerTemp.isPresent())
                rmCustomers.add(customerTemp.get());
        });
-       if(rmCustomers.size()!=0) newRM.setCustomers(rmCustomers);
+       //if(rmCustomers.size()!=0) newRM.setCustomers(rmCustomers);
+        newRM.setCustomers(rmCustomers);
         newRM.setCreationDetails(jwtUtil.extractUsernameFromRequest());
         RM savedRM = rmRepository.save(newRM);
         return rmMapper.RMToRMDTO(savedRM);
@@ -76,12 +77,12 @@ public class RMServiceImpl implements RMService{
         currentRM.setModificationDetails(jwtUtil.extractUsernameFromRequest());
         List<Customer> rmCustomers = new ArrayList<Customer>();
         rmDTO.getCustomers().forEach(customer -> {
-            Optional<Customer> customerTemp = customerRepository.findByCustomerId(customer.getCustomerId());
+            Optional<Customer> customerTemp = customerRepository.findByCustomerIdAndTransactionStatus(customer.getCustomerId(),TransactionStatusEnum.MASTER);
             if(customerTemp.isPresent())
                 rmCustomers.add(customerTemp.get());
         });
-        if(rmCustomers.size()!=0) currentRM.setCustomers(rmCustomers);
-
+        //if(rmCustomers.size()!=0) currentRM.setCustomers(rmCustomers);
+        currentRM.setCustomers(rmCustomers);
         return rmMapper.RMToRMDTO(rmRepository.save(currentRM));
     }
 

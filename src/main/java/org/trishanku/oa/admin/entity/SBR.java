@@ -162,4 +162,7 @@ public class SBR extends Base{
     private boolean anchorPartyApprovalRequired;
     @Column(name= "COUNTER_PARTY_APPROVAL_REQUIRED")
     private boolean counterPartyApprovalRequired;
+    @ManyToOne
+    @JoinColumn(name = "RM_ID")
+    private RM rm;
 }

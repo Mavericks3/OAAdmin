@@ -38,7 +38,7 @@ public class SBRValidationServiceImpl implements SBRValidationService {
         if(invalidAgreement(sbrdto)) return false;
         else if(invalidAnchorCustomer(sbrdto)) return false;
         else if(invalidCounterParty(sbrdto)) return false;
-
+        else if(invalidRM(sbrdto)) return false;
         else if(sbrExists(sbrdto)) return false;
         else if(incorrectParties(sbrdto)) return  false;
         else if(invalidSbrLimit(sbrdto)) return false;
@@ -49,9 +49,11 @@ public class SBRValidationServiceImpl implements SBRValidationService {
 
     @Override
     public boolean isValidModification(SBRDTO sbrdto) {
-        if(invalidAnchorCustomer(sbrdto)) return false;
-        else if(invalidCounterParty(sbrdto)) return false;
 
+        if(invalidAgreement(sbrdto)) return false;
+        else if(invalidAnchorCustomer(sbrdto)) return false;
+        else if(invalidCounterParty(sbrdto)) return false;
+        else if(invalidRM(sbrdto)) return false;
 
         else if(incorrectParties(sbrdto)) return false;
         else if(invalidSbrLimit(sbrdto)) return false;
@@ -91,7 +93,7 @@ public class SBRValidationServiceImpl implements SBRValidationService {
 
     private boolean invalidAgreement(SBRDTO sbrdto)
     {
-        Optional<Agreement> optionalAgreement = agreementRepository.findByContractReferenceNumber(sbrdto.getAgreement().getContractReferenceNumber());
+        Optional<Agreement> optionalAgreement = agreementRepository.findByContractReferenceNumberAndTransactionStatus(sbrdto.getAgreement().getContractReferenceNumber(),TransactionStatusEnum.MASTER);
         if(optionalAgreement.isEmpty())
             throw new RuntimeException("Agreement with contract reference number " + sbrdto.getAgreement().getContractReferenceNumber() + " does not exist");
         else if(!(optionalAgreement.get().isStatus()))
@@ -103,15 +105,22 @@ public class SBRValidationServiceImpl implements SBRValidationService {
 
     private boolean invalidAnchorCustomer(SBRDTO sbrdto)
     {
-        if(customerRepository.findByCustomerId(sbrdto.getAnchorCustomer().getCustomerId()).isEmpty())
+        if(customerRepository.findByCustomerIdAndTransactionStatus(sbrdto.getAnchorCustomer().getCustomerId(),TransactionStatusEnum.MASTER).isEmpty())
             throw new RuntimeException("Anchor customer " + sbrdto.getAnchorCustomer().getCustomerId() + " does not exist");
+        return false;
+    }
+
+    private boolean invalidRM(SBRDTO sbrdto)
+    {
+        if(rmRepository.findByRmIdAndTransactionStatus(sbrdto.getRm().getRmId(),TransactionStatusEnum.MASTER).isEmpty())
+            throw new RuntimeException("RM with id " + sbrdto.getRm().getRmId() + " does not exist");
         return false;
     }
 
 
     private boolean invalidCounterParty(SBRDTO sbrdto)
     {
-        if(customerRepository.findByCustomerId(sbrdto.getCounterParty().getCustomerId()).isEmpty())
+        if(customerRepository.findByCustomerIdAndTransactionStatus(sbrdto.getCounterParty().getCustomerId(),TransactionStatusEnum.MASTER).isEmpty())
             throw new RuntimeException("Counter party customer " + sbrdto.getCounterParty().getCustomerId() + " does not exist");
         return false;
     }

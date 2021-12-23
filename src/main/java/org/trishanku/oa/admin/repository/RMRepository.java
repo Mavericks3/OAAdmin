@@ -14,6 +14,7 @@ import java.util.UUID;
 public interface RMRepository extends JpaRepository<RM, UUID> {
 
     Optional<RM> findByRmId(String rmId);
+    Optional<RM> findByRmIdAndTransactionStatus(String rmId,TransactionStatusEnum transactionStatus);
     List<RM> findByTransactionStatus(TransactionStatusEnum transactionStatus);
 
     @Query(value = "SELECT nextval('admin.\"RMSequence\"')", nativeQuery=true)

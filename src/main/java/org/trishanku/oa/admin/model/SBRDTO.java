@@ -82,4 +82,5 @@ public class SBRDTO {
     private BigDecimal communicationChargeAmount;
     private boolean anchorPartyApprovalRequired;
     private boolean counterPartyApprovalRequired;
+
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.trishanku.oa.admin.entity.Customer;
 import org.trishanku.oa.admin.entity.SBR;
+import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 import org.trishanku.oa.admin.entity.User;
 import org.trishanku.oa.admin.model.AgreementDTO;
 import org.trishanku.oa.admin.repository.*;
@@ -79,7 +80,7 @@ public class AgreementValidationServiceImpl implements AgreementValidationServic
 
     private boolean invalidAnchorCustomer(AgreementDTO agreementDTO)
     {
-        Optional<Customer> customerOptional =customerRepository.findByCustomerId(agreementDTO.getAnchorCustomer().getCustomerId());
+        Optional<Customer> customerOptional =customerRepository.findByCustomerIdAndTransactionStatus(agreementDTO.getAnchorCustomer().getCustomerId(), TransactionStatusEnum.MASTER);
         if(customerOptional.isEmpty())
             throw new RuntimeException("Anchor customer " + agreementDTO.getAnchorCustomer().getCustomerId() + " does not exist");
         else if(!(customerOptional.get().isStatus()))
@@ -91,7 +92,7 @@ public class AgreementValidationServiceImpl implements AgreementValidationServic
 
     private boolean invalidRM(AgreementDTO agreementDTO)
     {
-        if(rmRepository.findByRmId(agreementDTO.getRm().getRmId()).isEmpty())
+        if(rmRepository.findByRmIdAndTransactionStatus(agreementDTO.getRm().getRmId(),TransactionStatusEnum.MASTER).isEmpty())
             throw new RuntimeException("RM  " + agreementDTO.getRm().getRmId() + " does not exist");
         return false;
     }
@@ -99,7 +100,7 @@ public class AgreementValidationServiceImpl implements AgreementValidationServic
     private boolean invalidCounterParties(AgreementDTO agreementDTO)
     {
         agreementDTO.getCounterParties().forEach(counterParty -> {
-            Optional<Customer> customerOptional =customerRepository.findByCustomerId(counterParty.getCustomerId());
+            Optional<Customer> customerOptional =customerRepository.findByCustomerIdAndTransactionStatus(counterParty.getCustomerId(),TransactionStatusEnum.MASTER);
             if (customerOptional.isEmpty())
                 throw new RuntimeException("Counter party customer " + counterParty.getCustomerId() + " does not exist");
             else if(!(customerOptional.get().isStatus()))

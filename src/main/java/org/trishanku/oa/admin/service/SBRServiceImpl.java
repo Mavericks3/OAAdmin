@@ -11,6 +11,7 @@ import org.trishanku.oa.admin.mapper.SBRMapper;
 import org.trishanku.oa.admin.model.SBRDTO;
 import org.trishanku.oa.admin.repository.AgreementRepository;
 import org.trishanku.oa.admin.repository.CustomerRepository;
+import org.trishanku.oa.admin.repository.RMRepository;
 import org.trishanku.oa.admin.repository.SBRRepository;
 
 import java.math.BigDecimal;
@@ -27,20 +28,19 @@ public class SBRServiceImpl implements SBRService {
     SBRRepository sbrRepository;
     @Autowired
     SBRValidationService sbrValidationService;
-
+    @Autowired
+    RMRepository rmRepository;
     @Autowired
     CustomerRepository customerRepository;
 
     @Autowired
     AgreementRepository agreementRepository;
 
-
     @Autowired
     SBRMapper sbrMapper;
 
     @Autowired
     ObjectMapper objectMapper;
-
 
     @Autowired
     JWTUtil jwtUtil;
@@ -65,40 +65,43 @@ public class SBRServiceImpl implements SBRService {
 
     @Override
     public SBRDTO addSBR(SBRDTO sbrdto) {
-        if(!sbrValidationService.isValid(sbrdto)) throw new RuntimeException("validation failed on the request");
+        if (!sbrValidationService.isValid(sbrdto)) throw new RuntimeException("validation failed on the request");
         SBR sbr = sbrMapper.SBRDTOToSBR(sbrdto);
         sbr.setUuid(UUID.randomUUID());
 
-        sbr.setAgreement(agreementRepository.findByContractReferenceNumber(sbr.getAgreement().getContractReferenceNumber()).get());
-        sbr.setAnchorCustomer(customerRepository.findByCustomerId(sbr.getAnchorCustomer().getCustomerId()).get());
-        sbr.setCounterParty(customerRepository.findByCustomerId(sbr.getCounterParty().getCustomerId()).get());
-
+        sbr.setAgreement(agreementRepository.findByContractReferenceNumber(sbrdto.getAgreement().getContractReferenceNumber()).get());
+        sbr.setAnchorCustomer(customerRepository.findByCustomerId(sbrdto.getAnchorCustomer().getCustomerId()).get());
+        sbr.setCounterParty(customerRepository.findByCustomerId(sbrdto.getCounterParty().getCustomerId()).get());
+        sbr.setRm(rmRepository.findByRmId(sbrdto.getRm().getRmId()).get());
         sbr.setCreationDetails(jwtUtil.extractUsernameFromRequest());
         sbr.setStatus(true);
-        return  sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
+        return sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
     }
 
     @Override
     public SBRDTO editSBR(SBRDTO sbrdto) {
         Optional<SBR> existingSBR = sbrRepository.findBySbrId(sbrdto.getSbrId());
-        if(existingSBR.isEmpty()) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
-        if(! sbrValidationService.isValidModification(sbrdto)) throw new RuntimeException("validation failed on the request");
+        if (existingSBR.isEmpty()) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
+        if (!sbrValidationService.isValidModification(sbrdto))
+            throw new RuntimeException("validation failed on the request");
         SBR sbr = sbrMapper.SBRDTOToSBR(sbrdto);
         sbr.setUuid(sbrRepository.findBySbrId(sbr.getSbrId()).get().getUuid());
-        sbr.setAgreement(agreementRepository.findByContractReferenceNumber(sbr.getAgreement().getContractReferenceNumber()).get());
-        sbr.setAnchorCustomer(customerRepository.findByCustomerId(sbr.getAnchorCustomer().getCustomerId()).get());
-        sbr.setCounterParty(customerRepository.findByCustomerId(sbr.getCounterParty().getCustomerId()).get());
+        sbr.setAgreement(agreementRepository.findByContractReferenceNumber(sbrdto.getAgreement().getContractReferenceNumber()).get());
+        sbr.setAnchorCustomer(customerRepository.findByCustomerId(sbrdto.getAnchorCustomer().getCustomerId()).get());
+        sbr.setCounterParty(customerRepository.findByCustomerId(sbrdto.getCounterParty().getCustomerId()).get());
+        sbr.setRm(rmRepository.findByRmId(sbrdto.getRm().getRmId()).get());
         sbr.setCreatedDate(existingSBR.get().getCreatedDate());
         sbr.setCreatedUser(existingSBR.get().getCreatedUser());
         sbr.setModificationDetails(jwtUtil.extractUsernameFromRequest());
-        return  sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
+        return sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
     }
 
     @Override
     public SBRDTO authoriseSBR(SBRDTO sbrdto) {
         SBR sbr = sbrRepository.findBySbrId(sbrdto.getSbrId()).get();
-        if(sbr == null) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
-        if(! (sbrValidationService.isValidAuthorization(sbrdto))) throw new RuntimeException("validation failed on the request");
+        if (sbr == null) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
+        if (!(sbrValidationService.isValidAuthorization(sbrdto)))
+            throw new RuntimeException("validation failed on the request");
 
         // logic to set Limit allocated and unallocated amounts on agreement
 
@@ -119,27 +122,27 @@ public class SBRServiceImpl implements SBRService {
         sbr.setAuthorizationDetails(jwtUtil.extractUsernameFromRequest());
         SBR save = sbrRepository.save(sbr);
 
-
         try {
             log.info("saved sbr is " + objectMapper.writeValueAsString(save));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return  sbrMapper.SBRToSBRDTO(save);
+        return sbrMapper.SBRToSBRDTO(save);
     }
 
     @Override
     public SBRDTO getSBRById(String sbrId) {
-        if(sbrRepository.findBySbrId(sbrId).isEmpty()) throw new RuntimeException("SBR with id " + sbrId + " does not exist");
+        if (sbrRepository.findBySbrId(sbrId).isEmpty())
+            throw new RuntimeException("SBR with id " + sbrId + " does not exist");
         return sbrMapper.SBRToSBRDTO(sbrRepository.findBySbrId(sbrId).get());
     }
 
     @Override
     public SBRDTO deleteSBR(SBRDTO sbrdto) {
         SBR sbr = sbrRepository.findBySbrId(sbrdto.getSbrId()).get();
-        if(sbr == null) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
+        if (sbr == null) throw new RuntimeException("SBR with id " + sbrdto.getSbrId() + " does not exist");
         sbr.setStatus(false);
-        return  sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
+        return sbrMapper.SBRToSBRDTO(sbrRepository.save(sbr));
     }
 
     @Override

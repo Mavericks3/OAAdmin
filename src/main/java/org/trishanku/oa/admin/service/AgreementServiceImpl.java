@@ -124,8 +124,7 @@ public class AgreementServiceImpl implements AgreementService {
 
     @Override
     public String getNewReference() {
-
-        String agreementSequence = agreementRepository.getAgreementSequence();
-        return "Agreement" + Calendar.getInstance().get(Calendar.YEAR) + agreementSequence;
+        String sbrSequence = agreementRepository.getAgreementSequence();
+        return "Agreement" + Calendar.getInstance().get(Calendar.YEAR) + sbrSequence;
     }
 }

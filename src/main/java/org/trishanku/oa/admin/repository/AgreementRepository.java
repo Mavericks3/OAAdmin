@@ -23,6 +23,8 @@ public interface AgreementRepository extends JpaRepository<Agreement, UUID> {
 
     Optional<Agreement> findByContractReferenceNumber(String contractReferenceNumber);
 
+    Optional<Agreement> findByContractReferenceNumberAndTransactionStatus(String contractReferenceNumber,TransactionStatusEnum transactionStatus);
+
     @Query(value = "SELECT nextval('admin.\"AgreementSequence\"')", nativeQuery=true)
 
     String getAgreementSequence();
