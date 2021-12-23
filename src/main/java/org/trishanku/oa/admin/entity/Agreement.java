@@ -70,13 +70,36 @@ public class Agreement extends Base{
     @Column(name = "STATUS")
     private boolean status;
     @Enumerated(EnumType.STRING)
-    @Column(name= "FINANCE_CHARGE_CURRENCY")
-    private CurrencyEnum financeChargeCurrency;
-    @Column(name= "FINANCE_CHARGE_AMOUNT")
-    private BigDecimal financeChargeAmount;
+    @Column(name = "CABLE_CHARGE_CURRENCY")
+    private CurrencyEnum cableChargeCurrency;
+    @Column(name = "CABLE_CHARGE_AMOUNT")
+    private BigDecimal cableChargeAmount;
     @Enumerated(EnumType.STRING)
-    @Column(name= "SETTLEMENT_CHARGE_CURRENCY")
-    private CurrencyEnum settlementChargeCurrency;
-    @Column(name= "SETTLEMENT_CHARGE_AMOUNT")
-    private BigDecimal settlementChargeAmount;
+    @Column(name = "COMMUNICATION_CHARGE_CURRENCY")
+    private CurrencyEnum communicationChargeCurrency;
+    @Column(name = "COMMUNICATION_CHARGE_AMOUNT")
+    private BigDecimal communicationChargeAmount;
+    @Enumerated(EnumType.STRING)
+    @Column(name= "INVOICE_SERVICE_CHARGE_CURRENCY")
+    private CurrencyEnum invoiceServiceChargeCurrency;
+    @Column(name= "INVOICE_SERVICE_CHARGE_AMOUNT")
+    private BigDecimal invoiceServiceChargeAmount;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "FINANCE_SERVICE_CHARGE_CURRENCY")
+    private CurrencyEnum financeServiceChargeCurrency;
+    @Column(name = "FINANCE_SERVICE_CHARGE_AMOUNT")
+    private BigDecimal financeServiceChargeAmount;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "SETTLEMENT_SERVICE_CHARGE_CURRENCY")
+    private CurrencyEnum settlementServiceChargeCurrency;
+    @Column(name = "SETTLEMENT_SERVICE_CHARGE_AMOUNT")
+    private BigDecimal settlementServiceChargeAmount;
+    @Column(name= "ANCHOR_PARTY_APPROVAL_REQUIRED")
+    private boolean anchorPartyApprovalRequired;
+    @Column(name= "COUNTER_PARTY_APPROVAL_REQUIRED")
+    private boolean counterPartyApprovalRequired;
+    @Column(name= "AUTO_FINANCE")
+    private boolean autoFinance;
+    @Column(name= "AUTO_SETTLEMENT")
+    private boolean autoSettlement;
 }

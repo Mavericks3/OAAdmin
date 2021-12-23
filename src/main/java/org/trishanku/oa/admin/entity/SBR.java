@@ -41,11 +41,6 @@ public class SBR extends Base{
     @Enumerated(EnumType.STRING)
     @Column(name= "LIMIT_TYPE_FLAG")
     private LimitTypeEnum limitTypeFlag;
-    @Enumerated(EnumType.STRING)
-    @Column(name= "APPLIED_LIMIT_CURRENCY")
-    private CurrencyEnum appliedLimitCurrency;
-    @Column(name= "APPLIED_LIMIT_AMOUNT")
-    private BigDecimal appliedLimitAmount;
     @Column(name= "NATURE_OF_BUSINESS")
     private String natureOfBusiness;
     @Column(name= "GOODS_DESCRIPTION")
@@ -63,10 +58,10 @@ public class SBR extends Base{
     private PaymentTermsEnum paymentTermsCondition;
     @Column(name= "COMMERCIAL_CONTRACT_DETAILS")
     private String commercialContractDetails;
-    @Column(name= "AUTO_FINANCING_AVAILABILITY")
-    private boolean autoFinanceAvailability;
-    @Column(name= "AUTO_FINANCING")
-    private boolean autoFinancing;
+    @Column(name= "AUTO_FINANCE")
+    private boolean autoFinance;
+    @Column(name= "AUTO_SETTLEMENT")
+    private boolean autoSettlement;
     @Column(name= "ANCHOR_CUSTOMER_CONTACT_NAME")
     private String anchorCustomerContactName;
     @Column(name= "ANCHOR_CUSTOMER_ADDRESS_LINE1")
@@ -100,11 +95,6 @@ public class SBR extends Base{
     @Column(name= "COUNTER_PARTY_TELEPHONE")
     private String counterPartyTelephone;
     @Enumerated(EnumType.STRING)
-    @Column(name= "MANAGEMENT_FEE_CURRENCY")
-    private CurrencyEnum managementFeeCurrency;
-    @Column(name= "MANAGEMENT_FEE_AMOUNT")
-    private BigDecimal managementFeeAmount;
-    @Enumerated(EnumType.STRING)
     @Column(name= "ADMINISTRATIVE_FEE_CURRENCY")
     private CurrencyEnum administrativeFeeCurrency;
     @Column(name= "ADMINISTRATIVE_FEE_AMOUNT")
@@ -114,16 +104,6 @@ public class SBR extends Base{
     private CurrencyEnum earlyPaymentFeeCurrency;
     @Column(name= "EARLY_PAYMENT_FEE_AMOUNT")
     private BigDecimal earlyPaymentAmount;
-    @Column(name= "FACTORING_COMMISSION_RATE")
-    private float factoringCommissionRate;
-    @Column(name= "FINACNING_PROFIT_MARGIN_RATE")
-    private float financingProfitMarginRate;
-    @Column(name= "REBATE_RATE")
-    private float rebateRate;
-    @Column(name= "REBATE_ACCOUNT")
-    private String rebateAccount;
-    @Column(name= "FINANCING_INFORMATION")
-    private String financingInformation;
     @Enumerated(EnumType.STRING)
     @Column(name= "INVOICE_SERVICE_CHARGE_CURRENCY")
     private CurrencyEnum invoiceServiceChargeCurrency;
@@ -132,8 +112,21 @@ public class SBR extends Base{
     @Column(name= "MAX_LOAN_PERCENTAGE")
     private float maxLoanPercentage;
     @Enumerated(EnumType.STRING)
-    @Column(name= "PROFIT_RATE_TYPE")
-    private ProfitRateEnum profitRateType;
+    @Column(name = "INTEREST_CHARGE_TYPE")
+    private InterestChargeTypeEnum interestChargeType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "INTEREST_RATE_TYPE")
+    private ProfitRateEnum interestRateType;
+    @Column(name = "INTEREST_RATE")
+    private float interestRate;
+    @Column(name = "INTEREST_MARGIN")
+    private float interestMargin;
+    @Column(name= "REBATE_RATE")
+    private float rebateRate;
+    @Column(name= "REBATE_ACCOUNT")
+    private String rebateAccount;
+    @Column(name= "FINANCING_INFORMATION")
+    private String financingInformation;
     @Column(name= "DOCUMENTS_REQUIRED")
     private String documentsRequired;
     @Enumerated(EnumType.STRING)
@@ -145,4 +138,28 @@ public class SBR extends Base{
     private boolean status;
     @Column(name = "EXPIRY_DATE")
     private Date expiryDate;
+    @Enumerated(EnumType.STRING)
+    @Column(name= "FINANCE_SERVICE_CHARGE_CURRENCY")
+    private CurrencyEnum financeServiceChargeCurrency;
+    @Column(name= "FINANCE_SERVICE_CHARGE_AMOUNT")
+    private BigDecimal financeServiceChargeAmount;
+    @Enumerated(EnumType.STRING)
+    @Column(name= "SETTLEMENT_SERVICE_CHARGE_CURRENCY")
+    private CurrencyEnum settlementServiceChargeCurrency;
+    @Column(name= "SETTLEMENT_SERVICE_CHARGE_AMOUNT")
+    private BigDecimal settlementServiceChargeAmount;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "CABLE_CHARGE_CURRENCY")
+    private CurrencyEnum cableChargeCurrency;
+    @Column(name = "CABLE_CHARGE_AMOUNT")
+    private BigDecimal cableChargeAmount;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "COMMUNICATION_CHARGE_CURRENCY")
+    private CurrencyEnum communicationChargeCurrency;
+    @Column(name = "COMMUNICATION_CHARGE_AMOUNT")
+    private BigDecimal communicationChargeAmount;
+    @Column(name= "ANCHOR_PARTY_APPROVAL_REQUIRED")
+    private boolean anchorPartyApprovalRequired;
+    @Column(name= "COUNTER_PARTY_APPROVAL_REQUIRED")
+    private boolean counterPartyApprovalRequired;
 }

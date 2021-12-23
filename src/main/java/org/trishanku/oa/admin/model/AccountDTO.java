@@ -2,6 +2,8 @@ package org.trishanku.oa.admin.model;
 
 import lombok.*;
 import org.trishanku.oa.admin.entity.CurrencyEnum;
+import org.trishanku.oa.admin.entity.Customer;
+import org.trishanku.oa.admin.entity.TransactionStatusEnum;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,5 +18,6 @@ public class AccountDTO {
     private String description;
     private CurrencyEnum currency;
     private boolean status;
-
+    private TransactionStatusEnum transactionStatus;
+    private Customer customer;
 }

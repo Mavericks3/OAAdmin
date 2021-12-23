@@ -33,6 +33,12 @@ public class Account extends Base {
     private CurrencyEnum currency;
     @Column(name = "STATUS")
     private boolean status;
-    @Column(name = "DELETEFLAG")
+    @Column(name = "DELETE_FLAG")
     private boolean deleteFlag;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DEBIT_CREDIT_FLAG")
+    private DebitCreditFlagEnum debitCreditFlag;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CUSTOMER_ID")
+    private Customer customer;
 }

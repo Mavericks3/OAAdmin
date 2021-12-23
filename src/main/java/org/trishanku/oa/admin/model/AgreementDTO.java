@@ -43,10 +43,20 @@ public class AgreementDTO {
     private float cashMargin;
     private boolean status;
     private TransactionStatusEnum transactionStatus;
-    private CurrencyEnum financeChargeCurrency;
-    private BigDecimal financeChargeAmount;
-    private CurrencyEnum settlementChargeCurrency;
-    private BigDecimal settlementChargeAmount;
     private BigDecimal limitAllocatedAmount;
     private BigDecimal limitUnallocatedAmount;
+    private CurrencyEnum cableChargeCurrency;
+    private BigDecimal cableChargeAmount;
+    private CurrencyEnum communicationChargeCurrency;
+    private BigDecimal communicationChargeAmount;
+    private boolean anchorPartyApprovalRequired;
+    private boolean counterPartyApprovalRequired;
+    private boolean autoFinance;
+    private boolean autoSettlement;
+    private CurrencyEnum financeServiceChargeCurrency;
+    private BigDecimal financeServiceChargeAmount;
+    private CurrencyEnum settlementServiceChargeCurrency;
+    private BigDecimal settlementServiceChargeAmount;
+    private CurrencyEnum invoiceServiceChargeCurrency;
+    private BigDecimal invoiceServiceChargeAmount;
 }
