@@ -1,3 +1,4 @@
+
 package org.trishanku.oa.admin.jwtauthentication.configuration.service;
 
 import io.jsonwebtoken.Claims;
@@ -5,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class JWTUtil {
     @Autowired
     RSAUtil rsaUtil;
 
+    @Value("${JWT.EXPIRY.IN.MINUTES}")
+    private int jwtExpiryInMinutes;
+
     public String extractUsernameFromRequest() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
@@ -52,6 +57,11 @@ public class JWTUtil {
 
     public Date extractExpiration(String token,PublicKey publicKey) {
         return extractClaim(token, Claims::getExpiration, publicKey);
+    }
+
+    public String extractClaim(String token, String claim, PublicKey publicKey) {
+        Claims claims = extractAllClaims(token, publicKey);
+        return claims.get(claim).toString();
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver, PublicKey publicKey) {
