@@ -3,7 +3,7 @@
     <toAddress><![CDATA[<%EmailAgreement%>;<%DEFAULT%>]]></toAddress>
     <ccAddress><![CDATA[<%EmailCCAgreement%>;ccaddress@gmail.com]]></ccAddress>
     <bccAddress><![CDATA[<%emailAddress%>;bccaddress@gmail.com]]></bccAddress>
-    <mailSubject><![CDATA[OA ADMIN AGREEMENT Deleted with Id - <%contractReferenceNumber%]]></mailSubject>
+    <mailSubject><![CDATA[ AGREEMENT Deleted for  Id - <%contractReferenceNumber%>]]></mailSubject>
     <fromAddress/>
     <mailContent><![CDATA[Dear <%anchorCustomer.customerId%>,<br><br>
 
