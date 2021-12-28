@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
-    <toAddress><![CDATA[<%emailAddress%>;<%DEFAULT%>]]></toAddress>
-    <ccAddress><![CDATA[<%emailAddress%>;ccaddress@gmail.com]]></ccAddress>
+    <toAddress><![CDATA[<%EmailAgreement%>;<%DEFAULT%>]]></toAddress>
+    <ccAddress><![CDATA[<%EmailCCAgreement%>;ccaddress@gmail.com]]></ccAddress>
     <bccAddress><![CDATA[<%emailAddress%>;bccaddress@gmail.com]]></bccAddress>
-    <mailSubject><![CDATA[OA ADMIN AGREEMENT approval with Id - <%userId%>  is crated]]></mailSubject>
+    <mailSubject><![CDATA[OA ADMIN AGREEMENT approval with Id - <%userId%>  is created]]></mailSubject>
     <fromAddress/>
-    <mailContent><![CDATA[Dear User,
+    <mailContent><![CDATA[Dear <%anchorCustomer.customerId%>,<br><br>
 
-We are pleased to notify that transaction under our reference number <%userId%> has been processed.
+<p>We are pleased to notify Agreement is Createed under the reference <%contractReferenceNumber%> for the product <%businessType.name%>.</p><br><br>
 
-Details of the transaction are available in the attached advice(s). Kindly note that the attachments are password protected.
-To open the attachment, kindly enter your 6 / 8 digit Customer ID. This e-mail is for your information and does not require a response.
+<p>Details of the Agreement are available in the attached advice(s). Kindly note that the attachments are password protected.
+To open the attachment, kindly enter your 6 / 8 digit Customer ID. This e-mail is for your information and does not require a response.</p><br><br>
 
-If you wish to contact us, please e-mail us at xxxx or call XXXXXXXXXXXXXXXXXXX within UAE or XXXXXXXXXXXXX from outside UAE.
+<p>If you wish to contact us, please e-mail us at xxxx or call XXXXXXXXXXXXXXXXXXX within UAE or XXXXXXXXXXXXX from outside UAE.</p><br><br>
 
-Sincerely,
-OA Admin Department
+Sincerely,<br>
+OA Admin Department<br>
 www.OA-ADMIN.com]]></mailContent>
 </root>
