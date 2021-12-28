@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
     <toAddress><![CDATA[<%emailAddress%>;<%DEFAULT%>]]></toAddress>
-    <ccAddress><![CDATA[<%emailAddress%><%bankCCUserEmail%>]]></ccAddress>
+    <ccAddress><![CDATA[<%emailAddress%>;ccaddress@gmail.com]]></ccAddress>
     <bccAddress><![CDATA[<%emailAddress%>;bccaddress@gmail.com]]></bccAddress>
-    <mailSubject><![CDATA[BANK USER Created  with Id - <%userId%>  is created]]></mailSubject>
+    <mailSubject><![CDATA[BANK USER Created  with Id - <%userId%>]]></mailSubject>
     <fromAddress/>
     <mailContent><![CDATA[Dear <%firstName%><%lastName%>,<br><br>
 
