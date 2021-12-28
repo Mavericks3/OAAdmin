@@ -7,7 +7,7 @@
     <fromAddress/>
     <mailContent><![CDATA[Dear <%firstName%><%lastName%>,<br><br>
 
-<p>We are here to notify that <%userId%> has been deleted as bank Admin</p><br><br>
+<p>We are here to notify that <%userId%> has been Modified as per the requested raised by You</p><br><br>
 
 <p>Please find attached reference copy. Please use this document for any further communication.
 <br>Kindly note that the attachments are password protected. To open the attachment, kindly enter your 6 / 8 digit Customer ID. This e-mail is for your information and does not require a response.</p><br><br>
