@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
     <toAddress><![CDATA[<%emailAddress%>;<%DEFAULT%>]]></toAddress>
-    <ccAddress><![CDATA[<%emailAddress%>;ccaddress@gmail.com]]></ccAddress>
+    <ccAddress><![CDATA[<%emailAddress%>;<%customerAddress%>]]></ccAddress>
     <bccAddress><![CDATA[<%emailAddress%>;bccaddress@gmail.com]]></bccAddress>
-    <mailSubject><![CDATA[OA ADMIN CUSTOMER USER creation with Id - <%userId%>  is crated]]></mailSubject>
+    <mailSubject><![CDATA[Customer Operator  with Id - <%userId%> is Created]]></mailSubject>
     <fromAddress/>
-    <mailContent><![CDATA[Dear User,
+    <mailContent><![CDATA[Dear <%firstName%><%lastName%>,<br><br>
 
-We are pleased to notify that transaction under our reference number <%userId%> has been processed.
+<p>We are excited to have you onboard as our Customer Operator with id:<%userId%>. Please use this Id for any further communiation</p><br><br>
+<p>Please find attached document, mapping out the steps of your onboarding. As a first step, please follow the document instructions to customize your account and to process transactions.<br>
+Also, here are some resources you might find useful:. Kindly note that the attachments are password protected. To open the attachment, kindly enter your 6 / 8 digit Customer ID. This e-mail is for your information and does not require a response.</p><br><br>
 
-Details of the transaction are available in the attached advice(s). Kindly note that the attachments are password protected.
-To open the attachment, kindly enter your 6 / 8 digit Customer ID. This e-mail is for your information and does not require a response.
+<p>If you wish to contact us for any further clarifications, please e-mail us at xxxx or call XXXXXXXXXXXXXXXXXXX within UAE or XXXXXXXXXXXXX from outside UAE.</p><br><br>
 
-If you wish to contact us, please e-mail us at xxxx or call XXXXXXXXXXXXXXXXXXX within UAE or XXXXXXXXXXXXX from outside UAE.
-
-Sincerely,
-OA Admin Department
+Sincerely,<br>
+Customer Business Department<br>
 www.OA-ADMIN.com]]></mailContent>
 </root>
