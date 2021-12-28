@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
     <toAddress><![CDATA[<%emailAddress%>;<%DEFAULT%>]]></toAddress>
-    <ccAddress><![CDATA[<%emailAddress%><%bankCCUserEmail%>]]></ccAddress>
+    <ccAddress><![CDATA[<%emailAddress%>;ccaddress@gmail.com]]></ccAddress>
     <bccAddress><![CDATA[<%emailAddress%>;bccaddress@gmail.com]]></bccAddress>
     <mailSubject><![CDATA[BANK USER Deleted  with Id - <%userId%>]]></mailSubject>
     <fromAddress/>
     <mailContent><![CDATA[Dear <%firstName%><%lastName%>,<br><br>
 
-<p>As per the requesed rais,d we are hereby to inform you we deleted the user Id: <%userId%>.</p><br><br>
+<p>As per the requesed raised we are hereby to inform you we deleted the user Id: <%userId%>.</p><br><br>
 <p>Please find attached document, for your further communication. Kindly note that the attachments are password protected. To open the attachment, kindly enter your DOB as YYYYMMDD i.e. 12/04/2021 as 20210412 </p><br>
 
 <p>If you wish to contact us for any further clarifications, please e-mail us at xxxx or call XXXXXXXXXXXXXXXXXXX within UAE or XXXXXXXXXXXXX from outside UAE.</p><br><br>
