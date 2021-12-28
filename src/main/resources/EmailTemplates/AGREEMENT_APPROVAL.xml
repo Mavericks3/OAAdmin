@@ -7,12 +7,12 @@
     <fromAddress/>
     <mailContent><![CDATA[Dear <%anchorCustomer.customerId%>,<br><br>
 
-<p>We are pleased to notify Agreement is Createed under the reference <%contractReferenceNumber%> for the product <%businessType.name%>.</p><br><br>
+<p>We are pleased to notify that, Product Agreement is Created under the reference <%contractReferenceNumber%> for the product type: <%businessType.name%>.</p><br><br>
 
 <p>Details of the Agreement are available in the attached advice(s). Kindly note that the attachments are password protected.
 To open the attachment, kindly enter your 6 / 8 digit Customer ID. This e-mail is for your information and does not require a response.</p><br><br>
 
-<p>If you wish to contact us, please e-mail us at xxxx or call XXXXXXXXXXXXXXXXXXX within UAE or XXXXXXXXXXXXX from outside UAE.</p><br><br>
+<p>If you wish to contact us for any further clarifications, please e-mail us at xxxx or call XXXXXXXXXXXXXXXXXXX within UAE or XXXXXXXXXXXXX from outside UAE.</p><br><br>
 
 Sincerely,<br>
 OA Admin Department<br>
