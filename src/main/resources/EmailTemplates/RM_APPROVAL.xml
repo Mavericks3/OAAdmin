@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
     <toAddress><![CDATA[<%emailAddress%>;<%DEFAULT%>]]></toAddress>
-    <ccAddress><![CDATA[<%emailAddress%>;<%rm%EmailAddress>]]></ccAddress>
+    <ccAddress><![CDATA[<%emailAddress%>;<%rmEmailAddress%>]]></ccAddress>
     <bccAddress><![CDATA[<%emailAddress%>;bccaddress@gmail.com]]></bccAddress>
     <mailSubject><![CDATA[RM Approval  with Id - <%rmId%> is Approved]]></mailSubject>
     <fromAddress/>
