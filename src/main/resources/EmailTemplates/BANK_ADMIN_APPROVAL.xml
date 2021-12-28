@@ -3,7 +3,7 @@
     <toAddress><![CDATA[<%%>;<%emailAddress%>]]></toAddress>
     <ccAddress><![CDATA[<%emailAddress%><%bankCCAdmin%>]]></ccAddress>
     <bccAddress><![CDATA[<%emailAddress%>]]></bccAddress>
-    <mailSubject><![CDATA[Bank Admin Authorised with Id - <%userId%>  is created]]></mailSubject>
+    <mailSubject><![CDATA[Bank Admin Approved with Id - <%userId%>]]></mailSubject>
     <fromAddress/>
     <mailContent><![CDATA[Dear <%firstName%><%lastName%>,<br><br>
 
